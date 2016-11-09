@@ -14,8 +14,8 @@ class RegistrationController(val trevor: SmlSalaryBot) : Controller {
         trevor.performSendMessage(chatId, "Hello. Again")
     }
 
-    @BotCommand("/login")
-    fun performLogin(chatId: Long) {
+    @BotCommand("/reg")
+    fun performRegistration(chatId: Long) {
         trevor.performSendMessage(chatId, "You say login")
     }
 }

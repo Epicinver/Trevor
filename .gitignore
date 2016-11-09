@@ -9,6 +9,7 @@
 gradle/
 gradlew
 gradlew.bat
+
 # IDEA
 # ----
 .idea
@@ -23,3 +24,7 @@ gradlew.bat
 /out
 /subprojects/*/*.iml
 /subprojects/*/out
+
+#MISC
+#----
+/*.s3db
