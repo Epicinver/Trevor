@@ -1,5 +1,6 @@
 package messageprocessor
 
+import featurecontroller.RegistrationController
 import org.telegram.telegrambots.api.objects.Message
 import java.util.*
 
@@ -16,11 +17,20 @@ class MessageProcessor {
         }
     }
 
-    fun process(message: Message) {
+    fun processCommand(message: Message) {
         message.text?.let {
-            if (it in commandsMap) commandsMap[it]?.execute(message.chatId)
+            if (it in commandsMap) {
+                commandsMap[it]?.execute(message)
+                return
+            } else {
+                processText(message)
+            }
         }
     }
 
-
+    fun processText(message: Message) {
+        with(RegistrationController) {
+            checkRegistration(message)
+        }
+    }
 }

@@ -1,5 +1,6 @@
 import annotation.BotCommand
 import bot.Trevor
+import database.DatabaseHelper
 import featurecontroller.Controller
 import featurecontroller.RegistrationController
 import messageprocessor.CommandExecutor
@@ -11,11 +12,12 @@ import org.telegram.telegrambots.TelegramBotsApi
  */
 
 fun main(args: Array<String>) {
-    val trevor = Trevor()
 
-    registerController(RegistrationController(trevor))
+    registerController(RegistrationController)
 
-    TelegramBotsApi().registerBot(trevor)
+    DatabaseHelper.createDb()
+
+    TelegramBotsApi().registerBot(Trevor)
 }
 
 fun registerController(controller: Controller) {

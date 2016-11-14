@@ -7,7 +7,10 @@ import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
  */
 interface SmlSalaryBot {
 
-    fun performSendMessage(chatId : Long, text : String)
+    fun performSendMessage(chatId : Long,
+                           text : String,
+                           keyboard: InlineKeyboardMarkup? = null)
+
 
     fun performEditMessage(chatId: Long,
                            messageId : Int,

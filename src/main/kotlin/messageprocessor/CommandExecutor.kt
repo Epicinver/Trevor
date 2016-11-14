@@ -1,6 +1,7 @@
 package messageprocessor
 
 import featurecontroller.Controller
+import org.telegram.telegrambots.api.objects.Message
 import java.lang.reflect.Method
 
 /**
@@ -8,7 +9,7 @@ import java.lang.reflect.Method
  */
 class CommandExecutor(val method: Method, val controller: Controller) {
 
-    fun execute(chatId: Long?) {
-        method.invoke(controller, chatId)
+    fun execute(message: Message?) {
+        method.invoke(controller, message)
     }
 }

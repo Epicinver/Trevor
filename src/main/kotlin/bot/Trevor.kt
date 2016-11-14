@@ -11,8 +11,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 /**
  * Created by sergeyopivalov on 08/11/2016.
  */
-class Trevor() : TelegramLongPollingBot(), SmlSalaryBot {
-
+object Trevor : TelegramLongPollingBot(), SmlSalaryBot {
+//TODO пока что обжект, так как что то похожее на синглтон. Подключить ДиАй и сделать полноценный синглтон
     val processor = MessageProcessor()
 
     override fun getBotUsername(): String = "sml_testing_bot"
@@ -21,15 +21,18 @@ class Trevor() : TelegramLongPollingBot(), SmlSalaryBot {
 
     override fun onUpdateReceived(update: Update?) {
         update?.message?.let {
-            processor.process(it)
+            processor.processCommand(it)
         }
 
     }
 
-    override fun performSendMessage(chatId: Long, text: String) {
+    override fun performSendMessage(chatId: Long,
+                                    text: String,
+                                    keyboard: InlineKeyboardMarkup?) {
         with(SendMessage()) {
             this.chatId = chatId.toString()
             this.text = text
+            keyboard?.let { replyMarkup = keyboard }
             sendMessage(this)
         }
     }
