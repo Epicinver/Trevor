@@ -30,7 +30,7 @@ class MessageProcessor {
 
     fun processText(message: Message) {
         with(RegistrationController) {
-            checkRegistration(message)
+            if (isRegistered(message)) updateUser(message) else askPass(message)
         }
     }
 }

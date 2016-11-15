@@ -1,46 +1,40 @@
 package user
 
 import database.DatabaseHelper
-import database.DatabaseRepository
 import java.sql.ResultSet
 
 /**
  * Created by sergeyopivalov on 10/11/2016.
  */
-object UserRepository : DatabaseRepository() {
-
-    fun create(username: String,
-               chatId: Long,
-               smlName: String? = null,
-               birthday: String? = null) {
-        executeTransaction("INSERT INTO users VALUES ('$username', $chatId, '$smlName', '$birthday', 'user')")
-    }
-
-    fun delete(username: String) {
-        executeTransaction("DELETE FROM users WHERE = '$username'")
-    }
-
-    //todo закрывать стейтменты желательно как бэ
-    fun get(chatId: Long) : ResultSet {
+object UserRepository : Repository {
+    private fun executeTransaction(transaction : String, closeDb : Boolean = false) {
         with(DatabaseHelper.openDb()) {
-           val result = with(createStatement()) {
-               executeQuery("SELECT * FROM users WHERE CHAT_ID = $chatId")
+            with(createStatement()) {
+                executeUpdate(transaction)
+                commit()
             }
-            close()
-            return@get result
+            if (closeDb) DatabaseHelper.closeDb()
         }
     }
 
-    fun updateUsername(chatId: Long, username: String) {
-        executeTransaction("UPDATE users SET USERNAME = '$username' WHERE CHAT_ID = $chatId")
+    override fun create(username: String,
+                        chatId: Long) {
+        executeTransaction("INSERT INTO users (USERNAME, CHAT_ID, ROLE) VALUES ('$username', '$chatId', 'user')")
     }
 
-    fun updateSmlName(chatId: Long, smlName: String) {
-        executeTransaction("UPDATE users SET SML_NAME = '$smlName' WHERE CHAT_ID = $chatId")
+    override fun delete(chatId: Long) {
+        executeTransaction("DELETE FROM users WHERE CHAT_ID = $chatId")
     }
 
-    fun updateBirthday(chatId: Long, birthday: String) {
-        executeTransaction("UPDATE users SET BIRTHDAY = $birthday WHERE CHAT_ID = $chatId")
+    override fun get(chatId: Long): ResultSet {
+        return with(DatabaseHelper.openDb()) {
+            createStatement().executeQuery("SELECT * FROM users WHERE CHAT_ID = $chatId")
+        }
+    }
+
+    override fun update(chatId: Long, column: String, value: String, closeDb: Boolean) {
+        executeTransaction("UPDATE users SET $column = '$value' WHERE CHAT_ID = $chatId", closeDb)
+
     }
 
 }

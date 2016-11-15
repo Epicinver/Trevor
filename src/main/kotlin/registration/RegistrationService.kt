@@ -9,34 +9,30 @@ import user.UserRepository
  */
 object RegistrationService {
 
-    fun alreadyRegistered(message: Message): Boolean =
+    //todo вызывать методы у Repository
+    fun isRegistered(message: Message): Boolean =
             UserRepository.get(message.chatId).isBeforeFirst
 
-    fun acceptRegistration(message: Message) {
+    fun isRegistrationCompleted(message: Message): Boolean  =
+            hasSmlName(message) && hasBirtday(message)
+
+    fun confirmRegistration(message: Message) {
         UserRepository.create(message.from.userName, message.chatId)
     }
 
-    fun updateUsername(chatId: Long, username: String) {
-        UserRepository.updateUsername(chatId, username)
-    }
-
-    fun updateSmlName(chatId: Long, smlName : String) {
-        UserRepository.updateSmlName(chatId, smlName)
-    }
-
-    fun updateBirtday(chatId: Long, birthday :String) {
-        UserRepository.updateBirthday(chatId, birthday)
+    fun updateUser (chatId: Long, column : String, value : String, closeDb : Boolean = false) {
+        UserRepository.update(chatId,column,value, closeDb)
     }
 
     fun hasSmlName(message: Message): Boolean {
         return with(UserRepository.get(message.chatId)) {
-            TextUtils.isEmpty(this?.getString("SML_NAME"))
+            !TextUtils.isEmpty(this.getString("SML_NAME"))
         }
     }
 
-    fun hasBirthday(message: Message): Boolean {
+    fun hasBirtday(message: Message): Boolean {
         return with(UserRepository.get(message.chatId)) {
-            TextUtils.isEmpty(this?.getString("BIRTHDAY"))
+            !TextUtils.isEmpty(this.getString("BIRTHDAY"))
         }
     }
 }
