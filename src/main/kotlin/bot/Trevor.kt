@@ -13,7 +13,6 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
  */
 object Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 //TODO пока что обжект, так как что то похожее на синглтон. Подключить ДиАй и сделать полноценный синглтон
-    val processor = MessageProcessor()
 
     override fun getBotUsername(): String = "sml_testing_bot"
 
@@ -21,7 +20,7 @@ object Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 
     override fun onUpdateReceived(update: Update?) {
         update?.message?.let {
-            processor.processCommand(it)
+            MessageProcessor.processCommand(it)
         }
 
     }

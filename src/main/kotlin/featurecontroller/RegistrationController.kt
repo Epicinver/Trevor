@@ -7,6 +7,7 @@ import database.DatabaseHelper
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
 import registration.RegistrationService
+import utils.DateValidator
 import utils.InlineKeyboardFactory
 
 
@@ -31,8 +32,6 @@ object RegistrationController : Controller {
         }
     }
 
-    //todo hardcode should be moved out
-
     fun askPass(message: Message) {
         if (message.text != Strings.pass) {
             Trevor.performSendMessage(message.chatId, Strings.wrongPass)
@@ -40,25 +39,29 @@ object RegistrationController : Controller {
         }
         Trevor.performSendMessage(message.chatId, Strings.rightPass)
         RegistrationService.createUser(message)
-        Trevor.performSendMessage(message.chatId, "Введи имя!")
+        Trevor.performSendMessage(message.chatId, Strings.typeYourName)
     }
 
     fun updateUser(message: Message) {
         if (RegistrationService.isRegistrationCompleted(message)) {
-            Trevor.performSendMessage(message.chatId, "Что?")
+            Trevor.performSendMessage(message.chatId, Strings.incorrectInput)
             return
         }
         if (RegistrationService.hasSmlName(message)) {
-            RegistrationService.updateUser(message.chatId,
-                    DatabaseHelper.COLUMN_BIRTHDAY,
-                    message.text,
-                    true)
-            Trevor.performSendMessage(message.chatId, "Регистрация завершена")
+            if (DateValidator.validateBirthday(message.text)) {
+                RegistrationService.updateUser(message.chatId,
+                        DatabaseHelper.COLUMN_BIRTHDAY,
+                        message.text,
+                        true)
+                Trevor.performSendMessage(message.chatId, Strings.registrationComplete)
+            } else {
+                Trevor.performSendMessage(message.chatId, Strings.incorrectBirthday)
+            }
         } else {
             RegistrationService.updateUser(message.chatId,
                     DatabaseHelper.COLUMN_SML_NAME,
                     message.text)
-            Trevor.performSendMessage(message.chatId, "А теперь дату рождения")
+            Trevor.performSendMessage(message.chatId, Strings.typeYourBirthday)
         }
     }
 

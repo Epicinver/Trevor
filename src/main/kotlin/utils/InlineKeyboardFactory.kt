@@ -17,13 +17,4 @@ object InlineKeyboardFactory {
 
     }
 
-    fun registrationKeyboard(): InlineKeyboardMarkup {
-        return InlineKeyboardMarkup().apply {
-            keyboard = listOf(
-                    listOf(createButton(Strings.stepName, "name")),
-                    listOf(createButton(Strings.stepBirthday, "birthday"))
-            )
-
-    }
-}
 }
