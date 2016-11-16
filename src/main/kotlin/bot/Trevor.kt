@@ -11,8 +11,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 /**
  * Created by sergeyopivalov on 08/11/2016.
  */
-object Trevor : TelegramLongPollingBot(), SmlSalaryBot {
-//TODO пока что обжект, так как что то похожее на синглтон. Подключить ДиАй и сделать полноценный синглтон
+class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 
     override fun getBotUsername(): String = "sml_testing_bot"
 
