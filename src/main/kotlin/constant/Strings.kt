@@ -16,4 +16,10 @@ object Strings {
     val typeYourBirthday = "Тревор хочет знать твою дату рождения. Формат : dd.mm.yyyy"
     val incorrectInput = "Ты прислал какую то шляпу..."
     val incorrectBirthday = "Ты втер мне дичь. Введи дату рождения в правильном формате"
+    val commandNotAllowed = "Вот тебе, именно тебе, такие команды использовать"
+
+    val buttonAllUsers = "Показать всех пользователей"
+    val buttonNeedHelp = "Помощь друга"
+    val buttonSalaryToday = "Сегодня зарплата =)"
+
 }

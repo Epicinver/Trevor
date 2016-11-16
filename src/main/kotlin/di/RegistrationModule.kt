@@ -4,7 +4,7 @@ package di
 import bot.SmlSalaryBot
 import bot.Trevor
 import entity.User
-import registration.RegistrationService
+import service.RegistrationService
 import repository.Repository
 import repository.UserRepository
 import uy.kohesive.injekt.api.InjektModule

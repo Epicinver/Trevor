@@ -21,6 +21,9 @@ class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
         update?.message?.let {
             MessageProcessor.processCommand(it)
         }
+        update?.callbackQuery?.let {
+            MessageProcessor.processCallbackQuery(it)
+        }
 
     }
 

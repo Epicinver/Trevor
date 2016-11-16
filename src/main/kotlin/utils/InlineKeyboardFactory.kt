@@ -17,4 +17,14 @@ object InlineKeyboardFactory {
 
     }
 
+    //todo hardcode move out
+    fun createAdminKeyboard(): InlineKeyboardMarkup {
+        return InlineKeyboardMarkup().apply {
+            keyboard = listOf(
+                    listOf(createButton(Strings.buttonAllUsers, "#allNames")),
+                    listOf(createButton(Strings.buttonNeedHelp, "#needHelp")),
+                    listOf(createButton(Strings.buttonSalaryToday, "#salaryToday")))
+        }
+    }
+
 }
