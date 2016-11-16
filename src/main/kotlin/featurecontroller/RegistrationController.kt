@@ -17,7 +17,7 @@ object RegistrationController : Controller {
     //todo вызывать методы у интерфейса smlSalaryBot
     @BotCommand("/reg")
     fun performRegistration(message: Message) {
-        if (RegistrationService.isRegistered(message)) {
+        if (RegistrationService.isExist(message)) {
             Trevor.performSendMessage(message.chatId, Strings.alreadyRegistered)
             RegistrationService.updateUser(message.chatId,
                     DatabaseHelper.COLUMN_USERNAME,
@@ -34,16 +34,16 @@ object RegistrationController : Controller {
     //todo hardcode should be moved out
 
     fun askPass(message: Message) {
-            if (message.text == Strings.pass) {
-                Trevor.performSendMessage(message.chatId, Strings.rightPass)
-                RegistrationService.confirmRegistration(message)
-                Trevor.performSendMessage(message.chatId, "Введи имя!")
-            } else {
-                Trevor.performSendMessage(message.chatId, Strings.wrongPass)
-            }
+        if (message.text != Strings.pass) {
+            Trevor.performSendMessage(message.chatId, Strings.wrongPass)
+            return
+        }
+        Trevor.performSendMessage(message.chatId, Strings.rightPass)
+        RegistrationService.createUser(message)
+        Trevor.performSendMessage(message.chatId, "Введи имя!")
     }
 
-    fun updateUser (message: Message) {
+    fun updateUser(message: Message) {
         if (RegistrationService.isRegistrationCompleted(message)) {
             Trevor.performSendMessage(message.chatId, "Что?")
             return
@@ -62,7 +62,7 @@ object RegistrationController : Controller {
         }
     }
 
-    fun isRegistered(message: Message) : Boolean = RegistrationService.isRegistered(message)
-
+    fun isRegistered(message: Message): Boolean = RegistrationService.isExist(message)
 }
+
 

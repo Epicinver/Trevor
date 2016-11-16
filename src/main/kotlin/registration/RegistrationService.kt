@@ -10,13 +10,13 @@ import user.UserRepository
 object RegistrationService {
 
     //todo вызывать методы у Repository
-    fun isRegistered(message: Message): Boolean =
+    fun isExist(message: Message): Boolean =
             UserRepository.get(message.chatId).isBeforeFirst
 
     fun isRegistrationCompleted(message: Message): Boolean  =
             hasSmlName(message) && hasBirtday(message)
 
-    fun confirmRegistration(message: Message) {
+    fun createUser(message: Message) {
         UserRepository.create(message.from.userName, message.chatId)
     }
 

@@ -28,3 +28,4 @@ gradlew.bat
 #MISC
 #----
 /*.s3db
+/*.s3dbjournal

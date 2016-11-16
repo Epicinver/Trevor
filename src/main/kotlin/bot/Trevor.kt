@@ -32,7 +32,7 @@ object Trevor : TelegramLongPollingBot(), SmlSalaryBot {
         with(SendMessage()) {
             this.chatId = chatId.toString()
             this.text = text
-            keyboard?.let { replyMarkup = keyboard }
+            keyboard?.let { this.replyMarkup = keyboard }
             sendMessage(this)
         }
     }

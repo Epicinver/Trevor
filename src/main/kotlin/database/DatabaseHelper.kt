@@ -25,15 +25,25 @@ object DatabaseHelper {
             "$COLUMN_BIRTHDAY TEXT," +
             "$COLUMN_ROLE TEXT);"
 
+    fun executeTransaction(transaction : String, closeDb : Boolean = false) {
+        with(getConnection()) {
+            with(createStatement()) {
+                executeUpdate(transaction)
+                commit()
+            }
+            if (closeDb) closeConnection()
+        }
+    }
+
     fun createDb() {
         Class.forName("org.sqlite.JDBC")
-            connection = openDb()
+            connection = getConnection()
             connection?.createStatement()?.execute(SQL_CREATE_TABLE)
         }
 
 
     //todo catch sqlexception
-    fun openDb(): Connection {
+    fun getConnection(): Connection {
         return if (connection == null) {
           with(DriverManager.getConnection(DATABASE_NAME)) {
               autoCommit = false
@@ -45,7 +55,7 @@ object DatabaseHelper {
 
     }
 
-    fun closeDb() {
+    fun closeConnection() {
         connection?.close()
     }
 }

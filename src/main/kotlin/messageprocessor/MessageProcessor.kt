@@ -7,15 +7,14 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 09/11/2016.
  */
-class MessageProcessor {
+object MessageProcessor {
 
-    companion object {
-        private val commandsMap = HashMap<String, CommandExecutor>()
+    private val commandsMap = HashMap<String, CommandExecutor>()
 
-        fun addCommand(command: String, executor: CommandExecutor) {
-            commandsMap.put(command, executor)
-        }
+    fun addCommand(command: String, executor: CommandExecutor) {
+        commandsMap.put(command, executor)
     }
+
 
     fun processCommand(message: Message) {
         message.text?.let {
