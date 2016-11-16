@@ -3,36 +3,37 @@ package registration
 import entity.User
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
-import repository.UserRepository
+import repository.Repository
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 /**
  * Created by sergeyopivalov on 10/11/2016.
  */
-object RegistrationService {
+class RegistrationService (val repository: Repository<User> = Injekt.get()){
 
-    //todo вызывать методы у Repository
     fun isExist(message: Message): Boolean =
-            UserRepository.getById(message.chatId) != null
+            repository.getById(message.chatId) != null
 
     fun isRegistrationCompleted(message: Message): Boolean =
             hasSmlName(message) && hasBirthday(message)
 
     fun createUser(message: Message) {
-        UserRepository.create(User(message.from.userName, message.chatId))
+        repository.create(User(message.from.userName, message.chatId))
     }
 
     fun updateUser(chatId : Long, key: String, value: String, closeDb: Boolean = false) {
-        UserRepository.update(chatId, key, value, closeDb)
+        repository.update(chatId, key, value, closeDb)
     }
 
     fun hasSmlName(message: Message): Boolean {
-        return with(UserRepository.getById(message.chatId)) {
+        return with(repository.getById(message.chatId)) {
             !TextUtils.isEmpty(this?.smlName)
         }
     }
 
     fun hasBirthday(message: Message): Boolean {
-        return with(UserRepository.getById(message.chatId)) {
+        return with(repository.getById(message.chatId)) {
             !TextUtils.isEmpty(this?.birthday)
         }
     }
