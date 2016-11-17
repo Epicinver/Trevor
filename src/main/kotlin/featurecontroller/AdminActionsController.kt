@@ -15,24 +15,53 @@ import uy.kohesive.injekt.api.get
  */
 object AdminActionsController : Controller {
 
+    var messageWithActions = -1
+
     val bot = Injekt.get<SmlSalaryBot>()
     val service = Injekt.get<AdminActionsService>()
 
+
+    //todo hardcode!
     @BotCommand("/actions")
     fun performActionsShow(message: Message) {
         if (!service.isAdmin(message)) {
             bot.performSendMessage(message.chatId, Strings.commandNotAllowed)
             return
         }
-        bot.performSendMessage(message.chatId, "Commands:", InlineKeyboardFactory.createAdminKeyboard())
+        messageWithActions = bot.performSendMessage(message.chatId, "Commands:",
+                InlineKeyboardFactory.createAdminKeyboard()).messageId
     }
 
     @BotCallbackData("#allNames")
-    fun showAllUsers(message: Message) {
-        var list = ""
-        for (name in service.getAllNames()) {
-            list = list + name + "\n"
+    fun showAllNames(message: Message) {
+        val allNames = StringBuilder()
+        service.getAllUsers()
+                .map { user -> "${user.smlName} \n" }
+                .forEach { allNames.append(it) }
+
+        bot.performSendMessage(message.chatId, allNames.toString())
+    }
+
+    //todo sticker factory!!!
+    @BotCallbackData("#needHelp")
+    fun helpRequest(message: Message) {
+        with(service.getHelper().chatId) {
+            bot.performSendMessage(this, Strings.helpRequest)
+            bot.performSendSticker(this, "BQADAQADch8AAtpxZgcZflwMawhtDQI")
         }
-        bot.performSendMessage(message.chatId, list)
+        bot.performSendMessage(message.chatId, Strings.helpGoing)
+
+    }
+
+    @BotCallbackData("#salaryToday")
+    fun sendSalaryNotification(message: Message) {
+        service.getAllUsers()
+                .forEach {
+                    bot.performSendMessage(it.chatId, Strings.salaryNotification,
+                            InlineKeyboardFactory.createUserNotificationKeyboard())
+                }
+        bot.performEditKeyboard(message.chatId, messageWithActions,
+                InlineKeyboardFactory.createEditedAdminKeyboard())
+
     }
 }

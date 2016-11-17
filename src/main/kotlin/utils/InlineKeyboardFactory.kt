@@ -27,4 +27,21 @@ object InlineKeyboardFactory {
         }
     }
 
+    fun createEditedAdminKeyboard() : InlineKeyboardMarkup {
+        return InlineKeyboardMarkup().apply {
+            keyboard = listOf(
+                    listOf(createButton(Strings.buttonAllUsers, "#allNames")),
+                    listOf(createButton(Strings.buttonNeedHelp, "#needHelp")),
+                    listOf(createButton(Strings.buttonSalaryList, "#salaryList")),
+                    listOf(createButton(Strings.buttonSalaryStart, "#salaryStart")))
+        }
+    }
+
+    fun createUserNotificationKeyboard() : InlineKeyboardMarkup {
+        return InlineKeyboardMarkup().apply {
+            keyboard = listOf(listOf(createButton(Strings.buttonYes, "#salaryYes"),
+                    createButton(Strings.buttonNo, "#salaryNo")))
+        }
+    }
+
 }

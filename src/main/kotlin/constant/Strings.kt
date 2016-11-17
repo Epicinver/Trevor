@@ -17,9 +17,16 @@ object Strings {
     val incorrectInput = "Ты прислал какую то шляпу..."
     val incorrectBirthday = "Ты втер мне дичь. Введи дату рождения в правильном формате"
     val commandNotAllowed = "Вот тебе, именно тебе, такие команды использовать"
+    val salaryNotification = "Привет! Сегодня зарплату обещают\nБудешь получать ?"
+    val helpRequest = "Варя, Тревор на связи. Лене нужна твоя помощь"
+    val helpGoing = "Тревор вызвал подмогу, сейчас все будет..."
 
     val buttonAllUsers = "Показать всех пользователей"
     val buttonNeedHelp = "Помощь друга"
     val buttonSalaryToday = "Сегодня зарплата =)"
+    val buttonSalaryStart = "Начать выдачу зарплаты"
+    val buttonSalaryList = "Список получающих сегодня"
+    val buttonYes = "Да"
+    val buttonNo = "Нет"
 
 }

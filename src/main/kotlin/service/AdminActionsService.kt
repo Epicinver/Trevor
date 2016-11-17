@@ -16,14 +16,17 @@ class AdminActionsService() {
 
     fun isAdmin(message: Message): Boolean {
         return userRepository.getById(message.chatId)?.
-                role?.equals("admin") as Boolean
+                role == ("admin")
     }
 
-    //todo сделать изящнее
-    fun getAllNames(): ArrayList<String> {
-        val result = ArrayList<String>()
-        for (user in userRepository.getAll()) user.smlName?.let { result.add(it) }
-        return result
+    fun getHelper(): User {
+        return userRepository.getAll()
+                .filter { it.role == "911" }[0]
     }
+
+    fun getAllUsers(): ArrayList<User> {
+        return userRepository.getAll()
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package bot
 
+import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 
 /**
@@ -9,14 +10,17 @@ interface SmlSalaryBot {
 
     fun performSendMessage(chatId : Long,
                            text : String,
-                           keyboard: InlineKeyboardMarkup? = null)
+                           keyboard: InlineKeyboardMarkup? = null) : Message
 
 
     fun performEditMessage(chatId: Long,
                            messageId : Int,
                            text: String,
-                           removeKeyboard : Boolean = false,
-                           keyboard : InlineKeyboardMarkup? = null)
+                           removeKeyboard : Boolean = false)
+
+    fun performEditKeyboard(chatId: Long,
+                            messageId: Int,
+                            keyboard: InlineKeyboardMarkup)
 
     fun performSendSticker(chatId: Long, sticker: String)
 }

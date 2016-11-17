@@ -8,6 +8,7 @@ import java.util.*
  * Created by sergeyopivalov on 10/11/2016.
  */
 class UserRepository : Repository <User> {
+
     override fun create(user: User) {
         DatabaseHelper.
                 executeTransaction("INSERT INTO users (USERNAME, CHAT_ID, ROLE) " +
