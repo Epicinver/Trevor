@@ -1,4 +1,4 @@
-package registration
+package service
 
 import entity.User
 import org.apache.http.util.TextUtils
@@ -10,7 +10,8 @@ import uy.kohesive.injekt.api.get
 /**
  * Created by sergeyopivalov on 10/11/2016.
  */
-class RegistrationService (val repository: Repository<User> = Injekt.get()){
+class RegistrationService() {
+    val repository: Repository<User> = Injekt.get()
 
     fun isExist(message: Message): Boolean =
             repository.getById(message.chatId) != null
@@ -19,10 +20,10 @@ class RegistrationService (val repository: Repository<User> = Injekt.get()){
             hasSmlName(message) && hasBirthday(message)
 
     fun createUser(message: Message) {
-        repository.create(User(message.from.userName, message.chatId))
+        repository.create(User(message.from.userName, message.chatId, role = "user"))
     }
 
-    fun updateUser(chatId : Long, key: String, value: String, closeDb: Boolean = false) {
+    fun updateUser(chatId: Long, key: String, value: String, closeDb: Boolean = false) {
         repository.update(chatId, key, value, closeDb)
     }
 

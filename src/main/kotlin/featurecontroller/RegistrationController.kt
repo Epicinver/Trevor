@@ -6,7 +6,7 @@ import constant.Strings
 import database.DatabaseHelper
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
-import registration.RegistrationService
+import service.RegistrationService
 import utils.DateValidator
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

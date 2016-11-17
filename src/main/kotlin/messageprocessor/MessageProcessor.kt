@@ -1,6 +1,7 @@
 package messageprocessor
 
 import featurecontroller.RegistrationController
+import org.telegram.telegrambots.api.objects.CallbackQuery
 import org.telegram.telegrambots.api.objects.Message
 import java.util.*
 
@@ -9,10 +10,15 @@ import java.util.*
  */
 object MessageProcessor {
 
-    private val commandsMap = HashMap<String, CommandExecutor>()
+    private val commandsMap = HashMap<String, MethodExecutor>()
+    private val callbackDataMap = HashMap<String, MethodExecutor>()
 
-    fun addCommand(command: String, executor: CommandExecutor) {
+    fun addCommand(command: String, executor: MethodExecutor) {
         commandsMap.put(command, executor)
+    }
+
+    fun addCallbackData(callbackData : String, executor: MethodExecutor){
+        callbackDataMap.put(callbackData, executor)
     }
 
 
@@ -25,6 +31,15 @@ object MessageProcessor {
                 processText(message)
             }
         }
+    }
+
+    fun processCallbackQuery(query: CallbackQuery) {
+        query.data?.let {
+            if(it in callbackDataMap) {
+                callbackDataMap[it]?.execute(query.message)
+            }
+        }
+
     }
 
     fun processText(message: Message) {

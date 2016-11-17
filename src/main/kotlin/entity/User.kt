@@ -6,4 +6,5 @@ package entity
 class User(var username: String,
            val chatId: Long,
            var smlName: String? = null,
-           var birthday: String? = null)
+           var birthday: String? = null,
+           var role : String)
