@@ -3,8 +3,9 @@ package featurecontroller
 import annotation.BotCallbackData
 import annotation.BotCommand
 import bot.SmlSalaryBot
-import constant.Strings
 import org.telegram.telegrambots.api.objects.Message
+import res.AdminStrings
+import res.UserStrings
 import service.AdminActionsService
 import utils.InlineKeyboardFactory
 import uy.kohesive.injekt.Injekt
@@ -25,7 +26,7 @@ object AdminActionsController : Controller {
     @BotCommand("/actions")
     fun performActionsShow(message: Message) {
         if (!service.isAdmin(message)) {
-            bot.performSendMessage(message.chatId, Strings.commandNotAllowed)
+            bot.performSendMessage(message.chatId, AdminStrings.commandNotAllowed)
             return
         }
         messageWithActions = bot.performSendMessage(message.chatId, "Commands:",
@@ -46,10 +47,10 @@ object AdminActionsController : Controller {
     @BotCallbackData("#needHelp")
     fun helpRequest(message: Message) {
         with(service.getHelper().chatId) {
-            bot.performSendMessage(this, Strings.helpRequest)
+            bot.performSendMessage(this, AdminStrings.helpRequest)
             bot.performSendSticker(this, "BQADAQADch8AAtpxZgcZflwMawhtDQI")
         }
-        bot.performSendMessage(message.chatId, Strings.helpGoing)
+        bot.performSendMessage(message.chatId, AdminStrings.helpGoing)
 
     }
 
@@ -57,7 +58,7 @@ object AdminActionsController : Controller {
     fun sendSalaryNotification(message: Message) {
         service.getAllUsers()
                 .forEach {
-                    bot.performSendMessage(it.chatId, Strings.salaryNotification,
+                    bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
                             InlineKeyboardFactory.createUserNotificationKeyboard())
                 }
         bot.performEditKeyboard(message.chatId, messageWithActions,
