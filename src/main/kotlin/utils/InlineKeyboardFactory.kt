@@ -3,6 +3,7 @@ package utils
 import constant.Strings
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton
+import res.ButtonLabel
 
 /**
  * Created by sergeyopivalov on 11/11/2016.
@@ -21,26 +22,26 @@ object InlineKeyboardFactory {
     fun createAdminKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(Strings.buttonAllUsers, "#allNames")),
-                    listOf(createButton(Strings.buttonNeedHelp, "#needHelp")),
-                    listOf(createButton(Strings.buttonSalaryToday, "#salaryToday")))
+                    listOf(createButton(ButtonLabel.allNames, "#allNames")),
+                    listOf(createButton(ButtonLabel.needHelp, "#needHelp")),
+                    listOf(createButton(ButtonLabel.salaryToday, "#salaryToday")))
         }
     }
 
     fun createEditedAdminKeyboard() : InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(Strings.buttonAllUsers, "#allNames")),
-                    listOf(createButton(Strings.buttonNeedHelp, "#needHelp")),
-                    listOf(createButton(Strings.buttonSalaryList, "#salaryList")),
-                    listOf(createButton(Strings.buttonSalaryStart, "#salaryStart")))
+                    listOf(createButton(ButtonLabel.allNames, "#allNames")),
+                    listOf(createButton(ButtonLabel.needHelp, "#needHelp")),
+                    listOf(createButton(ButtonLabel.salaryList, "#salaryList")),
+                    listOf(createButton(ButtonLabel.salaryStart, "#salaryStart")))
         }
     }
 
     fun createUserNotificationKeyboard() : InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
-            keyboard = listOf(listOf(createButton(Strings.buttonYes, "#salaryYes"),
-                    createButton(Strings.buttonNo, "#salaryNo")))
+            keyboard = listOf(listOf(createButton(ButtonLabel.salaryYes, "#salaryYes"),
+                    createButton(ButtonLabel.salaryNo, "#salaryNo")))
         }
     }
 
