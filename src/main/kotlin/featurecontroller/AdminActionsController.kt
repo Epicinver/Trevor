@@ -16,10 +16,10 @@ import uy.kohesive.injekt.api.get
  */
 object AdminActionsController : Controller {
 
-    var messageWithActions = -1
+    private var messageWithActions = Message() //todo ?
 
-    val bot = Injekt.get<SmlSalaryBot>()
-    val service = Injekt.get<AdminActionsService>()
+    private val bot = Injekt.get<SmlSalaryBot>()
+    private val service = Injekt.get<AdminActionsService>()
 
 
     //todo hardcode!
@@ -30,7 +30,7 @@ object AdminActionsController : Controller {
             return
         }
         messageWithActions = bot.performSendMessage(message.chatId, "Commands:",
-                InlineKeyboardFactory.createAdminKeyboard()).messageId
+                InlineKeyboardFactory.createAdminKeyboard())
     }
 
     @BotCallbackData("#allNames")
@@ -61,7 +61,7 @@ object AdminActionsController : Controller {
                     bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
                             InlineKeyboardFactory.createUserNotificationKeyboard())
                 }
-        bot.performEditKeyboard(message.chatId, messageWithActions,
+        bot.performEditKeyboard(message.chatId, messageWithActions.messageId,
                 InlineKeyboardFactory.createEditedAdminKeyboard())
 
     }

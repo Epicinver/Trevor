@@ -3,9 +3,8 @@ package featurecontroller
 import annotation.BotCallbackData
 import bot.SmlSalaryBot
 import task.SalaryTask
-import org.knowm.sundial.SundialJobScheduler
 import org.telegram.telegrambots.api.objects.Message
-import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
+import res.MiscStrings
 import res.SalaryDayStrings
 import service.SalaryService
 import utils.InlineKeyboardFactory
@@ -18,10 +17,11 @@ import java.util.*
  */
 object SalaryController : Controller {
 
-    private var adminMessageId = -1
+    private var adminMessage = Message()  //todo ???
 
     private val bot = Injekt.get<SmlSalaryBot>()
     private val service = Injekt.get<SalaryService>()
+    private val timer = Injekt.get<Timer>()
 
     @BotCallbackData("#salaryYes")
     fun addUserToSalaryList(message: Message) {
@@ -53,25 +53,38 @@ object SalaryController : Controller {
         bot.performSendMessage(message.chatId, list) //todo Feature:запомнить сообщение и редактировать его, а не присылать новое
     }
 
+    //todo название метода
+    @BotCallbackData("#salaryReady")
+    fun userReady(message: Message) {
+        bot.performSendMessage(message.chatId, MiscStrings.ok)
+        timer.cancel()
+
+    }
+
+    @BotCallbackData("#salaryNotReady")
+    fun skipTurn(message: Message) {
+        bot.performSendMessage(message.chatId, SalaryDayStrings.turnSkipped)
+        notifyNextUser()
+    }
+
     @BotCallbackData("#salaryStart")
     fun startSalary(message: Message) {
-        adminMessageId = bot.performSendMessage(message.chatId, SalaryDayStrings.dummy).messageId
-        notifyNextUser(message)
+        adminMessage = bot.performSendMessage(message.chatId, SalaryDayStrings.dummy)
+        notifyNextUser()
     }
 
     fun notifyUserSkipTurn(message: Message) {
-        bot.performSendMessage(message.chatId, SalaryDayStrings.turnSkipped)
-
+        bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.turnSkipped)
     }
 
-    private fun notifyNextUser(message: Message) {
-        val userMessage = with(service.getUserForSalary()) {
-            bot.performEditMessage(message.chatId, adminMessageId, "${this.smlName} ${SalaryDayStrings.isGoing}")
+    fun notifyNextUser() {
+        val message = with(service.getUserForSalary()) {
+            bot.performEditMessage(adminMessage.chatId, adminMessage.messageId,
+                    "${this.smlName} ${SalaryDayStrings.isGoing}")
             bot.performSendMessage(this.chatId, SalaryDayStrings.yourTurn,
                     InlineKeyboardFactory.createUserReadyKeyboard())
         }
-
-        Timer().schedule(SalaryTask(userMessage), 5000)
+        timer.schedule(SalaryTask(message), 5000)
     }
 
 

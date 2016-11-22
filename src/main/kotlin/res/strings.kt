@@ -15,6 +15,10 @@ object ButtonLabel {
     val notReady = "Не иду"
 }
 
+object MiscStrings{
+    val ok = "Ok"
+}
+
 object AdminStrings {
     val commandNotAllowed = "Вот тебе, именно тебе, такие команды использовать"
     val helpRequest = "Варя, Тревор на связи. Лене нужна твоя помощь"
@@ -45,5 +49,6 @@ object SalaryDayStrings {
     val yourTurn = "Твоя очередь. У тебя 2 минуты"
     val isGoing = "идет"
     val turnSkipped = "Ты пропустил свою очередь. Ожидай следующего вызова"
+
 }
 

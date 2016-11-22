@@ -36,10 +36,10 @@ class Application {
         }
 
         override fun InjektRegistrar.registerInjectables() {
+            importModule(BotModule)
             importModule(RegistrationModule)
             importModule(AdminActionsModule)
             importModule(SalaryModule)
-            importModule(BotModule)
         }
 
         fun registerController(controller: Controller) {

@@ -17,8 +17,8 @@ import uy.kohesive.injekt.api.get
  */
 object RegistrationController : Controller {
 
-    val bot = Injekt.get<SmlSalaryBot>()
-    val service = Injekt.get<RegistrationService>()
+    private val bot = Injekt.get<SmlSalaryBot>()
+    private val service = Injekt.get<RegistrationService>()
     
     @BotCommand("/reg")
     fun performRegistration(message: Message) {

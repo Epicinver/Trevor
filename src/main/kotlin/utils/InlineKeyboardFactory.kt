@@ -45,7 +45,7 @@ object InlineKeyboardFactory {
         }
     }
 
-    //todo название !!!! шляпень
+    //todo название !!!!
     fun createUserReadyKeyboard() : InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
