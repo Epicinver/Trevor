@@ -11,6 +11,8 @@ object ButtonLabel {
     val salaryList = "Список получающих сегодня"
     val salaryYes = "Да"
     val salaryNo = "Нет"
+    val ready = "Иду"
+    val notReady = "Не иду"
 }
 
 object AdminStrings {
@@ -33,3 +35,15 @@ object UserStrings {
     val incorrectBirthday = "Ты втер мне дичь. Введи дату рождения в правильном формате"
     val salaryNotification = "Привет! Сегодня зарплату обещают\nБудешь получать ?"
 }
+
+object SalaryDayStrings {
+    val dummy = "..."
+    val hasBeenAdded = "Добавил тебя в список получающих"
+    val inOtherTime = "Хорошо, в другой раз"
+    val noOne = "Пока никто не собирается"
+    val quantity = "Всего их - "
+    val yourTurn = "Твоя очередь. У тебя 2 минуты"
+    val isGoing = "идет"
+    val turnSkipped = "Ты пропустил свою очередь. Ожидай следующего вызова"
+}
+

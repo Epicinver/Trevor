@@ -1,9 +1,9 @@
 package utils
 
-import constant.Strings
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import res.ButtonLabel
+import java.io.BufferedReader
 
 /**
  * Created by sergeyopivalov on 11/11/2016.
@@ -42,6 +42,16 @@ object InlineKeyboardFactory {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(listOf(createButton(ButtonLabel.salaryYes, "#salaryYes"),
                     createButton(ButtonLabel.salaryNo, "#salaryNo")))
+        }
+    }
+
+    //todo название !!!! шляпень
+    fun createUserReadyKeyboard() : InlineKeyboardMarkup {
+        return InlineKeyboardMarkup().apply {
+            keyboard = listOf(
+                    listOf(createButton(ButtonLabel.ready, "#salaryReady"),
+                            createButton(ButtonLabel.notReady, "#salaryNotReady"))
+            )
         }
     }
 

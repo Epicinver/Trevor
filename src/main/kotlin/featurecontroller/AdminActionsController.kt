@@ -35,12 +35,12 @@ object AdminActionsController : Controller {
 
     @BotCallbackData("#allNames")
     fun showAllNames(message: Message) {
-        val allNames = StringBuilder()
+        val list = StringBuilder()
         service.getAllUsers()
                 .map { user -> "${user.smlName} \n" }
-                .forEach { allNames.append(it) }
+                .forEach { list.append(it) }
 
-        bot.performSendMessage(message.chatId, allNames.toString())
+        bot.performSendMessage(message.chatId, list.toString())
     }
 
     //todo sticker factory!!!
