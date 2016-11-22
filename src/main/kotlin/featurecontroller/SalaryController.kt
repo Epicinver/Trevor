@@ -78,6 +78,10 @@ object SalaryController : Controller {
     }
 
     fun notifyNextUser() {
+        if (service.getSalaryListSize() == 0) {
+            bot.performEditMessage(adminMessage.chatId, adminMessage.messageId, SalaryDayStrings.complete)
+            return
+        }
         val message = with(service.getUserForSalary()) {
             bot.performEditMessage(adminMessage.chatId, adminMessage.messageId,
                     "${this.smlName} ${SalaryDayStrings.isGoing}")

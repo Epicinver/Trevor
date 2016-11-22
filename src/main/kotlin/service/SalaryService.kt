@@ -35,4 +35,6 @@ class SalaryService {
             salaryList[it]
         }
     }
+
+    fun getSalaryListSize(): Int = salaryList.size
 }

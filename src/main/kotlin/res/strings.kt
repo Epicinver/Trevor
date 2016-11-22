@@ -45,10 +45,11 @@ object SalaryDayStrings {
     val hasBeenAdded = "Добавил тебя в список получающих"
     val inOtherTime = "Хорошо, в другой раз"
     val noOne = "Пока никто не собирается"
-    val quantity = "Всего их - "
+    val quantity = "\nВсего - "
     val yourTurn = "Твоя очередь. У тебя 2 минуты"
     val isGoing = "идет"
     val turnSkipped = "Ты пропустил свою очередь. Ожидай следующего вызова"
+    val complete = "Зарплата выдана всем"
 
 }
 
