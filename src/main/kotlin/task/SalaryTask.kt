@@ -12,6 +12,7 @@ class SalaryTask(val message: Message) : TimerTask() {
     override fun run() {
         SalaryController.notifyUserSkipTurn(message)
         SalaryController.notifyNextUser()
+        cancel()
     }
 
 }

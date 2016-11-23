@@ -22,19 +22,27 @@ class SalaryService {
         }
     }
 
-    fun deleteUserFromSalaryList(message: Message) {
-        userRepository.getById(message.chatId)?.let {
-            salaryList.remove(it)
-        }
+    fun deleteUserFromSalaryList(user : User) {
+        salaryList.remove(user)
     }
 
     fun getAllUsersForSalary(): ArrayList<User> = salaryList
 
-    fun getUserForSalary(): User {
+    fun getNextUser(presentUser: User?) : User {
+        var user = getRandomUser()
+        while (user == presentUser && !isLastUser()) {
+            user = getRandomUser()
+        }
+        return user
+    }
+
+    fun isListEmpty(): Boolean = salaryList.size == 0
+
+    private fun isLastUser(): Boolean = salaryList.size == 1
+
+    private fun getRandomUser(): User {
         return Random().nextInt(salaryList.size).let {
             salaryList[it]
         }
     }
-
-    fun getSalaryListSize(): Int = salaryList.size
 }

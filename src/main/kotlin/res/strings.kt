@@ -13,6 +13,8 @@ object ButtonLabel {
     val salaryNo = "Нет"
     val ready = "Иду"
     val notReady = "Не иду"
+    val get = "Получил"
+    val notGet = "Не получил"
 }
 
 object MiscStrings{
@@ -20,7 +22,8 @@ object MiscStrings{
 }
 
 object AdminStrings {
-    val commandNotAllowed = "Вот тебе, именно тебе, такие команды использовать"
+    val commandsList = "Вот возможные действия:"
+    val commandNotAllowed = "Вот тебе, именно тебе, такие команды использовать запрещено"
     val helpRequest = "Варя, Тревор на связи. Лене нужна твоя помощь"
     val helpGoing = "Тревор вызвал подмогу, сейчас все будет..."
 }
@@ -47,9 +50,10 @@ object SalaryDayStrings {
     val noOne = "Пока никто не собирается"
     val quantity = "\nВсего - "
     val yourTurn = "Твоя очередь. У тебя 2 минуты"
-    val isGoing = "идет"
+    val isGoing = "идет..."
     val turnSkipped = "Ты пропустил свою очередь. Ожидай следующего вызова"
     val complete = "Зарплата выдана всем"
+    val moneyReceived = "Деньги получены. Досвидули"
 
 }
 

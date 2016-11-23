@@ -2,6 +2,7 @@ package repository
 
 import database.DatabaseHelper
 import entity.User
+import java.sql.ResultSet
 import java.util.*
 
 /**
@@ -12,7 +13,7 @@ class UserRepository : Repository <User> {
     override fun create(user: User) {
         DatabaseHelper.
                 executeTransaction("INSERT INTO users (USERNAME, CHAT_ID, ROLE) " +
-                        "VALUES ('${user.username}', '${user.chatId}', ${user.role})")
+                        "VALUES ('${user.username}', '${user.chatId}', '${user.role}')")
     }
 
     override fun delete(chatId: Long) {
@@ -23,12 +24,16 @@ class UserRepository : Repository <User> {
     override fun getById(chatId: Long): User? {
         val resultSet = DatabaseHelper.getConnection().
                 createStatement().executeQuery("SELECT * FROM users WHERE CHAT_ID = $chatId")
-        if (!resultSet.isBeforeFirst) return null
+        if (!resultSet.isBeforeFirst) {
+            resultSet.close()
+            return null
+        }
         return with(resultSet) {
             val username = getString(DatabaseHelper.COLUMN_USERNAME)
             val smlName = getString(DatabaseHelper.COLUMN_SML_NAME)
             val birthday = getString(DatabaseHelper.COLUMN_BIRTHDAY)
             val role = getString(DatabaseHelper.COLUMN_ROLE)
+            resultSet.close()
             User(username, chatId, smlName, birthday, role)
         }
     }
@@ -45,6 +50,7 @@ class UserRepository : Repository <User> {
             val role = resultSet.getString(DatabaseHelper.COLUMN_ROLE)
             result.add(User(username, chatId, smlName, birthday, role))
         }
+        resultSet.close()
         return result
     }
 

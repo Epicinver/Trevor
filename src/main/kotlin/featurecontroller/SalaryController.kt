@@ -2,6 +2,7 @@ package featurecontroller
 
 import annotation.BotCallbackData
 import bot.SmlSalaryBot
+import entity.User
 import task.SalaryTask
 import org.telegram.telegrambots.api.objects.Message
 import res.MiscStrings
@@ -11,17 +12,21 @@ import utils.InlineKeyboardFactory
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
+import kotlin.properties.Delegates
 
 /**
  * Created by sergeyopivalov on 20.11.16.
  */
 object SalaryController : Controller {
 
-    private var adminMessage = Message()  //todo ???
+    private var adminMessage: Message by Delegates.notNull()
+    private var currentMessage: Message by Delegates.notNull()
+    private var currentUser: User? = null
 
     private val bot = Injekt.get<SmlSalaryBot>()
     private val service = Injekt.get<SalaryService>()
-    private val timer = Injekt.get<Timer>()
+    private var timer = Injekt.get<Timer>()
+    private var timerTask : TimerTask? = null
 
     @BotCallbackData("#salaryYes")
     fun addUserToSalaryList(message: Message) {
@@ -29,7 +34,7 @@ object SalaryController : Controller {
         bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.hasBeenAdded, true)
     }
 
-    //todo тупое название метода
+    //todo название метода
     @BotCallbackData("#salaryNo")
     fun userNoSalary(message: Message) {
         bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.inOtherTime, true)
@@ -56,9 +61,8 @@ object SalaryController : Controller {
     //todo название метода
     @BotCallbackData("#salaryReady")
     fun userReady(message: Message) {
-        bot.performSendMessage(message.chatId, MiscStrings.ok)
-        timer.cancel()
-
+        bot.performEditMessage(message.chatId, message.messageId, MiscStrings.ok, true)
+        timerTask?.cancel()
     }
 
     @BotCallbackData("#salaryNotReady")
@@ -73,23 +77,52 @@ object SalaryController : Controller {
         notifyNextUser()
     }
 
+    @BotCallbackData("#userGetSalary")
+    fun userGetSalary(message: Message) {
+        bot.performEditMessage(currentMessage.chatId, currentMessage.messageId, SalaryDayStrings.moneyReceived, true)
+        service.deleteUserFromSalaryList(currentUser!!)
+        notifyNextUser()
+    }
+
+    @BotCallbackData("#userNotGetSalary")
+    fun userNotGetSalary(message: Message) {
+        notifyUserSkipTurn(currentMessage)
+        notifyNextUser()
+    }
+
     fun notifyUserSkipTurn(message: Message) {
         bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.turnSkipped)
     }
 
     fun notifyNextUser() {
-        if (service.getSalaryListSize() == 0) {
+        timerTask?.cancel()
+
+        if (service.isListEmpty()) {
             bot.performEditMessage(adminMessage.chatId, adminMessage.messageId, SalaryDayStrings.complete)
             return
         }
-        val message = with(service.getUserForSalary()) {
-            bot.performEditMessage(adminMessage.chatId, adminMessage.messageId,
-                    "${this.smlName} ${SalaryDayStrings.isGoing}")
-            bot.performSendMessage(this.chatId, SalaryDayStrings.yourTurn,
-                    InlineKeyboardFactory.createUserReadyKeyboard())
-        }
-        timer.schedule(SalaryTask(message), 5000)
+
+        currentUser = service.getNextUser(currentUser)
+        notifyAdmin()
+        currentMessage = inviteUser()
+
+        timerTask = SalaryTask(currentMessage)
+        timer.schedule(timerTask, 5000) //todo delay to properties
     }
+
+    private fun notifyAdmin() {
+        with (bot) {
+            performEditMessage(adminMessage.chatId, adminMessage.messageId,
+                    "${currentUser?.smlName} ${SalaryDayStrings.isGoing}")
+            performEditKeyboard(adminMessage.chatId, adminMessage.messageId,
+                    InlineKeyboardFactory.createUserStatusKeyboard())
+        }
+    }
+
+    private fun inviteUser() : Message =
+            bot.performSendMessage(currentMessage.chatId, SalaryDayStrings.yourTurn,
+                InlineKeyboardFactory.createUserReadyKeyboard())
+
 
 
 }

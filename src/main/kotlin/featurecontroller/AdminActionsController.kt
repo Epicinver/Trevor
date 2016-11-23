@@ -10,13 +10,14 @@ import service.AdminActionsService
 import utils.InlineKeyboardFactory
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import kotlin.properties.Delegates
 
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
 object AdminActionsController : Controller {
 
-    private var messageWithActions = Message() //todo ?
+    private var messageWithActions :Message by Delegates.notNull()
 
     private val bot = Injekt.get<SmlSalaryBot>()
     private val service = Injekt.get<AdminActionsService>()
@@ -29,7 +30,7 @@ object AdminActionsController : Controller {
             bot.performSendMessage(message.chatId, AdminStrings.commandNotAllowed)
             return
         }
-        messageWithActions = bot.performSendMessage(message.chatId, "Commands:",
+        messageWithActions = bot.performSendMessage(message.chatId, AdminStrings.commandsList,
                 InlineKeyboardFactory.createAdminKeyboard())
     }
 

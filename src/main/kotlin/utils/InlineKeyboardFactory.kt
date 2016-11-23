@@ -10,6 +10,7 @@ import java.io.BufferedReader
  */
 object InlineKeyboardFactory {
 
+    //todo все имена в этом классе
     private fun createButton(text: String, callbackData: String): InlineKeyboardButton {
         return InlineKeyboardButton().apply {
             this.text = text
@@ -51,6 +52,15 @@ object InlineKeyboardFactory {
             keyboard = listOf(
                     listOf(createButton(ButtonLabel.ready, "#salaryReady"),
                             createButton(ButtonLabel.notReady, "#salaryNotReady"))
+            )
+        }
+    }
+
+    fun createUserStatusKeyboard() : InlineKeyboardMarkup {
+        return InlineKeyboardMarkup().apply {
+            keyboard = listOf(
+                    listOf(createButton(ButtonLabel.get, "#userGetSalary"),
+                            createButton(ButtonLabel.notGet, "#userNotGetSalary"))
             )
         }
     }
