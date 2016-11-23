@@ -10,16 +10,17 @@ import service.AdminActionsService
 import utils.InlineKeyboardFactory
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import kotlin.properties.Delegates
 
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
 object AdminActionsController : Controller {
 
-    var messageWithActions = -1
+    private var messageWithActions :Message by Delegates.notNull()
 
-    val bot = Injekt.get<SmlSalaryBot>()
-    val service = Injekt.get<AdminActionsService>()
+    private val bot = Injekt.get<SmlSalaryBot>()
+    private val service = Injekt.get<AdminActionsService>()
 
 
     //todo hardcode!
@@ -29,18 +30,18 @@ object AdminActionsController : Controller {
             bot.performSendMessage(message.chatId, AdminStrings.commandNotAllowed)
             return
         }
-        messageWithActions = bot.performSendMessage(message.chatId, "Commands:",
-                InlineKeyboardFactory.createAdminKeyboard()).messageId
+        messageWithActions = bot.performSendMessage(message.chatId, AdminStrings.commandsList,
+                InlineKeyboardFactory.createAdminKeyboard())
     }
 
     @BotCallbackData("#allNames")
     fun showAllNames(message: Message) {
-        val allNames = StringBuilder()
+        val list = StringBuilder()
         service.getAllUsers()
                 .map { user -> "${user.smlName} \n" }
-                .forEach { allNames.append(it) }
+                .forEach { list.append(it) }
 
-        bot.performSendMessage(message.chatId, allNames.toString())
+        bot.performSendMessage(message.chatId, list.toString())
     }
 
     //todo sticker factory!!!
@@ -61,7 +62,7 @@ object AdminActionsController : Controller {
                     bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
                             InlineKeyboardFactory.createUserNotificationKeyboard())
                 }
-        bot.performEditKeyboard(message.chatId, messageWithActions,
+        bot.performEditKeyboard(message.chatId, messageWithActions.messageId,
                 InlineKeyboardFactory.createEditedAdminKeyboard())
 
     }

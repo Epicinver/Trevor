@@ -10,12 +10,13 @@ import messageprocessor.MethodExecutor
 import messageprocessor.MessageProcessor
 import di.BotModule
 import di.RegistrationModule
+import di.SalaryModule
 import featurecontroller.AdminActionsController
+import featurecontroller.SalaryController
+import org.knowm.sundial.SundialJobScheduler
 import org.telegram.telegrambots.TelegramBotsApi
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.InjektMain
 import uy.kohesive.injekt.api.InjektRegistrar
-import uy.kohesive.injekt.api.get
 
 /**
  * Created by sergeyopivalov on 16.11.16.
@@ -26,16 +27,19 @@ class Application {
 
             registerController(RegistrationController)
             registerController(AdminActionsController)
+            registerController(SalaryController)
 
             DatabaseHelper.createDb()
 
+            SundialJobScheduler.startScheduler("task")
             TelegramBotsApi().registerBot(Trevor())
         }
 
         override fun InjektRegistrar.registerInjectables() {
+            importModule(BotModule)
             importModule(RegistrationModule)
             importModule(AdminActionsModule)
-            importModule(BotModule)
+            importModule(SalaryModule)
         }
 
         fun registerController(controller: Controller) {

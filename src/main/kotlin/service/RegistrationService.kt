@@ -11,6 +11,7 @@ import uy.kohesive.injekt.api.get
  * Created by sergeyopivalov on 10/11/2016.
  */
 class RegistrationService() {
+
     val repository: Repository<User> = Injekt.get()
 
     fun isExist(message: Message): Boolean =
