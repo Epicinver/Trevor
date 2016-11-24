@@ -24,7 +24,7 @@ object InlineKeyboardFactory {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
                     listOf(createButton(ButtonLabel.allNames, "#allNames")),
-                    listOf(createButton(ButtonLabel.needHelp, "#needHelp")),
+                    listOf(createButton(ButtonLabel.needHelp, "#helpRequest")),
                     listOf(createButton(ButtonLabel.salaryToday, "#salaryToday")))
         }
     }
@@ -33,7 +33,7 @@ object InlineKeyboardFactory {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
                     listOf(createButton(ButtonLabel.allNames, "#allNames")),
-                    listOf(createButton(ButtonLabel.needHelp, "#needHelp")),
+                    listOf(createButton(ButtonLabel.needHelp, "#helpRequest")),
                     listOf(createButton(ButtonLabel.salaryList, "#salaryList")),
                     listOf(createButton(ButtonLabel.salaryStart, "#salaryStart")))
         }

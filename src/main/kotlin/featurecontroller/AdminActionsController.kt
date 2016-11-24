@@ -4,7 +4,9 @@ import annotation.BotCallbackData
 import annotation.BotCommand
 import bot.SmlSalaryBot
 import org.telegram.telegrambots.api.objects.Message
+import org.telegram.telegrambots.api.objects.Sticker
 import res.AdminStrings
+import res.Stickers
 import res.UserStrings
 import service.AdminActionsService
 import utils.InlineKeyboardFactory
@@ -44,12 +46,11 @@ object AdminActionsController : Controller {
         bot.performSendMessage(message.chatId, list.toString())
     }
 
-    //todo sticker factory!!!
-    @BotCallbackData("#needHelp")
+    @BotCallbackData("#helpRequest")
     fun helpRequest(message: Message) {
         with(service.getHelper().chatId) {
             bot.performSendMessage(this, AdminStrings.helpRequest)
-            bot.performSendSticker(this, "BQADAQADch8AAtpxZgcZflwMawhtDQI")
+            bot.performSendSticker(this, Stickers.helpRequest)
         }
         bot.performSendMessage(message.chatId, AdminStrings.helpGoing)
 

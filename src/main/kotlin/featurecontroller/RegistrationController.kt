@@ -5,6 +5,7 @@ import bot.SmlSalaryBot
 import database.DatabaseHelper
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
+import res.Stickers
 import res.UserStrings
 import service.RegistrationService
 import utils.DateValidator
@@ -58,6 +59,7 @@ object RegistrationController : Controller {
                         message.text,
                         true)
                 bot.performSendMessage(message.chatId, UserStrings.registrationComplete)
+                bot.performSendSticker(message.chatId, Stickers.registrationComplete)
             } else {
                 bot.performSendMessage(message.chatId, UserStrings.incorrectBirthday)
             }
