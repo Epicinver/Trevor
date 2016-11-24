@@ -10,7 +10,7 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 20.11.16.
  */
-class SalaryService {
+class SalaryService() {
 
     private val salaryList = ArrayList<User>()
 
