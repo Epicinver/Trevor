@@ -43,6 +43,11 @@ object UserStrings {
     val salaryNotification = "Привет! Сегодня зарплату обещают\nБудешь получать ?"
 }
 
+object BirthdayStrings {
+    val notification = "Cегодня празднует свой день рождения "
+    val notificationWeekend = "На выходных был день рождения у "
+}
+
 object SalaryDayStrings {
     val dummy = "..."
     val hasBeenAdded = "Добавил тебя в список получающих"

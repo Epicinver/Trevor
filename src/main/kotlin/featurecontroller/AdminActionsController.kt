@@ -24,8 +24,6 @@ object AdminActionsController : Controller {
     private val bot = Injekt.get<SmlSalaryBot>()
     private val service = Injekt.get<AdminActionsService>()
 
-
-    //todo hardcode!
     @BotCommand("/actions")
     fun performActionsShow(message: Message) {
         if (!service.isAdmin(message)) {
