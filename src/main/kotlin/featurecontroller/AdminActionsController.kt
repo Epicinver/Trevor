@@ -5,9 +5,7 @@ import annotation.BotCommand
 import bot.SmlSalaryBot
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Sticker
-import res.AdminStrings
-import res.Stickers
-import res.UserStrings
+import res.*
 import service.AdminActionsService
 import utils.InlineKeyboardFactory
 import uy.kohesive.injekt.Injekt
@@ -17,7 +15,7 @@ import kotlin.properties.Delegates
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
-object AdminActionsController : BaseController(){
+object AdminActionsController : BaseController() {
 
     //todo добавить возможность удалять юзера из БД
     private var messageWithActions: Message by Delegates.notNull()
@@ -35,7 +33,8 @@ object AdminActionsController : BaseController(){
                 InlineKeyboardFactory.createAdminKeyboard())
     }
 
-    @BotCallbackData("#allNames")
+
+    @BotCallbackData(CallbackData.allNames)
     fun showAllNames(message: Message) {
         val list = StringBuilder()
         service.getAllUsers()
@@ -45,7 +44,7 @@ object AdminActionsController : BaseController(){
         bot.performSendMessage(message.chatId, list.toString())
     }
 
-    @BotCallbackData("#helpRequest")
+    @BotCallbackData(CallbackData.needHelp)
     fun helpRequest(message: Message) {
         with(service.getHelper().chatId) {
             bot.performSendMessage(this, AdminStrings.helpRequest)
@@ -55,7 +54,7 @@ object AdminActionsController : BaseController(){
 
     }
 
-    @BotCallbackData("#salaryToday")
+    @BotCallbackData(CallbackData.salaryToday)
     fun sendSalaryNotification(message: Message) {
         service.getAllUsers()
                 .forEach {

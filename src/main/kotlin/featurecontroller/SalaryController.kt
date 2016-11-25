@@ -1,7 +1,6 @@
 package featurecontroller
 
 import annotation.BotCallbackData
-import bot.SmlSalaryBot
 import entity.User
 import task.SalaryTask
 import org.telegram.telegrambots.api.objects.Message
@@ -22,11 +21,13 @@ object SalaryController : BaseController() {
 
     private val service = Injekt.get<SalaryService>()
     private var timer = Injekt.get<Timer>()
-    private var timerTask : TimerTask? = null
 
     private var adminMessage: Message by Delegates.notNull()
     private var currentMessage: Message by Delegates.notNull()
+    private var salaryListMessage: Message? = null
+
     private var currentUser: User? = null
+    private var timerTask: TimerTask? = null
 
     @BotCallbackData(CallbackData.addToSalaryList)
     fun addUserToSalaryList(message: Message) {
@@ -39,22 +40,25 @@ object SalaryController : BaseController() {
         bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.inOtherTime, true)
     }
 
-    //todo more kotlin in this method
     @BotCallbackData(CallbackData.salaryList)
     fun showSalaryList(message: Message) {
         val list = with(service.getAllUsersForSalary()) {
-            if (this.isEmpty()) {
+            if (isEmpty()) {
                 bot.performSendMessage(message.chatId, SalaryDayStrings.noOne)
                 return
             }
             val list = StringBuilder()
-            this.map { user -> "${user.smlName} \n" }
-                    .forEach { list.append(it) }
+            map { user -> "${user.smlName} \n" }
+            forEach { list.append(it) }
 
             list.append("${SalaryDayStrings.quantity} ${this.size}")
             list.toString()
         }
-        bot.performSendMessage(message.chatId, list) //todo Feature:запомнить сообщение и редактировать его, а не присылать новое
+
+        if (salaryListMessage == null)
+            salaryListMessage = bot.performSendMessage(message.chatId, list)
+        else
+            bot.performEditMessage(message.chatId, salaryListMessage!!.messageId, list)
     }
 
     @BotCallbackData(CallbackData.goingToGetPaid)
@@ -97,6 +101,7 @@ object SalaryController : BaseController() {
 
         if (service.isListEmpty()) {
             bot.performEditMessage(adminMessage.chatId, adminMessage.messageId, SalaryDayStrings.complete)
+            salaryListMessage = null
             return
         }
 
@@ -109,7 +114,7 @@ object SalaryController : BaseController() {
     }
 
     private fun notifyAdmin() {
-        with (bot) {
+        with(bot) {
             performEditMessage(adminMessage.chatId, adminMessage.messageId,
                     "${currentUser?.smlName} ${SalaryDayStrings.isGoing}")
             performEditKeyboard(adminMessage.chatId, adminMessage.messageId,
@@ -117,10 +122,9 @@ object SalaryController : BaseController() {
         }
     }
 
-    private fun inviteUser() : Message =
+    private fun inviteUser(): Message =
             bot.performSendMessage(currentMessage.chatId, SalaryDayStrings.yourTurn,
-                InlineKeyboardFactory.createUserInvitationKeyboard())
-
+                    InlineKeyboardFactory.createUserInvitationKeyboard())
 
 
 }
