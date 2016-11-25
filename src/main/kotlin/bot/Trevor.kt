@@ -9,15 +9,18 @@ import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
+import utils.PropertiesLoader
 
 /**
  * Created by sergeyopivalov on 08/11/2016.
  */
 class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 
-    override fun getBotUsername(): String = "sml_testing_bot"
+    override fun getBotUsername(): String =
+            PropertiesLoader.getProperty("bot.username")
 
-    override fun getBotToken(): String = "293702222:AAEhZdfDSIPuSgZ10fbvE0RNRwZLaJFGico"
+    override fun getBotToken(): String =
+            PropertiesLoader.getProperty("bot.token")
 
     override fun onUpdateReceived(update: Update?) {
         update?.message?.let {

@@ -27,11 +27,11 @@ class Application {
 
             DatabaseHelper.createDb()
 
+            TelegramBotsApi().registerBot(Trevor())
+
             SundialJobScheduler.startScheduler("job")
             SundialJobScheduler.startJob(BirthdayWeekdayJob::class.java.simpleName)
             SundialJobScheduler.startJob(BirthdayWeekendJob::class.java.simpleName)
-
-            TelegramBotsApi().registerBot(Trevor())
         }
 
         override fun InjektRegistrar.registerInjectables() {

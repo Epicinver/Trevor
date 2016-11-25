@@ -9,6 +9,7 @@ import res.MiscStrings
 import res.SalaryDayStrings
 import service.SalaryService
 import utils.InlineKeyboardFactory
+import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
@@ -40,6 +41,7 @@ object SalaryController : BaseController() {
         bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.inOtherTime, true)
     }
 
+    //todo more kotlin need here
     @BotCallbackData(CallbackData.salaryList)
     fun showSalaryList(message: Message) {
         val list = with(service.getAllUsersForSalary()) {
@@ -48,8 +50,8 @@ object SalaryController : BaseController() {
                 return
             }
             val list = StringBuilder()
-            map { user -> "${user.smlName} \n" }
-            forEach { list.append(it) }
+            this.map { user -> "${user.smlName} \n" }
+                .forEach { list.append(it) }
 
             list.append("${SalaryDayStrings.quantity} ${this.size}")
             list.toString()
@@ -110,7 +112,7 @@ object SalaryController : BaseController() {
         currentMessage = inviteUser()
 
         timerTask = SalaryTask(currentMessage)
-        timer.schedule(timerTask, 5000) //todo delay to properties
+        timer.schedule(timerTask, PropertiesLoader.getProperty("delay").toLong())
     }
 
     private fun notifyAdmin() {

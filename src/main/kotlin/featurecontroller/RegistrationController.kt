@@ -9,6 +9,7 @@ import res.Stickers
 import res.UserStrings
 import service.RegistrationService
 import utils.DateValidator
+import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -37,7 +38,7 @@ object RegistrationController : BaseController(){
     }
 
     fun askPass(message: Message) {
-        if (message.text != UserStrings.pass) {
+        if (message.text != PropertiesLoader.getProperty("pass")) {
             bot.performSendMessage(message.chatId, UserStrings.wrongPass)
             return
         }
