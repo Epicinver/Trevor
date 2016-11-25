@@ -1,8 +1,9 @@
-package service
+package feature.adminactions
 
 import entity.User
 import org.telegram.telegrambots.api.objects.Message
 import repository.Repository
+import feature.base.BaseService
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
@@ -10,9 +11,7 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
-class AdminActionsService() {
-
-    val userRepository = Injekt.get<Repository<User>>()
+class AdminActionsService : BaseService() {
 
     fun isAdmin(message: Message): Boolean {
         return userRepository.getById(message.chatId)?.

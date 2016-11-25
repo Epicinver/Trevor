@@ -1,14 +1,13 @@
-package featurecontroller
+package feature.adminactions
 
 import annotation.BotCallbackData
 import annotation.BotCommand
-import bot.SmlSalaryBot
+import feature.base.BaseController
 import org.telegram.telegrambots.api.objects.Message
-import org.telegram.telegrambots.api.objects.Sticker
 import res.AdminStrings
+import res.CallbackData
 import res.Stickers
 import res.UserStrings
-import service.AdminActionsService
 import utils.InlineKeyboardFactory
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -17,11 +16,12 @@ import kotlin.properties.Delegates
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
-object AdminActionsController : Controller {
+object AdminActionsController : BaseController() {
 
-    private var messageWithActions :Message by Delegates.notNull()
+    //todo добавить возможность удалять юзера из БД
+    private var messageWithActions: Message by Delegates.notNull()
 
-    private val bot = Injekt.get<SmlSalaryBot>()
+    //todo перенести сервис в базовый класс (там гемор с дженериками)
     private val service = Injekt.get<AdminActionsService>()
 
     @BotCommand("/actions")
@@ -34,7 +34,8 @@ object AdminActionsController : Controller {
                 InlineKeyboardFactory.createAdminKeyboard())
     }
 
-    @BotCallbackData("#allNames")
+
+    @BotCallbackData(CallbackData.allNames)
     fun showAllNames(message: Message) {
         val list = StringBuilder()
         service.getAllUsers()
@@ -44,7 +45,7 @@ object AdminActionsController : Controller {
         bot.performSendMessage(message.chatId, list.toString())
     }
 
-    @BotCallbackData("#helpRequest")
+    @BotCallbackData(CallbackData.needHelp)
     fun helpRequest(message: Message) {
         with(service.getHelper().chatId) {
             bot.performSendMessage(this, AdminStrings.helpRequest)
@@ -54,13 +55,11 @@ object AdminActionsController : Controller {
 
     }
 
-    @BotCallbackData("#salaryToday")
+    @BotCallbackData(CallbackData.salaryToday)
     fun sendSalaryNotification(message: Message) {
         service.getAllUsers()
-                .forEach {
-                    bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
-                            InlineKeyboardFactory.createUserNotificationKeyboard())
-                }
+                .forEach { bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
+                            InlineKeyboardFactory.createUserNotificationKeyboard()) }
         bot.performEditKeyboard(message.chatId, messageWithActions.messageId,
                 InlineKeyboardFactory.createEditedAdminKeyboard())
 

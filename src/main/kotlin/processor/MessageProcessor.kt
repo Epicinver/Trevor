@@ -1,6 +1,6 @@
-package messageprocessor
+package processor
 
-import featurecontroller.RegistrationController
+import feature.registration.RegistrationController
 import org.telegram.telegrambots.api.objects.CallbackQuery
 import org.telegram.telegrambots.api.objects.Message
 import java.util.*
@@ -17,7 +17,7 @@ object MessageProcessor {
         commandsMap.put(command, executor)
     }
 
-    fun addCallbackData(callbackData : String, executor: MethodExecutor){
+    fun addCallbackData(callbackData: String, executor: MethodExecutor) {
         callbackDataMap.put(callbackData, executor)
     }
 
@@ -35,14 +35,14 @@ object MessageProcessor {
 
     fun processCallbackQuery(query: CallbackQuery) {
         query.data?.let {
-            if(it in callbackDataMap) {
+            if (it in callbackDataMap) {
                 callbackDataMap[it]?.execute(query.message)
             }
         }
 
     }
 
-    fun processText(message: Message) {
+    private fun processText(message: Message) {
         with(RegistrationController) {
             if (isRegistered(message)) updateUser(message) else askPass(message)
         }

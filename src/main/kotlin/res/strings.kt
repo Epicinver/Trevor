@@ -9,12 +9,12 @@ object ButtonLabel {
     val salaryToday = "Сегодня зарплата =)"
     val salaryStart = "Начать выдачу зарплаты"
     val salaryList = "Список получающих сегодня"
-    val salaryYes = "Да"
-    val salaryNo = "Нет"
-    val ready = "Иду"
-    val notReady = "Не иду"
-    val get = "Получил"
-    val notGet = "Не получил"
+    val yes = "Да"
+    val no = "Нет"
+    val going = "Иду"
+    val notGoing = "Не иду"
+    val gotPaid = "Получил"
+    val notGotPaid = "Не получил"
 }
 
 object MiscStrings{
@@ -29,7 +29,6 @@ object AdminStrings {
 }
 
 object UserStrings {
-    val pass = "0272" //todo вынести пароль в properties
     val alreadyRegistered = "Ну ты ведь зарегестрирован уже..."
     val thereIsNoUsername = "Привет! Ты хочешь получать зарплату, но у тебя не указан username в настройках Telegram. Не надо так. Добавь username и попробуй /reg снова"
     val askPass = "Привет! Ну ладно, ты хочешь получать зарплату. Какой пароль?"

@@ -1,14 +1,16 @@
-package featurecontroller
+package feature.salary
 
 import annotation.BotCallbackData
-import bot.SmlSalaryBot
 import entity.User
-import task.SalaryTask
+import feature.base.BaseController
+import feature.salary.task.SalaryTask
 import org.telegram.telegrambots.api.objects.Message
+import res.CallbackData
 import res.MiscStrings
 import res.SalaryDayStrings
-import service.SalaryService
+import feature.salary.SalaryService
 import utils.InlineKeyboardFactory
+import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
@@ -17,74 +19,77 @@ import kotlin.properties.Delegates
 /**
  * Created by sergeyopivalov on 20.11.16.
  */
-object SalaryController : Controller {
+object SalaryController : BaseController() {
+
+    private val service = Injekt.get<SalaryService>()
+    private var timer = Injekt.get<Timer>()
 
     private var adminMessage: Message by Delegates.notNull()
     private var currentMessage: Message by Delegates.notNull()
+    private var salaryListMessage: Message? = null
+
     private var currentUser: User? = null
+    private var timerTask: TimerTask? = null
 
-    private val bot = Injekt.get<SmlSalaryBot>()
-    private val service = Injekt.get<SalaryService>()
-    private var timer = Injekt.get<Timer>()
-    private var timerTask : TimerTask? = null
-
-    @BotCallbackData("#salaryYes")
+    @BotCallbackData(CallbackData.addToSalaryList)
     fun addUserToSalaryList(message: Message) {
         service.addUserToSalaryList(message)
         bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.hasBeenAdded, true)
     }
 
-    //todo название метода
-    @BotCallbackData("#salaryNo")
-    fun userNoSalary(message: Message) {
+    @BotCallbackData(CallbackData.notAddToSalaryList)
+    fun notAddUserToSalaryList(message: Message) {
         bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.inOtherTime, true)
     }
 
-    //todo more kotlin in this method
-    @BotCallbackData("#salaryList")
+    //todo more kotlin need here
+    @BotCallbackData(CallbackData.salaryList)
     fun showSalaryList(message: Message) {
         val list = with(service.getAllUsersForSalary()) {
-            if (this.isEmpty()) {
+            if (isEmpty()) {
                 bot.performSendMessage(message.chatId, SalaryDayStrings.noOne)
                 return
             }
             val list = StringBuilder()
             this.map { user -> "${user.smlName} \n" }
-                    .forEach { list.append(it) }
+                .forEach { list.append(it) }
 
             list.append("${SalaryDayStrings.quantity} ${this.size}")
             list.toString()
         }
-        bot.performSendMessage(message.chatId, list) //todo Feature:запомнить сообщение и редактировать его, а не присылать новое
+
+        if (salaryListMessage == null)
+            salaryListMessage = bot.performSendMessage(message.chatId, list)
+        else
+            bot.performEditMessage(message.chatId, salaryListMessage!!.messageId, list)
     }
 
-    //todo название метода
-    @BotCallbackData("#salaryReady")
-    fun userReady(message: Message) {
+    @BotCallbackData(CallbackData.goingToGetPaid)
+    fun userGoingToGetPaid(message: Message) {
         bot.performEditMessage(message.chatId, message.messageId, MiscStrings.ok, true)
         timerTask?.cancel()
     }
 
-    @BotCallbackData("#salaryNotReady")
+    @BotCallbackData(CallbackData.notGoingToGetPaid)
     fun skipTurn(message: Message) {
         bot.performSendMessage(message.chatId, SalaryDayStrings.turnSkipped)
         notifyNextUser()
     }
 
-    @BotCallbackData("#salaryStart")
+    @BotCallbackData(CallbackData.salaryStart)
     fun startSalary(message: Message) {
         adminMessage = bot.performSendMessage(message.chatId, SalaryDayStrings.dummy)
         notifyNextUser()
     }
 
-    @BotCallbackData("#userGetSalary")
+    @BotCallbackData(CallbackData.gotPaid)
     fun userGetSalary(message: Message) {
         bot.performEditMessage(currentMessage.chatId, currentMessage.messageId, SalaryDayStrings.moneyReceived, true)
         service.deleteUserFromSalaryList(currentUser!!)
         notifyNextUser()
     }
 
-    @BotCallbackData("#userNotGetSalary")
+    @BotCallbackData(CallbackData.notGotPaid)
     fun userNotGetSalary(message: Message) {
         notifyUserSkipTurn(currentMessage)
         notifyNextUser()
@@ -99,6 +104,7 @@ object SalaryController : Controller {
 
         if (service.isListEmpty()) {
             bot.performEditMessage(adminMessage.chatId, adminMessage.messageId, SalaryDayStrings.complete)
+            salaryListMessage = null
             return
         }
 
@@ -107,22 +113,21 @@ object SalaryController : Controller {
         currentMessage = inviteUser()
 
         timerTask = SalaryTask(currentMessage)
-        timer.schedule(timerTask, 5000) //todo delay to properties
+        timer.schedule(timerTask, PropertiesLoader.getProperty("delay").toLong())
     }
 
     private fun notifyAdmin() {
-        with (bot) {
-            performEditMessage(adminMessage.chatId, adminMessage.messageId,
-                    "${currentUser?.smlName} ${SalaryDayStrings.isGoing}")
-            performEditKeyboard(adminMessage.chatId, adminMessage.messageId,
-                    InlineKeyboardFactory.createUserStatusKeyboard())
+        bot.apply {
+            performEditMessage(feature.salary.SalaryController.adminMessage.chatId, feature.salary.SalaryController.adminMessage.messageId,
+                    "${feature.salary.SalaryController.currentUser?.smlName} ${res.SalaryDayStrings.isGoing}")
+            performEditKeyboard(feature.salary.SalaryController.adminMessage.chatId, feature.salary.SalaryController.adminMessage.messageId,
+                    utils.InlineKeyboardFactory.createUserPaidStatusKeyboard())
         }
     }
 
-    private fun inviteUser() : Message =
+    private fun inviteUser(): Message =
             bot.performSendMessage(currentMessage.chatId, SalaryDayStrings.yourTurn,
-                InlineKeyboardFactory.createUserReadyKeyboard())
-
+                    InlineKeyboardFactory.createUserInvitationKeyboard())
 
 
 }

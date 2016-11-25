@@ -1,6 +1,6 @@
-package di
+package feature.birthdays
 
-import service.BirthdayService
+import feature.birthdays.BirthdayService
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton
@@ -8,7 +8,7 @@ import uy.kohesive.injekt.api.addSingleton
 /**
  * Created by sergeyopivalov on 24/11/2016.
  */
-object BirthdayModule : InjektModule{
+object BirthdayModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(BirthdayService())
     }
