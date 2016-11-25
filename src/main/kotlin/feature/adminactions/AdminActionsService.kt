@@ -18,6 +18,10 @@ class AdminActionsService : BaseService() {
                 role == ("admin")
     }
 
+    fun deleteUser(chatId: Long) {
+        userRepository.delete(chatId)
+    }
+
     fun getHelper(): User {
         return userRepository.getAll()
                 .filter { it.role == "911" }[0]

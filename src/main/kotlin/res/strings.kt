@@ -4,7 +4,7 @@ package res
  * Created by sergeyopivalov on 17.11.16.
  */
 object ButtonLabel {
-    val allNames = "Показать всех пользователей"
+    val allUsers = "Показать всех пользователей"
     val needHelp = "Помощь друга"
     val salaryToday = "Сегодня зарплата =)"
     val salaryStart = "Начать выдачу зарплаты"
@@ -15,6 +15,7 @@ object ButtonLabel {
     val notGoing = "Не иду"
     val gotPaid = "Получил"
     val notGotPaid = "Не получил"
+    val deleteUser = "Удалить пользователя"
 }
 
 object MiscStrings{
@@ -26,6 +27,8 @@ object AdminStrings {
     val commandNotAllowed = "Вот тебе, именно тебе, такие команды использовать запрещено"
     val helpRequest = "Варя, Тревор на связи. Лене нужна твоя помощь"
     val helpGoing = "Тревор вызвал подмогу, сейчас все будет..."
+    val typeChatIdToDelete = "Введи ID пользователя для удаления"
+    val userHasBeenDeleted = "Удалил изменника"
 }
 
 object UserStrings {

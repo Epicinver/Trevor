@@ -1,5 +1,6 @@
 package processor
 
+import feature.adminactions.AdminActionsController
 import feature.registration.RegistrationController
 import org.telegram.telegrambots.api.objects.CallbackQuery
 import org.telegram.telegrambots.api.objects.Message
@@ -43,6 +44,12 @@ object MessageProcessor {
     }
 
     private fun processText(message: Message) {
+        with(AdminActionsController) {
+            if(message.isReply) {
+                performDeleteUser(message)
+                return
+            }
+        }
         with(RegistrationController) {
             if (isRegistered(message)) updateUser(message) else askPass(message)
         }

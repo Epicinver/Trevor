@@ -37,7 +37,7 @@ class Application {
 
             TelegramBotsApi().registerBot(Trevor())
 
-            SundialJobScheduler.startScheduler("feature/birthdays/job")
+            SundialJobScheduler.startScheduler("feature.birthdays.job")
             SundialJobScheduler.startJob(BirthdayWeekdayJob::class.java.simpleName)
             SundialJobScheduler.startJob(BirthdayWeekendJob::class.java.simpleName)
         }

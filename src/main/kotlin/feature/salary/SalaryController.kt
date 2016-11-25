@@ -8,7 +8,6 @@ import org.telegram.telegrambots.api.objects.Message
 import res.CallbackData
 import res.MiscStrings
 import res.SalaryDayStrings
-import feature.salary.SalaryService
 import utils.InlineKeyboardFactory
 import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
@@ -52,7 +51,7 @@ object SalaryController : BaseController() {
             }
             val list = StringBuilder()
             this.map { user -> "${user.smlName} \n" }
-                .forEach { list.append(it) }
+                    .forEach { list.append(it) }
 
             list.append("${SalaryDayStrings.quantity} ${this.size}")
             list.toString()
@@ -110,7 +109,7 @@ object SalaryController : BaseController() {
 
         currentUser = service.getNextUser(currentUser)
         notifyAdmin()
-        currentMessage = inviteUser()
+        inviteUser()
 
         timerTask = SalaryTask(currentMessage)
         timer.schedule(timerTask, PropertiesLoader.getProperty("delay").toLong())
@@ -118,16 +117,17 @@ object SalaryController : BaseController() {
 
     private fun notifyAdmin() {
         bot.apply {
-            performEditMessage(feature.salary.SalaryController.adminMessage.chatId, feature.salary.SalaryController.adminMessage.messageId,
-                    "${feature.salary.SalaryController.currentUser?.smlName} ${res.SalaryDayStrings.isGoing}")
-            performEditKeyboard(feature.salary.SalaryController.adminMessage.chatId, feature.salary.SalaryController.adminMessage.messageId,
-                    utils.InlineKeyboardFactory.createUserPaidStatusKeyboard())
+            performEditMessage(adminMessage.chatId, adminMessage.messageId,
+                    "${currentUser?.smlName} ${SalaryDayStrings.isGoing}")
+            performEditKeyboard(SalaryController.adminMessage.chatId, adminMessage.messageId,
+                    InlineKeyboardFactory.createUserPaidStatusKeyboard())
         }
     }
 
-    private fun inviteUser(): Message =
-            bot.performSendMessage(currentMessage.chatId, SalaryDayStrings.yourTurn,
-                    InlineKeyboardFactory.createUserInvitationKeyboard())
-
+    private fun inviteUser() {
+        //todo Проверить работает ли
+        currentMessage = bot.performSendMessage(currentUser!!.chatId, SalaryDayStrings.yourTurn,
+                InlineKeyboardFactory.createUserInvitationKeyboard())
+    }
 
 }

@@ -22,8 +22,9 @@ object InlineKeyboardFactory {
     fun createAdminKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(ButtonLabel.allNames, CallbackData.allNames)),
+                    listOf(createButton(ButtonLabel.allUsers, CallbackData.allUsers)),
                     listOf(createButton(ButtonLabel.needHelp, CallbackData.needHelp)),
+                    listOf(createButton(ButtonLabel.deleteUser, CallbackData.deleteUser)),
                     listOf(createButton(ButtonLabel.salaryToday, CallbackData.salaryToday)))
         }
     }
@@ -31,8 +32,9 @@ object InlineKeyboardFactory {
     fun createEditedAdminKeyboard() : InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(ButtonLabel.allNames, CallbackData.allNames)),
+                    listOf(createButton(ButtonLabel.allUsers, CallbackData.allUsers)),
                     listOf(createButton(ButtonLabel.needHelp, CallbackData.needHelp)),
+                    listOf(createButton(ButtonLabel.deleteUser, CallbackData.deleteUser)),
                     listOf(createButton(ButtonLabel.salaryList, CallbackData.salaryList)),
                     listOf(createButton(ButtonLabel.salaryStart, CallbackData.salaryStart)))
         }

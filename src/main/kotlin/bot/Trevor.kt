@@ -7,6 +7,7 @@ import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMa
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
+import org.telegram.telegrambots.api.objects.replykeyboard.ForceReplyKeyboard
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import utils.PropertiesLoader
@@ -32,12 +33,15 @@ class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 
     }
 
+    //todo forceReply тут кажется уже лишним. Может вынести в отдельный метод может ?
     override fun performSendMessage(chatId: Long,
                                     text: String,
-                                    keyboard: InlineKeyboardMarkup?): Message {
+                                    keyboard: InlineKeyboardMarkup?,
+                                    forceReply : Boolean?): Message {
         return with(SendMessage()) {
             this.chatId = chatId.toString()
             this.text = text
+            forceReply?.let { this.replyMarkup = ForceReplyKeyboard()}
             keyboard?.let { this.replyMarkup = keyboard }
             sendMessage(this)
         }

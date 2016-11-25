@@ -10,7 +10,8 @@ interface SmlSalaryBot {
 
     fun performSendMessage(chatId : Long,
                            text : String,
-                           keyboard: InlineKeyboardMarkup? = null) : Message
+                           keyboard: InlineKeyboardMarkup? = null,
+                           forceReply:Boolean? = null) : Message
 
 
     fun performEditMessage(chatId: Long,
