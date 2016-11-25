@@ -10,11 +10,9 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 20.11.16.
  */
-class SalaryService() {
+class SalaryService : BaseService(){
 
     private val salaryList = ArrayList<User>()
-
-    val userRepository = Injekt.get<Repository<User>>()
 
     fun addUserToSalaryList(message: Message) {
         userRepository.getById(message.chatId)?.let {

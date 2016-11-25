@@ -10,9 +10,7 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
-class AdminActionsService() {
-
-    val userRepository = Injekt.get<Repository<User>>()
+class AdminActionsService : BaseService() {
 
     fun isAdmin(message: Message): Boolean {
         return userRepository.getById(message.chatId)?.

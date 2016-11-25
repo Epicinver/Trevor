@@ -1,6 +1,5 @@
 package featurecontroller
 
-import bot.SmlSalaryBot
 import entity.User
 import res.BirthdayStrings
 import service.BirthdayService
@@ -12,9 +11,8 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 24/11/2016.
  */
-object BirthdayController : Controller {
+object BirthdayController : BaseController(){
 
-    val bot = Injekt.get<SmlSalaryBot>()
     val service = Injekt.get<BirthdayService>()
 
     private var birthdayUsers: ArrayList<User>? = null

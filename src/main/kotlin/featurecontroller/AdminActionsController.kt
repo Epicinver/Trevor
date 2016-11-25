@@ -17,11 +17,12 @@ import kotlin.properties.Delegates
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
-object AdminActionsController : Controller {
+object AdminActionsController : BaseController(){
 
-    private var messageWithActions :Message by Delegates.notNull()
+    //todo добавить возможность удалять юзера из БД
+    private var messageWithActions: Message by Delegates.notNull()
 
-    private val bot = Injekt.get<SmlSalaryBot>()
+    //todo перенести сервис в базовый класс (там гемор с дженериками)
     private val service = Injekt.get<AdminActionsService>()
 
     @BotCommand("/actions")

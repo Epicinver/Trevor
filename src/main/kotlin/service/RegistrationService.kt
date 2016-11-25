@@ -10,9 +10,7 @@ import uy.kohesive.injekt.api.get
 /**
  * Created by sergeyopivalov on 10/11/2016.
  */
-class RegistrationService() {
-
-    val userRepository = Injekt.get<Repository<User>>()
+class RegistrationService : BaseService() {
 
     fun isExist(message: Message): Boolean =
             userRepository.getById(message.chatId) != null

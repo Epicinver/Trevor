@@ -16,9 +16,8 @@ import uy.kohesive.injekt.api.get
 /**
  * Created by sergeyopivalov on 08/11/2016.
  */
-object RegistrationController : Controller {
+object RegistrationController : BaseController(){
 
-    private val bot = Injekt.get<SmlSalaryBot>()
     private val service = Injekt.get<RegistrationService>()
     
     @BotCommand("/reg")

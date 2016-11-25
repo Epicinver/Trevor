@@ -9,12 +9,12 @@ object ButtonLabel {
     val salaryToday = "Сегодня зарплата =)"
     val salaryStart = "Начать выдачу зарплаты"
     val salaryList = "Список получающих сегодня"
-    val salaryYes = "Да"
-    val salaryNo = "Нет"
-    val ready = "Иду"
-    val notReady = "Не иду"
-    val get = "Получил"
-    val notGet = "Не получил"
+    val yes = "Да"
+    val no = "Нет"
+    val going = "Иду"
+    val notGoing = "Не иду"
+    val gotPaid = "Получил"
+    val notGotPaid = "Не получил"
 }
 
 object MiscStrings{

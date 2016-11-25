@@ -1,17 +1,12 @@
 package service
 
 import entity.User
-import repository.Repository
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import java.util.*
 
 /**
  * Created by sergeyopivalov on 24/11/2016.
  */
-class BirthdayService() {
-
-    val userRepository = Injekt.get<Repository<User>>()
+class BirthdayService : BaseService(){
 
     fun getUsersWasBornToday(today: String): ArrayList<User>? =
             userRepository.getAll().filter { it.birthday == today } as ArrayList<User>
