@@ -1,18 +1,11 @@
 import annotation.BotCallbackData
 import annotation.BotCommand
-import bot.SmlSalaryBot
 import bot.Trevor
 import database.DatabaseHelper
-import di.AdminActionsModule
-import featurecontroller.Controller
-import featurecontroller.RegistrationController
+import di.*
+import featurecontroller.*
 import messageprocessor.MethodExecutor
 import messageprocessor.MessageProcessor
-import di.BotModule
-import di.RegistrationModule
-import di.SalaryModule
-import featurecontroller.AdminActionsController
-import featurecontroller.SalaryController
 import org.knowm.sundial.SundialJobScheduler
 import org.telegram.telegrambots.TelegramBotsApi
 import uy.kohesive.injekt.InjektMain
@@ -28,10 +21,14 @@ class Application {
             registerController(RegistrationController)
             registerController(AdminActionsController)
             registerController(SalaryController)
+            registerController(BirthdayController)
 
             DatabaseHelper.createDb()
 
-            SundialJobScheduler.startScheduler("task")
+            SundialJobScheduler.startScheduler("job")
+            SundialJobScheduler.startJob("BirthdayWeekdayJob")
+            SundialJobScheduler.startJob("BirthdayWeekendJob")
+
             TelegramBotsApi().registerBot(Trevor())
         }
 
@@ -40,6 +37,7 @@ class Application {
             importModule(RegistrationModule)
             importModule(AdminActionsModule)
             importModule(SalaryModule)
+            importModule(BirthdayModule)
         }
 
         fun registerController(controller: Controller) {
