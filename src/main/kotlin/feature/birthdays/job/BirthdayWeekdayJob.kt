@@ -1,6 +1,6 @@
-package job
+package feature.birthdays.job
 
-import featurecontroller.BirthdayController
+import feature.birthdays.BirthdayController
 import org.knowm.sundial.Job
 import org.knowm.sundial.annotations.CronTrigger
 

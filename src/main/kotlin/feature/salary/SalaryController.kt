@@ -1,13 +1,14 @@
-package featurecontroller
+package feature.salary
 
 import annotation.BotCallbackData
 import entity.User
-import task.SalaryTask
+import feature.base.BaseController
+import feature.salary.task.SalaryTask
 import org.telegram.telegrambots.api.objects.Message
 import res.CallbackData
 import res.MiscStrings
 import res.SalaryDayStrings
-import service.SalaryService
+import feature.salary.SalaryService
 import utils.InlineKeyboardFactory
 import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
@@ -116,11 +117,11 @@ object SalaryController : BaseController() {
     }
 
     private fun notifyAdmin() {
-        with(bot) {
-            performEditMessage(adminMessage.chatId, adminMessage.messageId,
-                    "${currentUser?.smlName} ${SalaryDayStrings.isGoing}")
-            performEditKeyboard(adminMessage.chatId, adminMessage.messageId,
-                    InlineKeyboardFactory.createUserPaidStatusKeyboard())
+        bot.apply {
+            performEditMessage(feature.salary.SalaryController.adminMessage.chatId, feature.salary.SalaryController.adminMessage.messageId,
+                    "${feature.salary.SalaryController.currentUser?.smlName} ${res.SalaryDayStrings.isGoing}")
+            performEditKeyboard(feature.salary.SalaryController.adminMessage.chatId, feature.salary.SalaryController.adminMessage.messageId,
+                    utils.InlineKeyboardFactory.createUserPaidStatusKeyboard())
         }
     }
 

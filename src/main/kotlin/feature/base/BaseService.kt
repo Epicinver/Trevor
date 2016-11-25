@@ -1,4 +1,4 @@
-package service
+package feature.base
 
 import entity.User
 import repository.Repository

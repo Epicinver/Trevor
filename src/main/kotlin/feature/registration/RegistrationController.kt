@@ -1,13 +1,14 @@
-package featurecontroller
+package feature.registration
 
 import annotation.BotCommand
 import bot.SmlSalaryBot
 import database.DatabaseHelper
+import feature.base.BaseController
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
 import res.Stickers
 import res.UserStrings
-import service.RegistrationService
+import feature.registration.RegistrationService
 import utils.DateValidator
 import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
@@ -17,10 +18,10 @@ import uy.kohesive.injekt.api.get
 /**
  * Created by sergeyopivalov on 08/11/2016.
  */
-object RegistrationController : BaseController(){
+object RegistrationController : BaseController() {
 
     private val service = Injekt.get<RegistrationService>()
-    
+
     @BotCommand("/reg")
     fun performRegistration(message: Message) {
         if (service.isExist(message)) {

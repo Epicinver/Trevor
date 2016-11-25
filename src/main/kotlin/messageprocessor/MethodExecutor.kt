@@ -1,6 +1,6 @@
 package messageprocessor
 
-import featurecontroller.BaseController
+import feature.base.BaseController
 import org.telegram.telegrambots.api.objects.Message
 import java.lang.reflect.Method
 

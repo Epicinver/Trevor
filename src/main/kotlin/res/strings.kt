@@ -29,7 +29,6 @@ object AdminStrings {
 }
 
 object UserStrings {
-    val pass = "0272" //todo вынести пароль в properties
     val alreadyRegistered = "Ну ты ведь зарегестрирован уже..."
     val thereIsNoUsername = "Привет! Ты хочешь получать зарплату, но у тебя не указан username в настройках Telegram. Не надо так. Добавь username и попробуй /reg снова"
     val askPass = "Привет! Ну ладно, ты хочешь получать зарплату. Какой пароль?"

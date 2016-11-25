@@ -1,17 +1,17 @@
-package di
+package bot
 
-import service.SalaryService
+import bot.SmlSalaryBot
+import bot.Trevor
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton
-import java.util.*
 
 /**
- * Created by sergeyopivalov on 20.11.16.
+ * Created by sergeyopivalov on 16.11.16.
  */
-object SalaryModule : InjektModule{
+object BotModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
-        addSingleton(SalaryService())
-        addSingleton(Timer())
+        addSingleton(Trevor() as SmlSalaryBot)
     }
+
 }

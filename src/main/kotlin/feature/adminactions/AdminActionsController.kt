@@ -1,12 +1,13 @@
-package featurecontroller
+package feature.adminactions
 
 import annotation.BotCallbackData
 import annotation.BotCommand
-import bot.SmlSalaryBot
+import feature.base.BaseController
 import org.telegram.telegrambots.api.objects.Message
-import org.telegram.telegrambots.api.objects.Sticker
-import res.*
-import service.AdminActionsService
+import res.AdminStrings
+import res.CallbackData
+import res.Stickers
+import res.UserStrings
 import utils.InlineKeyboardFactory
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -57,10 +58,8 @@ object AdminActionsController : BaseController() {
     @BotCallbackData(CallbackData.salaryToday)
     fun sendSalaryNotification(message: Message) {
         service.getAllUsers()
-                .forEach {
-                    bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
-                            InlineKeyboardFactory.createUserNotificationKeyboard())
-                }
+                .forEach { bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
+                            InlineKeyboardFactory.createUserNotificationKeyboard()) }
         bot.performEditKeyboard(message.chatId, messageWithActions.messageId,
                 InlineKeyboardFactory.createEditedAdminKeyboard())
 

@@ -1,7 +1,5 @@
-package di
+package feature.adminactions
 
-import bot.SmlSalaryBot
-import bot.Trevor
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton
@@ -9,9 +7,8 @@ import uy.kohesive.injekt.api.addSingleton
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
-object BotModule : InjektModule {
+object AdminActionsModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
-        addSingleton(Trevor() as SmlSalaryBot)
+        addSingleton(AdminActionsService())
     }
-
 }

@@ -1,6 +1,6 @@
 package messageprocessor
 
-import featurecontroller.RegistrationController
+import feature.registration.RegistrationController
 import org.telegram.telegrambots.api.objects.CallbackQuery
 import org.telegram.telegrambots.api.objects.Message
 import java.util.*

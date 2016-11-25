@@ -1,4 +1,4 @@
-package featurecontroller
+package feature.base
 
 import bot.SmlSalaryBot
 import uy.kohesive.injekt.Injekt

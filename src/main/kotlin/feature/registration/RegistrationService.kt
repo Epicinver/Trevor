@@ -1,9 +1,10 @@
-package service
+package feature.registration
 
 import entity.User
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
 import repository.Repository
+import feature.base.BaseService
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 

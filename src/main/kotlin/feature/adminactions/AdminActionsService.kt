@@ -1,8 +1,9 @@
-package service
+package feature.adminactions
 
 import entity.User
 import org.telegram.telegrambots.api.objects.Message
 import repository.Repository
+import feature.base.BaseService
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*

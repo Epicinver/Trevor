@@ -1,8 +1,8 @@
-package featurecontroller
+package feature.birthdays
 
 import entity.User
+import feature.base.BaseController
 import res.BirthdayStrings
-import service.BirthdayService
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.SimpleDateFormat
@@ -24,7 +24,8 @@ object BirthdayController : BaseController(){
         birthdayAtWeekendUsers?.apply {
             forEach { user ->
                 service.getUsersForNotify(user)
-                        .forEach { bot.performSendMessage(it.chatId, "${BirthdayStrings.notificationWeekend} ${user.smlName}") }
+                        .forEach { bot.performSendMessage(it.chatId,
+                                "${BirthdayStrings.notificationWeekend} ${user.smlName}") }
             }
             clear()
         }
@@ -32,7 +33,8 @@ object BirthdayController : BaseController(){
         birthdayUsers?.apply {
             forEach { user ->
                 service.getUsersForNotify(user)
-                        .forEach { bot.performSendMessage(it.chatId, "${BirthdayStrings.notification} ${user.smlName}") }
+                        .forEach { bot.performSendMessage(it.chatId,
+                                "${BirthdayStrings.notification} ${user.smlName}") }
             }
             clear()
         }

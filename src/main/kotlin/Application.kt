@@ -1,15 +1,23 @@
+import feature.adminactions.AdminActionsController
+import feature.adminactions.AdminActionsModule
 import annotation.BotCallbackData
 import annotation.BotCommand
+import feature.birthdays.BirthdayController
+import feature.birthdays.BirthdayModule
+import bot.BotModule
 import bot.Trevor
 import database.DatabaseHelper
-import di.*
-import featurecontroller.*
-import job.BirthdayWeekdayJob
-import job.BirthdayWeekendJob
+import feature.base.BaseController
+import feature.birthdays.job.BirthdayWeekdayJob
+import feature.birthdays.job.BirthdayWeekendJob
 import messageprocessor.MethodExecutor
 import messageprocessor.MessageProcessor
 import org.knowm.sundial.SundialJobScheduler
 import org.telegram.telegrambots.TelegramBotsApi
+import feature.registration.RegistrationController
+import feature.registration.RegistrationModule
+import feature.salary.SalaryController
+import feature.salary.SalaryModule
 import uy.kohesive.injekt.InjektMain
 import uy.kohesive.injekt.api.InjektRegistrar
 
@@ -29,7 +37,7 @@ class Application {
 
             TelegramBotsApi().registerBot(Trevor())
 
-            SundialJobScheduler.startScheduler("job")
+            SundialJobScheduler.startScheduler("feature/birthdays/job")
             SundialJobScheduler.startJob(BirthdayWeekdayJob::class.java.simpleName)
             SundialJobScheduler.startJob(BirthdayWeekendJob::class.java.simpleName)
         }
