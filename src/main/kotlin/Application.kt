@@ -10,8 +10,8 @@ import database.DatabaseHelper
 import feature.base.BaseController
 import feature.birthdays.job.BirthdayWeekdayJob
 import feature.birthdays.job.BirthdayWeekendJob
-import messageprocessor.MethodExecutor
-import messageprocessor.MessageProcessor
+import processor.MethodExecutor
+import processor.MessageProcessor
 import org.knowm.sundial.SundialJobScheduler
 import org.telegram.telegrambots.TelegramBotsApi
 import feature.registration.RegistrationController

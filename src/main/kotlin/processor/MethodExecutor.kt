@@ -1,4 +1,4 @@
-package messageprocessor
+package processor
 
 import feature.base.BaseController
 import org.telegram.telegrambots.api.objects.Message

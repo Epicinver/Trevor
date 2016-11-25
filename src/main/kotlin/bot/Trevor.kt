@@ -1,6 +1,6 @@
 package bot
 
-import messageprocessor.MessageProcessor
+import processor.MessageProcessor
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.methods.send.SendSticker
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMarkup

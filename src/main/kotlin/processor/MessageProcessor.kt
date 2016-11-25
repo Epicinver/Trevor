@@ -1,4 +1,4 @@
-package messageprocessor
+package processor
 
 import feature.registration.RegistrationController
 import org.telegram.telegrambots.api.objects.CallbackQuery

@@ -27,5 +27,6 @@ gradlew.bat
 
 #MISC
 #----
+*.properties
 /*.s3db
 /*.s3dbjournal
