@@ -1,6 +1,5 @@
 import annotation.BotCallbackData
 import annotation.BotCommand
-import bot.SmlSalaryBot
 import bot.Trevor
 import database.DatabaseHelper
 import di.*
@@ -28,6 +27,7 @@ class Application {
 
             SundialJobScheduler.startScheduler("job")
             SundialJobScheduler.startJob("BirthdayWeekdayJob")
+            SundialJobScheduler.startJob("BirthdayWeekendJob")
 
             TelegramBotsApi().registerBot(Trevor())
         }
