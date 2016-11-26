@@ -16,8 +16,7 @@ class UserRepository : Repository <User> {
     }
 
     override fun delete(chatId: Long) {
-        DatabaseHelper.
-                executeTransaction("DELETE FROM users WHERE CHAT_ID = $chatId")
+        DatabaseHelper.executeTransaction("DELETE FROM users WHERE CHAT_ID = $chatId")
     }
 
     override fun getById(chatId: Long): User? {
@@ -38,7 +37,7 @@ class UserRepository : Repository <User> {
     }
 
     override fun getAll(): ArrayList<User> {
-        var result  = ArrayList<User>()
+        val result  = ArrayList<User>()
         val resultSet = DatabaseHelper.getConnection().
                 createStatement().executeQuery("SELECT * FROM users")
         while (resultSet.next()) {
