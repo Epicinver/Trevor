@@ -3,6 +3,7 @@ package utils
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import res.ButtonLabel
+import res.CallbackData
 import java.io.BufferedReader
 
 /**
@@ -10,7 +11,6 @@ import java.io.BufferedReader
  */
 object InlineKeyboardFactory {
 
-    //todo все имена в этом классе
     private fun createButton(text: String, callbackData: String): InlineKeyboardButton {
         return InlineKeyboardButton().apply {
             this.text = text
@@ -19,48 +19,48 @@ object InlineKeyboardFactory {
 
     }
 
-    //todo hardcode move out
     fun createAdminKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(ButtonLabel.allNames, "#allNames")),
-                    listOf(createButton(ButtonLabel.needHelp, "#helpRequest")),
-                    listOf(createButton(ButtonLabel.salaryToday, "#salaryToday")))
+                    listOf(createButton(ButtonLabel.allUsers, CallbackData.allUsers)),
+                    listOf(createButton(ButtonLabel.needHelp, CallbackData.needHelp)),
+                    listOf(createButton(ButtonLabel.deleteUser, CallbackData.deleteUser)),
+                    listOf(createButton(ButtonLabel.salaryToday, CallbackData.salaryToday)))
         }
     }
 
     fun createEditedAdminKeyboard() : InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(ButtonLabel.allNames, "#allNames")),
-                    listOf(createButton(ButtonLabel.needHelp, "#helpRequest")),
-                    listOf(createButton(ButtonLabel.salaryList, "#salaryList")),
-                    listOf(createButton(ButtonLabel.salaryStart, "#salaryStart")))
+                    listOf(createButton(ButtonLabel.allUsers, CallbackData.allUsers)),
+                    listOf(createButton(ButtonLabel.needHelp, CallbackData.needHelp)),
+                    listOf(createButton(ButtonLabel.deleteUser, CallbackData.deleteUser)),
+                    listOf(createButton(ButtonLabel.salaryList, CallbackData.salaryList)),
+                    listOf(createButton(ButtonLabel.salaryStart, CallbackData.salaryStart)))
         }
     }
 
     fun createUserNotificationKeyboard() : InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
-            keyboard = listOf(listOf(createButton(ButtonLabel.salaryYes, "#salaryYes"),
-                    createButton(ButtonLabel.salaryNo, "#salaryNo")))
+            keyboard = listOf(listOf(createButton(ButtonLabel.yes, CallbackData.addToSalaryList),
+                    createButton(ButtonLabel.no, CallbackData.notAddToSalaryList)))
         }
     }
 
-    //todo название !!!!
-    fun createUserReadyKeyboard() : InlineKeyboardMarkup {
+    fun createUserInvitationKeyboard() : InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(ButtonLabel.ready, "#salaryReady"),
-                            createButton(ButtonLabel.notReady, "#salaryNotReady"))
+                    listOf(createButton(ButtonLabel.going, CallbackData.goingToGetPaid),
+                            createButton(ButtonLabel.notGoing, CallbackData.notGoingToGetPaid))
             )
         }
     }
 
-    fun createUserStatusKeyboard() : InlineKeyboardMarkup {
+    fun createUserPaidStatusKeyboard() : InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(ButtonLabel.get, "#userGetSalary"),
-                            createButton(ButtonLabel.notGet, "#userNotGetSalary"))
+                    listOf(createButton(ButtonLabel.gotPaid, CallbackData.gotPaid),
+                            createButton(ButtonLabel.notGotPaid, CallbackData.notGotPaid))
             )
         }
     }

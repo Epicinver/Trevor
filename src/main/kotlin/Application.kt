@@ -1,14 +1,23 @@
+import feature.adminactions.AdminActionsController
+import feature.adminactions.AdminActionsModule
 import annotation.BotCallbackData
 import annotation.BotCommand
-import bot.SmlSalaryBot
+import feature.birthdays.BirthdayController
+import feature.birthdays.BirthdayModule
+import bot.BotModule
 import bot.Trevor
 import database.DatabaseHelper
-import di.*
-import featurecontroller.*
-import messageprocessor.MethodExecutor
-import messageprocessor.MessageProcessor
+import feature.base.BaseController
+import feature.birthdays.job.BirthdayWeekdayJob
+import feature.birthdays.job.BirthdayWeekendJob
+import processor.MethodExecutor
+import processor.MessageProcessor
 import org.knowm.sundial.SundialJobScheduler
 import org.telegram.telegrambots.TelegramBotsApi
+import feature.registration.RegistrationController
+import feature.registration.RegistrationModule
+import feature.salary.SalaryController
+import feature.salary.SalaryModule
 import uy.kohesive.injekt.InjektMain
 import uy.kohesive.injekt.api.InjektRegistrar
 
@@ -26,10 +35,11 @@ class Application {
 
             DatabaseHelper.createDb()
 
-            SundialJobScheduler.startScheduler("job")
-            SundialJobScheduler.startJob("BirthdayWeekdayJob")
-
             TelegramBotsApi().registerBot(Trevor())
+
+            SundialJobScheduler.startScheduler("feature.birthdays.job")
+            SundialJobScheduler.startJob(BirthdayWeekdayJob::class.java.simpleName)
+            SundialJobScheduler.startJob(BirthdayWeekendJob::class.java.simpleName)
         }
 
         override fun InjektRegistrar.registerInjectables() {
@@ -40,7 +50,7 @@ class Application {
             importModule(BirthdayModule)
         }
 
-        fun registerController(controller: Controller) {
+        private fun registerController(controller: BaseController) {
             controller.javaClass.declaredMethods
                     .forEach {
                         if (it.isAnnotationPresent(BotCommand::class.java)) {

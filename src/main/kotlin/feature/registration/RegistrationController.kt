@@ -1,14 +1,16 @@
-package featurecontroller
+package feature.registration
 
 import annotation.BotCommand
 import bot.SmlSalaryBot
 import database.DatabaseHelper
+import feature.base.BaseController
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
 import res.Stickers
 import res.UserStrings
-import service.RegistrationService
+import feature.registration.RegistrationService
 import utils.DateValidator
+import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -16,11 +18,10 @@ import uy.kohesive.injekt.api.get
 /**
  * Created by sergeyopivalov on 08/11/2016.
  */
-object RegistrationController : Controller {
+object RegistrationController : BaseController() {
 
-    private val bot = Injekt.get<SmlSalaryBot>()
     private val service = Injekt.get<RegistrationService>()
-    
+
     @BotCommand("/reg")
     fun performRegistration(message: Message) {
         if (service.isExist(message)) {
@@ -38,7 +39,7 @@ object RegistrationController : Controller {
     }
 
     fun askPass(message: Message) {
-        if (message.text != UserStrings.pass) {
+        if (message.text != PropertiesLoader.getProperty("pass")) {
             bot.performSendMessage(message.chatId, UserStrings.wrongPass)
             return
         }

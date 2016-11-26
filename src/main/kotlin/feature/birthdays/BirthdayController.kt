@@ -1,9 +1,8 @@
-package featurecontroller
+package feature.birthdays
 
-import bot.SmlSalaryBot
 import entity.User
+import feature.base.BaseController
 import res.BirthdayStrings
-import service.BirthdayService
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.SimpleDateFormat
@@ -12,9 +11,8 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 24/11/2016.
  */
-object BirthdayController : Controller {
+object BirthdayController : BaseController(){
 
-    val bot = Injekt.get<SmlSalaryBot>()
     val service = Injekt.get<BirthdayService>()
 
     private var birthdayUsers: ArrayList<User>? = null
@@ -26,7 +24,8 @@ object BirthdayController : Controller {
         birthdayAtWeekendUsers?.apply {
             forEach { user ->
                 service.getUsersForNotify(user)
-                        .forEach { bot.performSendMessage(it.chatId, "${BirthdayStrings.notificationWeekend} ${user.smlName}") }
+                        .forEach { bot.performSendMessage(it.chatId,
+                                "${BirthdayStrings.notificationWeekend} ${user.smlName}") }
             }
             clear()
         }
@@ -34,7 +33,8 @@ object BirthdayController : Controller {
         birthdayUsers?.apply {
             forEach { user ->
                 service.getUsersForNotify(user)
-                        .forEach { bot.performSendMessage(it.chatId, "${BirthdayStrings.notification} ${user.smlName}") }
+                        .forEach { bot.performSendMessage(it.chatId,
+                                "${BirthdayStrings.notification} ${user.smlName}") }
             }
             clear()
         }

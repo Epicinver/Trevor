@@ -1,6 +1,6 @@
-package task
+package feature.salary.task
 
-import featurecontroller.SalaryController
+import feature.salary.SalaryController
 import org.telegram.telegrambots.api.objects.Message
 import java.util.*
 

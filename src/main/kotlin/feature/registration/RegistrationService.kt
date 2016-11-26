@@ -1,18 +1,17 @@
-package service
+package feature.registration
 
 import entity.User
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
 import repository.Repository
+import feature.base.BaseService
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 /**
  * Created by sergeyopivalov on 10/11/2016.
  */
-class RegistrationService() {
-
-    val userRepository = Injekt.get<Repository<User>>()
+class RegistrationService : BaseService() {
 
     fun isExist(message: Message): Boolean =
             userRepository.getById(message.chatId) != null
