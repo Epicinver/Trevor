@@ -18,7 +18,6 @@ import kotlin.properties.Delegates
  */
 object AdminActionsController : BaseController() {
 
-    //todo добавить возможность удалять юзера из БД
     private var messageWithActions: Message by Delegates.notNull()
 
     //todo перенести сервис в базовый класс (там гемор с дженериками)

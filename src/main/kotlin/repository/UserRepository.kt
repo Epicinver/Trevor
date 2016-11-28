@@ -23,7 +23,7 @@ class UserRepository : Repository <User> {
         val resultSet = DatabaseHelper.getConnection().
                 createStatement().executeQuery("SELECT * FROM users WHERE CHAT_ID = $chatId")
         if (!resultSet.isBeforeFirst) {
-            resultSet.close()
+            DatabaseHelper.closeConnection()
             return null
         }
         return with(resultSet) {
@@ -31,7 +31,7 @@ class UserRepository : Repository <User> {
             val smlName = getString(DatabaseHelper.COLUMN_SML_NAME)
             val birthday = getString(DatabaseHelper.COLUMN_BIRTHDAY)
             val role = getString(DatabaseHelper.COLUMN_ROLE)
-            resultSet.close()
+            DatabaseHelper.closeConnection()
             User(username, chatId, smlName, birthday, role)
         }
     }
@@ -48,7 +48,7 @@ class UserRepository : Repository <User> {
             val role = resultSet.getString(DatabaseHelper.COLUMN_ROLE)
             result.add(User(username, chatId, smlName, birthday, role))
         }
-        resultSet.close()
+        DatabaseHelper.closeConnection()
         return result
     }
 

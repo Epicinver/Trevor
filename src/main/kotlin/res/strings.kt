@@ -16,9 +16,11 @@ object ButtonLabel {
     val gotPaid = "Получил"
     val notGotPaid = "Не получил"
     val deleteUser = "Удалить пользователя"
+    val bigRoom = "Большая стеклянная"
+    val smallRoom = "Маленькая уютная"
 }
 
-object MiscStrings{
+object MiscStrings {
     val ok = "Ok"
 }
 
@@ -47,7 +49,7 @@ object UserStrings {
 
 object BirthdayStrings {
     val notification = "Cегодня празднует свой день рождения "
-    val notificationWeekend = "На выходных был день рождения у "
+    val notificationWeekend = "На выходных был день рождения у " //todo падеж!!!
 }
 
 object SalaryDayStrings {
@@ -62,5 +64,14 @@ object SalaryDayStrings {
     val complete = "Зарплата выдана всем"
     val moneyReceived = "Деньги получены. Досвидули"
 
+}
+
+object ReservationStrings {
+    val chooseRoom = "Выбери переговорную, которую хочешь зарезервировать"
+    val reserved = "Зарезервировано"
+    val incorrectTime = "Некорректное время"
+    val incorrectDuration = "Не нужно тебе столько..."
+    val typeDuration = "Введи адекватную продолжительность резерва"
+    val typeTime = "Во сколько? Формат hh:MM"
 }
 

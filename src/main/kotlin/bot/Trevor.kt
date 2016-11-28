@@ -17,6 +17,8 @@ import utils.PropertiesLoader
  */
 class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 
+    //todo добавить реакцию на /start
+    //todo добавить все команды в папу бота, чтобы был хайлайт
     override fun getBotUsername(): String =
             PropertiesLoader.getProperty("bot.username")
 
@@ -24,7 +26,7 @@ class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
             PropertiesLoader.getProperty("bot.token")
 
     override fun onUpdateReceived(update: Update?) {
-        update?.message?.let {
+        update?.message?.let { //todo добавить isCommand и тогда processText можно тут вызывать у процессора
             MessageProcessor.processCommand(it)
         }
         update?.callbackQuery?.let {
@@ -41,8 +43,8 @@ class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
         return with(SendMessage()) {
             this.chatId = chatId.toString()
             this.text = text
-            forceReply?.let { this.replyMarkup = ForceReplyKeyboard()}
             keyboard?.let { this.replyMarkup = keyboard }
+            forceReply?.let { this.replyMarkup = ForceReplyKeyboard()}
             sendMessage(this)
         }
     }

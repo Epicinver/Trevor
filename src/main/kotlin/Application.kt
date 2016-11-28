@@ -16,6 +16,8 @@ import org.knowm.sundial.SundialJobScheduler
 import org.telegram.telegrambots.TelegramBotsApi
 import feature.registration.RegistrationController
 import feature.registration.RegistrationModule
+import feature.reservation.ReservationController
+import feature.reservation.ReservationModule
 import feature.salary.SalaryController
 import feature.salary.SalaryModule
 import uy.kohesive.injekt.InjektMain
@@ -32,6 +34,7 @@ class Application {
             registerController(AdminActionsController)
             registerController(SalaryController)
             registerController(BirthdayController)
+            registerController(ReservationController)
 
             DatabaseHelper.createDb()
 
@@ -48,6 +51,7 @@ class Application {
             importModule(AdminActionsModule)
             importModule(SalaryModule)
             importModule(BirthdayModule)
+            importModule(ReservationModule)
         }
 
         private fun registerController(controller: BaseController) {

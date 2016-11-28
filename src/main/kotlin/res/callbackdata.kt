@@ -16,4 +16,6 @@ object CallbackData {
     const val notGoingToGetPaid = "#noGoingToGetPaid"
     const val gotPaid = "#gotPaid"
     const val notGotPaid = "#notGotPaid"
+    const val bigRoomReserve = "#bigRoomReserve"
+    const val smallRoomReserve = "#smallRoomReserve"
 }

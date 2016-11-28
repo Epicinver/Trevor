@@ -65,4 +65,13 @@ object InlineKeyboardFactory {
         }
     }
 
+    fun createChoosingRoomKeyboard() : InlineKeyboardMarkup {
+        return InlineKeyboardMarkup().apply {
+            keyboard = listOf(
+                    listOf(createButton(ButtonLabel.bigRoom, CallbackData.bigRoomReserve),
+                            createButton(ButtonLabel.smallRoom, CallbackData.smallRoomReserve))
+            )
+        }
+    }
+
 }

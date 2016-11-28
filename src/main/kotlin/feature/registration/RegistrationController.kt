@@ -9,7 +9,7 @@ import org.telegram.telegrambots.api.objects.Message
 import res.Stickers
 import res.UserStrings
 import feature.registration.RegistrationService
-import utils.DateValidator
+import utils.RegexValidator
 import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -54,7 +54,7 @@ object RegistrationController : BaseController() {
             return
         }
         if (service.hasSmlName(message)) {
-            if (DateValidator.validateBirthday(message.text)) {
+            if (RegexValidator.validateBirthday(message.text)) {
                 service.updateUser(message.chatId,
                         DatabaseHelper.COLUMN_BIRTHDAY,
                         message.text,

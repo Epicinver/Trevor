@@ -36,34 +36,30 @@ object DatabaseHelper {
             "$COLUMN_DURATION TEXT);"
 
     private val SQL_CREATE_ROOMS_TABLE = "CREATE TABLE IF NOT EXISTS rooms" +
-            " ($COLUMN_ROOM_ID INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT," +
+            " ($COLUMN_ROOM_ID INTEGER PRIMARY KEY AUTOINCREMENT," +
             "$COLUMN_DESCRIPTION TEXT NOT NULL);"
 
-    fun executeTransaction(transaction: String, closeDb: Boolean = false) {
+    fun executeTransaction(transaction: String, close: Boolean = false) {
         with(getConnection()) {
-            with(createStatement()) {
-                execute(transaction)
-                commit()
-            }
-            if (closeDb) closeConnection()
+            createStatement().executeUpdate(transaction)
+            //commit()
         }
+        closeConnection()
     }
 
     fun createDb() {
-        Class.forName("org.sqlite.JDBC")
         executeTransaction(SQL_CREATE_USERS_TABLE)
         executeTransaction(SQL_CREATE_RESERVATIONS_TABLE)
         executeTransaction(SQL_CREATE_ROOMS_TABLE)
-        closeConnection()
     }
 
 
     //todo catch sqlexception
     fun getConnection(): Connection {
         if (connection == null) {
-            connection = with(DriverManager.getConnection(DATABASE_NAME)) {
-                autoCommit = false
-                this
+            Class.forName("org.sqlite.JDBC")
+            connection = DriverManager.getConnection(DATABASE_NAME).apply {
+               // autoCommit = false
             }
         }
         return connection!!
