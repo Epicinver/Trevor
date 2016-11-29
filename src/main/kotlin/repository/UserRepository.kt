@@ -1,61 +1,26 @@
 package repository
 
-import database.DatabaseHelper
+import com.j256.ormlite.dao.Dao
 import entity.User
-import java.sql.ResultSet
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.*
 
 /**
  * Created by sergeyopivalov on 10/11/2016.
  */
 class UserRepository : Repository <User> {
-    override fun create(user: User) {
-        DatabaseHelper.
-                executeTransaction("INSERT INTO users (USERNAME, CHAT_ID, ROLE) " +
-                        "VALUES ('${user.username}', '${user.chatId}', '${user.role}')")
-    }
 
-    override fun delete(chatId: Long) {
-        DatabaseHelper.executeTransaction("DELETE FROM users WHERE CHAT_ID = $chatId")
-    }
+    val dao = Injekt.get<Dao<User, Long>>()
 
-    override fun getById(chatId: Long): User? {
-        val resultSet = DatabaseHelper.getConnection().
-                createStatement().executeQuery("SELECT * FROM users WHERE CHAT_ID = $chatId")
-        if (!resultSet.isBeforeFirst) {
-            DatabaseHelper.closeConnection()
-            return null
-        }
-        return with(resultSet) {
-            val username = getString(DatabaseHelper.COLUMN_USERNAME)
-            val smlName = getString(DatabaseHelper.COLUMN_SML_NAME)
-            val birthday = getString(DatabaseHelper.COLUMN_BIRTHDAY)
-            val role = getString(DatabaseHelper.COLUMN_ROLE)
-            DatabaseHelper.closeConnection()
-            User(username, chatId, smlName, birthday, role)
-        }
-    }
+    override fun create(user: User) { dao.create(user) }
 
-    override fun getAll(): ArrayList<User> {
-        val result  = ArrayList<User>()
-        val resultSet = DatabaseHelper.getConnection().
-                createStatement().executeQuery("SELECT * FROM users")
-        while (resultSet.next()) {
-            val username = resultSet.getString(DatabaseHelper.COLUMN_USERNAME)
-            val chatId = resultSet.getLong(DatabaseHelper.COLUMN_CHAT_ID)
-            val smlName = resultSet.getString(DatabaseHelper.COLUMN_SML_NAME)
-            val birthday = resultSet.getString(DatabaseHelper.COLUMN_BIRTHDAY)
-            val role = resultSet.getString(DatabaseHelper.COLUMN_ROLE)
-            result.add(User(username, chatId, smlName, birthday, role))
-        }
-        DatabaseHelper.closeConnection()
-        return result
-    }
+    override fun delete(chatId: Number) { dao.deleteById(chatId.toLong()) }
 
-    override fun update(chatId: Long, key: String, value: String, closeConnection: Boolean) {
-        DatabaseHelper.
-                executeTransaction("UPDATE users SET $key = '$value' WHERE CHAT_ID = $chatId", closeConnection)
+    override fun getById(chatId: Number): User? = dao.queryForId(chatId.toLong())
 
-    }
+    override fun getAll(): ArrayList<User> = dao.queryForAll() as ArrayList<User>
+
+    override fun update(user: User) { dao.update(user) }
 
 }

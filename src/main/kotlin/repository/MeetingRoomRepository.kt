@@ -1,53 +1,25 @@
 package repository
 
-import database.DatabaseHelper
+import com.j256.ormlite.dao.Dao
 import entity.MeetingRoom
-import entity.Reservation
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.*
 
 /**
  * Created by sergeyopivalov on 26.11.16.
  */
-class MeetingRoomRepository : Repository<MeetingRoom>{
+class MeetingRoomRepository : Repository<MeetingRoom> {
 
-    override fun create(room: MeetingRoom) {
-        DatabaseHelper.executeTransaction("INSERT INTO rooms (DESCRIPTION) " +
-                "VALUES ('${room.description}')")
-    }
+    val dao = Injekt.get<Dao<MeetingRoom, Int>>()
 
-    override fun delete(id: Long) {
-        DatabaseHelper.executeTransaction("DELETE FROM rooms WHERE ROOM_ID = $id")
+    override fun create(room: MeetingRoom) { dao.create(room) }
 
-    }
+    override fun delete(id: Number) { dao.deleteById(id.toInt()) }
 
-    override fun getById(id: Long): MeetingRoom? {
-        val resultSet = DatabaseHelper.getConnection().
-                createStatement().executeQuery("SELECT * FROM rooms WHERE ROOM_ID = $id")
-        if (!resultSet.isBeforeFirst) {
-            resultSet.close()
-            return null
-        }
-        return with(resultSet) {
-            val description = getString(DatabaseHelper.COLUMN_DESCRIPTION)
-            resultSet.close()
-            MeetingRoom(description)
-        }
-    }
+    override fun getById(id: Number): MeetingRoom? = dao.queryForId(id.toInt())
 
-    override fun getAll(): ArrayList<MeetingRoom> {
-        val result = ArrayList<MeetingRoom>()
-        val resultSet = DatabaseHelper.getConnection().
-                createStatement().executeQuery("SELECT * FROM rooms")
-        while (resultSet.next()) {
-            val description = resultSet.getString(DatabaseHelper.COLUMN_DESCRIPTION)
-            result.add(MeetingRoom(description))
-        }
-        resultSet.close()
-        return result
-    }
+    override fun getAll(): ArrayList<MeetingRoom> = dao.queryForAll() as ArrayList<MeetingRoom>
 
-    override fun update(id: Long, key: String, value: String, closeConnection: Boolean) {
-        DatabaseHelper.
-                executeTransaction("UPDATE rooms SET $key = '$value' WHERE ROOM_ID = $id", closeConnection)
-    }
+    override fun update(room: MeetingRoom) { dao.update(room) }
 }

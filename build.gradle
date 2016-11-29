@@ -23,8 +23,10 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile 'org.telegram:telegrambots:2.4.0'
-    compile 'org.xerial:sqlite-jdbc:3.15.1'
+    compile "org.telegram:telegrambots:2.4.0"
+    compile "org.xerial:sqlite-jdbc:3.15.1"
+    compile "com.j256.ormlite:ormlite-core:5.0"
+    compile "com.j256.ormlite:ormlite-jdbc:5.0"
     compile "org.knowm:sundial:2.1.1"
     compile "uy.kohesive.injekt:injekt-core:1.16.+"
     compile 'org.aeonbits.owner:owner:1.0.9'

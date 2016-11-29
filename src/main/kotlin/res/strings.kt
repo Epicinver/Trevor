@@ -73,5 +73,6 @@ object ReservationStrings {
     val incorrectDuration = "Не нужно тебе столько..."
     val typeDuration = "Введи адекватную продолжительность резерва"
     val typeTime = "Во сколько? Формат hh:MM"
+    val rewriteReserve = "На тебя уже есть не завершенный резерв. Он будет презаписан"
 }
 

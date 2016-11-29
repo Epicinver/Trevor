@@ -1,5 +1,9 @@
 package feature.reservation
 
+import com.j256.ormlite.dao.Dao
+import com.j256.ormlite.dao.DaoManager
+import com.j256.ormlite.jdbc.JdbcConnectionSource
+import entity.MeetingRoom
 import entity.Reservation
 import repository.Repository
 import repository.ReservationRepository
@@ -14,6 +18,9 @@ object ReservationModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(ReservationRepository() as Repository<Reservation>)
         addSingleton(ReservationService())
-
+        addSingleton(DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), MeetingRoom::class.java) as
+                Dao<*, *>)
+        addSingleton(DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), Reservation::class.java) as
+                Dao<*, *>)
     }
 }

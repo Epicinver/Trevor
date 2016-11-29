@@ -10,14 +10,11 @@ interface Repository <T> {
 
     fun create(entity : T)
 
-    fun delete(id : Long)
+    fun delete(id : Number)
 
-    fun getById(id: Long) : T?
+    fun getById(id: Number) : T?
 
     fun getAll() : ArrayList<T>
 
-    fun update(id : Long,
-               key : String,
-               value: String,
-               closeConnection: Boolean)
+    fun update(entity: T)
 }

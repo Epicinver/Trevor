@@ -6,7 +6,13 @@ import feature.birthdays.BirthdayController
 import feature.birthdays.BirthdayModule
 import bot.BotModule
 import bot.Trevor
+import com.j256.ormlite.jdbc.JdbcConnectionSource
+import com.j256.ormlite.support.ConnectionSource
+import com.j256.ormlite.table.TableUtils
 import database.DatabaseHelper
+import entity.MeetingRoom
+import entity.Reservation
+import entity.User
 import feature.base.BaseController
 import feature.birthdays.job.BirthdayWeekdayJob
 import feature.birthdays.job.BirthdayWeekendJob
@@ -36,7 +42,9 @@ class Application {
             registerController(BirthdayController)
             registerController(ReservationController)
 
-            DatabaseHelper.createDb()
+//            DatabaseHelper.createDb()
+
+            initDb()
 
             TelegramBotsApi().registerBot(Trevor())
 
@@ -52,6 +60,13 @@ class Application {
             importModule(SalaryModule)
             importModule(BirthdayModule)
             importModule(ReservationModule)
+        }
+
+        private fun initDb() {
+            val connection = JdbcConnectionSource("jdbc:sqlite:test.s3db")
+            TableUtils.createTable(connection, User::class.java)
+            TableUtils.createTable(connection, MeetingRoom::class.java)
+            TableUtils.createTable(connection, Reservation::class.java)
         }
 
         private fun registerController(controller: BaseController) {

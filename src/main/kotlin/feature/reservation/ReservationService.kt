@@ -2,11 +2,11 @@ package feature.reservation
 
 import entity.Reservation
 import feature.base.BaseService
-import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
 import repository.Repository
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Created by sergeyopivalov on 26.11.16.
@@ -14,16 +14,18 @@ import uy.kohesive.injekt.api.get
 class ReservationService : BaseService() {
 
     val reservationRepository = Injekt.get<Repository<Reservation>>()
+    val map = ConcurrentHashMap<Long, Reservation>()
 
-    fun reserve(message: Message, room: Rooms) {
+
+    fun createReserve(message: Message, room: Rooms) {
         when (room) {
-            Rooms.BIG -> reservationRepository.create(Reservation(message.chatId, 1))
-            Rooms.SMALL -> reservationRepository.create(Reservation(message.chatId, 2))
+            Rooms.BIG -> map.put(message.chatId, Reservation(chatId = message.chatId, roomId = 1))
+            Rooms.SMALL -> map.put(message.chatId, Reservation(chatId = message.chatId, roomId = 2))
         }
     }
 
-    fun updateReserve(chatId: Long, key: String, value: String, closeDb: Boolean = false) {
-        reservationRepository.update(chatId, key, value, closeDb)
+    fun updateReserve(reservation: Reservation) {
+        reservationRepository.update(reservation)
     }
 
 
@@ -32,19 +34,16 @@ class ReservationService : BaseService() {
 
 
     fun isReserveCompleted(message: Message): Boolean =
-            hasTime(message) && hasDuration(message)
+            hasDate(message) && hasDuration(message)
 
-    fun hasTime(message: Message): Boolean {
-        return with(reservationRepository.getById(message.chatId)) {
-            !TextUtils.isEmpty(this?.time)
-        }
+    fun hasDate(message: Message): Boolean = with(reservationRepository.getById(message.chatId)) {
+        this?.date != null
     }
 
 
-    fun hasDuration(message: Message): Boolean {
-        return with(reservationRepository.getById(message.chatId)) {
-            !TextUtils.isEmpty(this?.duration)
-        }
+    fun hasDuration(message: Message): Boolean = with(reservationRepository.getById(message.chatId)) {
+        this?.duration != null
+
     }
 
     enum class Rooms {

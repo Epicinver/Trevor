@@ -13,23 +13,16 @@ import java.util.*
  */
 class AdminActionsService : BaseService() {
 
-    fun isAdmin(message: Message): Boolean {
-        return userRepository.getById(message.chatId)?.
-                role == ("admin")
-    }
+    fun isAdmin(message: Message): Boolean = userRepository.getById(message.chatId)?.
+            role == ("admin")
 
-    fun deleteUser(chatId: Long) {
-        userRepository.delete(chatId)
-    }
 
-    fun getHelper(): User {
-        return userRepository.getAll()
-                .filter { it.role == "911" }[0]
-    }
+    fun deleteUser(chatId: Long) { userRepository.delete(chatId) }
 
-    fun getAllUsers(): ArrayList<User> {
-        return userRepository.getAll()
-    }
+    fun getHelper(): User = userRepository.getAll()
+            .filter { it.role == "911" }[0]
+
+    fun getAllUsers(): ArrayList<User> { return userRepository.getAll() }
 
 
 }
