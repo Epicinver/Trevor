@@ -1,12 +1,12 @@
 package feature.reservation
 
+import entity.MeetingRoom
 import entity.Reservation
 import feature.base.BaseService
 import org.telegram.telegrambots.api.objects.Message
 import repository.Repository
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
@@ -17,12 +17,14 @@ import java.util.concurrent.ConcurrentHashMap
 class ReservationService : BaseService() {
 
     val reservationRepository = Injekt.get<Repository<Reservation>>()
+    val roomRepository = Injekt.get<Repository<MeetingRoom>>()
     val map = ConcurrentHashMap<Long, Reservation>()
 
     fun createReserve(message: Message, room: Rooms) {
+        val user = userRepository.getById(message.chatId)
         when (room) {
-            Rooms.BIG -> map.put(message.chatId, Reservation(message.chatId, 1))
-            Rooms.SMALL -> map.put(message.chatId, Reservation(message.chatId, 2))
+            Rooms.BIG -> map.put(message.chatId, Reservation(user!!, roomRepository.getById(1)!!))
+            Rooms.SMALL -> map.put(message.chatId, Reservation(user!!, roomRepository.getById(2)!!))
         }
     }
 
@@ -46,7 +48,6 @@ class ReservationService : BaseService() {
     fun hasDuration(message: Message): Boolean = map[message.chatId]?.duration != null
 
     fun getAllReserves(): ArrayList<Reservation> = reservationRepository.getAll()
-
 
     private fun performReserve(message: Message) {
         reservationRepository.create(map[message.chatId]!!)

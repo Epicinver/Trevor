@@ -30,8 +30,10 @@ object ReservationController : BaseController() {
     fun showReservesList(message: Message) {
         val list = StringBuilder()
         service.getAllReserves()
-                .map { SimpleDateFormat("dd.MM.yyyy hh:mm").format(it.date!!) }
-                .forEach { list.append(it + "\n") }
+                .forEach { list.append("${it.room!!.description} " +
+                        "   ${SimpleDateFormat("dd.MM.yyyy hh:mm").format(it.date!!)}" +
+                        "   ${it.user!!.smlName}" +
+                        "   ${it.duration}min\n") }
         bot.performSendMessage(message.chatId, list.toString())
 
     }

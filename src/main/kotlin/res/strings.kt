@@ -16,8 +16,8 @@ object ButtonLabel {
     val gotPaid = "Получил"
     val notGotPaid = "Не получил"
     val deleteUser = "Удалить пользователя"
-    val bigRoom = "Большая стеклянная"
-    val smallRoom = "Маленькая уютная"
+    val bigRoom = "Большая"
+    val smallRoom = "Маленькая"
     val reservesList = "График бронирования"
 }
 
@@ -42,7 +42,7 @@ object UserStrings {
     val wrongPass = "Почти правильный пароль"
     val rightPass = "Верный пароль"
     val typeYourName = "Введи свое имя и фамилию. Через пробел. С большой буквы. И без шуточек"
-    val typeYourBirthday = "Тревор хочет знать твою дату рождения. Формат : dd.mm.yyyy"
+    val typeYourBirthday = "Тревор хочет знать твою дату рождения. Формат : dd.MM.yyyy"
     val incorrectInput = "Ты прислал какую то шляпу..."
     val incorrectBirthday = "Ты втер мне дичь. Введи дату рождения в правильном формате"
     val salaryNotification = "Привет! Сегодня зарплату обещают\nБудешь получать ?"

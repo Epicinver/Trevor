@@ -1,10 +1,8 @@
 package feature.reservation
 
-import com.j256.ormlite.dao.Dao
-import com.j256.ormlite.dao.DaoManager
-import com.j256.ormlite.jdbc.JdbcConnectionSource
 import entity.MeetingRoom
 import entity.Reservation
+import repository.MeetingRoomRepository
 import repository.Repository
 import repository.ReservationRepository
 import uy.kohesive.injekt.api.InjektModule
@@ -17,6 +15,7 @@ import uy.kohesive.injekt.api.addSingleton
 object ReservationModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(ReservationRepository() as Repository<Reservation>)
+        addSingleton(MeetingRoomRepository() as Repository<MeetingRoom>)
         addSingleton(ReservationService())
 //        addSingleton(DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), MeetingRoom::class.java) as
 //                Dao<*, *>)

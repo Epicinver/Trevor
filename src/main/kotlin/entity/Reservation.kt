@@ -10,17 +10,17 @@ import java.sql.Timestamp
 @DatabaseTable(tableName = "reservations")
 class Reservation {
     @DatabaseField(generatedId = true) val id: Int = -1
-    @DatabaseField var chatId: Long = -1
-    @DatabaseField var roomId: Int = -1
-    @DatabaseField var date: Long? = -1
-    @DatabaseField var duration: Int? = -1
+    @DatabaseField(foreign = true, foreignAutoRefresh = true) var user: User? = null
+    @DatabaseField(foreign = true, foreignAutoRefresh = true) var room: MeetingRoom? = null
+    @DatabaseField var date: Long? = null
+    @DatabaseField var duration: Int? = null
 
     constructor() {
     }
 
-    constructor(chatId: Long, roomId: Int) {
-        this.chatId = chatId
-        this.roomId = roomId
+    constructor(user: User, room: MeetingRoom) {
+        this.user = user
+        this.room = room
     }
 
 }
