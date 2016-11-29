@@ -1,6 +1,8 @@
 package repository
 
 import com.j256.ormlite.dao.Dao
+import com.j256.ormlite.dao.DaoManager
+import com.j256.ormlite.jdbc.JdbcConnectionSource
 import entity.MeetingRoom
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -11,7 +13,8 @@ import java.util.*
  */
 class MeetingRoomRepository : Repository<MeetingRoom> {
 
-    val dao = Injekt.get<Dao<MeetingRoom, Int>>()
+//    val dao = Injekt.get<Dao<MeetingRoom, Int>>()
+    val dao : Dao<MeetingRoom, Int> = DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), MeetingRoom::class.java)
 
     override fun create(room: MeetingRoom) { dao.create(room) }
 
@@ -21,5 +24,11 @@ class MeetingRoomRepository : Repository<MeetingRoom> {
 
     override fun getAll(): ArrayList<MeetingRoom> = dao.queryForAll() as ArrayList<MeetingRoom>
 
-    override fun update(room: MeetingRoom) { dao.update(room) }
+    override fun update(id: Number, column : String, value : Any) {
+        dao.updateBuilder().apply {
+            where().eq("id", id)
+            updateColumnValue(column, value)
+            update()
+        }
+    }
 }

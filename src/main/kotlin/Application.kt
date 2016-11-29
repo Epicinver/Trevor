@@ -64,9 +64,9 @@ class Application {
 
         private fun initDb() {
             val connection = JdbcConnectionSource("jdbc:sqlite:test.s3db")
-            TableUtils.createTable(connection, User::class.java)
-            TableUtils.createTable(connection, MeetingRoom::class.java)
-            TableUtils.createTable(connection, Reservation::class.java)
+            TableUtils.createTableIfNotExists(connection, User::class.java)
+            TableUtils.createTableIfNotExists(connection, MeetingRoom::class.java)
+            TableUtils.createTableIfNotExists(connection, Reservation::class.java)
         }
 
         private fun registerController(controller: BaseController) {

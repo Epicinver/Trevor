@@ -6,6 +6,10 @@ import com.j256.ormlite.table.DatabaseTable
 /**
  * Created by sergeyopivalov on 26.11.16.
  */
-@DatabaseTable(tableName = "rooms")
+@DatabaseTable(tableName = "rooms") //TODO переделать сущности
 class MeetingRoom(@DatabaseField(generatedId = true) val id: Int,
-        @DatabaseField val description: String)
+                  @DatabaseField val description: String) {
+    constructor() : this(-1, "") {
+
+    }
+}

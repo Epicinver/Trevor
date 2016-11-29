@@ -10,8 +10,11 @@ import java.sql.Timestamp
 @DatabaseTable(tableName = "reservations")
 class Reservation(
         @DatabaseField(generatedId = true) val id: Int? = null,
-        @DatabaseField(foreign = true) val chatId: Long? = null,
-        @DatabaseField(foreign = true) val roomId: Int? = null,
-        @DatabaseField val date: Timestamp? = null,
-        @DatabaseField val duration: Long? = null)
+        @DatabaseField val chatId: Long? = null,
+        @DatabaseField val roomId: Int? = null,
+        @DatabaseField var date: Timestamp? = null,
+        @DatabaseField var duration: Int? = null) {
+
+    constructor() : this(-1, -1, -1, null, 0)
+}
 

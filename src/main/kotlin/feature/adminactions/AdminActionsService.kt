@@ -14,7 +14,7 @@ import java.util.*
 class AdminActionsService : BaseService() {
 
     fun isAdmin(message: Message): Boolean = userRepository.getById(message.chatId)?.
-            role == ("admin")
+            role == ("Admin")
 
 
     fun deleteUser(chatId: Long) { userRepository.delete(chatId) }

@@ -18,9 +18,9 @@ object ReservationModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(ReservationRepository() as Repository<Reservation>)
         addSingleton(ReservationService())
-        addSingleton(DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), MeetingRoom::class.java) as
-                Dao<*, *>)
-        addSingleton(DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), Reservation::class.java) as
-                Dao<*, *>)
+//        addSingleton(DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), MeetingRoom::class.java) as
+//                Dao<*, *>)
+//        addSingleton(DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), Reservation::class.java) as
+//                Dao<*, *>)
     }
 }

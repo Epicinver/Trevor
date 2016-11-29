@@ -25,7 +25,7 @@ object RegistrationController : BaseController() {
     fun performRegistration(message: Message) {
         if (service.isExist(message)) {
             bot.performSendMessage(message.chatId, UserStrings.alreadyRegistered)
-            service.updateUser(User(message.from.userName, message.chatId))
+            service.updateUser(message.chatId, "username", message.from.userName)
             return
         }
         if (TextUtils.isEmpty(message.from.userName)) {
@@ -53,14 +53,14 @@ object RegistrationController : BaseController() {
         }
         if (service.hasSmlName(message)) {
             if (Validator.validateBirthday(message.text)) {
-                service.updateUser(User(message.from.userName, message.chatId, birthday = message.text))
+                service.updateUser(message.chatId, "birthday", message.text)
                 bot.performSendMessage(message.chatId, UserStrings.registrationComplete)
                 bot.performSendSticker(message.chatId, Stickers.registrationComplete)
             } else {
                 bot.performSendMessage(message.chatId, UserStrings.incorrectBirthday)
             }
         } else {
-            service.updateUser(User(message.from.userName, message.chatId, smlName = message.text))
+            service.updateUser(message.chatId, "smlName", message.text)
             bot.performSendMessage(message.chatId, UserStrings.typeYourBirthday)
         }
     }

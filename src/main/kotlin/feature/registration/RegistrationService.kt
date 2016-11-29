@@ -17,11 +17,12 @@ class RegistrationService : BaseService() {
             hasSmlName(message) && hasBirthday(message)
 
     fun createUser(message: Message) {
-        userRepository.create(User(message.from.userName, message.chatId, role = "user"))
+        userRepository.create(User(message.from.userName, message.chatId))
     }
 
-    fun updateUser(chatId : Long) {
-        userRepository.update(user) }
+    fun updateUser(chatId: Long, column: String, value: Any) {
+        userRepository.update(chatId, column, value)
+    }
 
     fun hasSmlName(message: Message): Boolean {
         return with(userRepository.getById(message.chatId)) {

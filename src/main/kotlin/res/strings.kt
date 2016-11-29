@@ -69,10 +69,9 @@ object SalaryDayStrings {
 object ReservationStrings {
     val chooseRoom = "Выбери переговорную, которую хочешь зарезервировать"
     val reserved = "Зарезервировано"
-    val incorrectTime = "Некорректное время"
+    val incorrectDate = "Некорректная дата"
     val incorrectDuration = "Не нужно тебе столько..."
     val typeDuration = "Введи адекватную продолжительность резерва"
-    val typeTime = "Во сколько? Формат hh:MM"
-    val rewriteReserve = "На тебя уже есть не завершенный резерв. Он будет презаписан"
+    val typeDate = "Когда? Формат dd.mm.yyyy hh:MM"
 }
 
