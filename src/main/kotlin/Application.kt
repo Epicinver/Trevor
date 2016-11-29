@@ -1,31 +1,29 @@
-import feature.adminactions.AdminActionsController
-import feature.adminactions.AdminActionsModule
 import annotation.BotCallbackData
 import annotation.BotCommand
-import feature.birthdays.BirthdayController
-import feature.birthdays.BirthdayModule
 import bot.BotModule
 import bot.Trevor
 import com.j256.ormlite.jdbc.JdbcConnectionSource
-import com.j256.ormlite.support.ConnectionSource
 import com.j256.ormlite.table.TableUtils
-import database.DatabaseHelper
 import entity.MeetingRoom
 import entity.Reservation
 import entity.User
+import feature.adminactions.AdminActionsController
+import feature.adminactions.AdminActionsModule
 import feature.base.BaseController
+import feature.birthdays.BirthdayController
+import feature.birthdays.BirthdayModule
 import feature.birthdays.job.BirthdayWeekdayJob
 import feature.birthdays.job.BirthdayWeekendJob
-import processor.MethodExecutor
-import processor.MessageProcessor
-import org.knowm.sundial.SundialJobScheduler
-import org.telegram.telegrambots.TelegramBotsApi
 import feature.registration.RegistrationController
 import feature.registration.RegistrationModule
 import feature.reservation.ReservationController
 import feature.reservation.ReservationModule
 import feature.salary.SalaryController
 import feature.salary.SalaryModule
+import org.knowm.sundial.SundialJobScheduler
+import org.telegram.telegrambots.TelegramBotsApi
+import processor.MessageProcessor
+import processor.MethodExecutor
 import uy.kohesive.injekt.InjektMain
 import uy.kohesive.injekt.api.InjektRegistrar
 
@@ -41,8 +39,6 @@ class Application {
             registerController(SalaryController)
             registerController(BirthdayController)
             registerController(ReservationController)
-
-//            DatabaseHelper.createDb()
 
             initDb()
 

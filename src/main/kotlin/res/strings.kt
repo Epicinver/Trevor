@@ -18,6 +18,7 @@ object ButtonLabel {
     val deleteUser = "Удалить пользователя"
     val bigRoom = "Большая стеклянная"
     val smallRoom = "Маленькая уютная"
+    val reservesList = "График бронирования"
 }
 
 object MiscStrings {
@@ -71,7 +72,7 @@ object ReservationStrings {
     val reserved = "Зарезервировано"
     val incorrectDate = "Некорректная дата"
     val incorrectDuration = "Не нужно тебе столько..."
-    val typeDuration = "Введи адекватную продолжительность резерва"
-    val typeDate = "Когда? Формат dd.mm.yyyy hh:MM"
+    val typeDuration = "Введи адекватную продолжительность резерва в минутах"
+    val typeDate = "Когда? Формат dd.MM.yyyy hh:mm"
 }
 

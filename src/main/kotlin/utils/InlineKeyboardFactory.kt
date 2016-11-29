@@ -29,7 +29,7 @@ object InlineKeyboardFactory {
         }
     }
 
-    fun createEditedAdminKeyboard() : InlineKeyboardMarkup {
+    fun createEditedAdminKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
                     listOf(createButton(ButtonLabel.allUsers, CallbackData.allUsers)),
@@ -40,14 +40,14 @@ object InlineKeyboardFactory {
         }
     }
 
-    fun createUserNotificationKeyboard() : InlineKeyboardMarkup {
+    fun createUserNotificationKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(listOf(createButton(ButtonLabel.yes, CallbackData.addToSalaryList),
                     createButton(ButtonLabel.no, CallbackData.notAddToSalaryList)))
         }
     }
 
-    fun createUserInvitationKeyboard() : InlineKeyboardMarkup {
+    fun createUserInvitationKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
                     listOf(createButton(ButtonLabel.going, CallbackData.goingToGetPaid),
@@ -56,7 +56,7 @@ object InlineKeyboardFactory {
         }
     }
 
-    fun createUserPaidStatusKeyboard() : InlineKeyboardMarkup {
+    fun createUserPaidStatusKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
                     listOf(createButton(ButtonLabel.gotPaid, CallbackData.gotPaid),
@@ -65,11 +65,12 @@ object InlineKeyboardFactory {
         }
     }
 
-    fun createChoosingRoomKeyboard() : InlineKeyboardMarkup {
+    fun createReservationKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
                     listOf(createButton(ButtonLabel.bigRoom, CallbackData.bigRoomReserve),
-                            createButton(ButtonLabel.smallRoom, CallbackData.smallRoomReserve))
+                            createButton(ButtonLabel.smallRoom, CallbackData.smallRoomReserve)),
+                    listOf(createButton(ButtonLabel.reservesList, CallbackData.reservesList))
             )
         }
     }

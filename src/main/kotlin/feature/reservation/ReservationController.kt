@@ -2,7 +2,6 @@ package feature.reservation
 
 import annotation.BotCallbackData
 import annotation.BotCommand
-import entity.Reservation
 import feature.base.BaseController
 import org.telegram.telegrambots.api.objects.Message
 import res.CallbackData
@@ -11,6 +10,7 @@ import utils.InlineKeyboardFactory
 import utils.Validator
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.text.SimpleDateFormat
 
 /**
  * Created by sergeyopivalov on 26.11.16.
@@ -22,7 +22,17 @@ object ReservationController : BaseController() {
     @BotCommand("/reserve")
     fun performChooseRoom(message: Message) {
         bot.performSendMessage(message.chatId, ReservationStrings.chooseRoom,
-                InlineKeyboardFactory.createChoosingRoomKeyboard())
+                InlineKeyboardFactory.createReservationKeyboard())
+
+    }
+
+    @BotCallbackData(CallbackData.reservesList)
+    fun showReservesList(message: Message) {
+        val list = StringBuilder()
+        service.getAllReserves()
+                .map { SimpleDateFormat("dd.MM.yyyy hh:mm").format(it.date!!) }
+                .forEach { list.append(it + "\n") }
+        bot.performSendMessage(message.chatId, list.toString())
 
     }
 

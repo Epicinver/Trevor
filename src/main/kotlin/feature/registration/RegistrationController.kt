@@ -1,11 +1,9 @@
 package feature.registration
 
 import annotation.BotCommand
-import database.DatabaseHelper
 import feature.base.BaseController
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
-import entity.User
 import res.Stickers
 import res.UserStrings
 import utils.PropertiesLoader

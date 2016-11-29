@@ -8,13 +8,20 @@ import java.sql.Timestamp
  * Created by sergeyopivalov on 26.11.16.
  */
 @DatabaseTable(tableName = "reservations")
-class Reservation(
-        @DatabaseField(generatedId = true) val id: Int? = null,
-        @DatabaseField val chatId: Long? = null,
-        @DatabaseField val roomId: Int? = null,
-        @DatabaseField var date: Timestamp? = null,
-        @DatabaseField var duration: Int? = null) {
+class Reservation {
+    @DatabaseField(generatedId = true) val id: Int = -1
+    @DatabaseField var chatId: Long = -1
+    @DatabaseField var roomId: Int = -1
+    @DatabaseField var date: Long? = -1
+    @DatabaseField var duration: Int? = -1
 
-    constructor() : this(-1, -1, -1, null, 0)
+    constructor() {
+    }
+
+    constructor(chatId: Long, roomId: Int) {
+        this.chatId = chatId
+        this.roomId = roomId
+    }
+
 }
 

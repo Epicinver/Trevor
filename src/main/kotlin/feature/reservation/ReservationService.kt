@@ -8,6 +8,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -20,14 +21,14 @@ class ReservationService : BaseService() {
 
     fun createReserve(message: Message, room: Rooms) {
         when (room) {
-            Rooms.BIG -> map.put(message.chatId, Reservation(chatId = message.chatId, roomId = 1))
-            Rooms.SMALL -> map.put(message.chatId, Reservation(chatId = message.chatId, roomId = 2))
+            Rooms.BIG -> map.put(message.chatId, Reservation(message.chatId, 1))
+            Rooms.SMALL -> map.put(message.chatId, Reservation(message.chatId, 2))
         }
     }
 
     fun updateDate(message: Message) {
-        with (SimpleDateFormat("dd.mm.yyyy hh:MM")) {
-            map[message.chatId]?.date = Timestamp(this.parse(message.text).time)
+        with(SimpleDateFormat("dd.MM.yyyy hh:mm")) {
+            map[message.chatId]?.date = this.parse(message.text).time
         }
     }
 
@@ -44,16 +45,19 @@ class ReservationService : BaseService() {
 
     fun hasDuration(message: Message): Boolean = map[message.chatId]?.duration != null
 
+    fun getAllReserves(): ArrayList<Reservation> = reservationRepository.getAll()
+
+
     private fun performReserve(message: Message) {
         reservationRepository.create(map[message.chatId]!!)
         map.remove(message.chatId)
     }
-
 
     enum class Rooms {
 
         BIG, SMALL
 
     }
+
 
 }
