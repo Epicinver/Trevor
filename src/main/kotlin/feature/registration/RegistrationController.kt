@@ -1,16 +1,13 @@
 package feature.registration
 
 import annotation.BotCommand
-import bot.SmlSalaryBot
-import database.DatabaseHelper
 import feature.base.BaseController
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
 import res.Stickers
 import res.UserStrings
-import feature.registration.RegistrationService
-import utils.DateValidator
 import utils.PropertiesLoader
+import utils.Validator
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -26,9 +23,7 @@ object RegistrationController : BaseController() {
     fun performRegistration(message: Message) {
         if (service.isExist(message)) {
             bot.performSendMessage(message.chatId, UserStrings.alreadyRegistered)
-            service.updateUser(message.chatId,
-                    DatabaseHelper.COLUMN_USERNAME,
-                    message.from.userName)
+            service.updateUser(message.chatId, "username", message.from.userName)
             return
         }
         if (TextUtils.isEmpty(message.from.userName)) {
@@ -44,6 +39,7 @@ object RegistrationController : BaseController() {
             return
         }
         bot.performSendMessage(message.chatId, UserStrings.rightPass)
+
         service.createUser(message)
         bot.performSendMessage(message.chatId, UserStrings.typeYourName)
     }
@@ -54,20 +50,15 @@ object RegistrationController : BaseController() {
             return
         }
         if (service.hasSmlName(message)) {
-            if (DateValidator.validateBirthday(message.text)) {
-                service.updateUser(message.chatId,
-                        DatabaseHelper.COLUMN_BIRTHDAY,
-                        message.text,
-                        true)
+            if (Validator.validateBirthday(message.text)) {
+                service.updateUser(message.chatId, "birthday", message.text)
                 bot.performSendMessage(message.chatId, UserStrings.registrationComplete)
                 bot.performSendSticker(message.chatId, Stickers.registrationComplete)
             } else {
                 bot.performSendMessage(message.chatId, UserStrings.incorrectBirthday)
             }
         } else {
-            service.updateUser(message.chatId,
-                    DatabaseHelper.COLUMN_SML_NAME,
-                    message.text)
+            service.updateUser(message.chatId, "smlName", message.text)
             bot.performSendMessage(message.chatId, UserStrings.typeYourBirthday)
         }
     }

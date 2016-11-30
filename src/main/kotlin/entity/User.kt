@@ -1,15 +1,25 @@
 package entity
 
+import com.j256.ormlite.field.DatabaseField
+import com.j256.ormlite.table.DatabaseTable
+
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
-class User(var username: String,
-           val chatId: Long,
-           var smlName: String? = null,
-           var birthday: String? = null,
-           var role: String) {
-    //todo попробовать без этого метода
-    override fun equals(other: Any?): Boolean {
-        return if (other == null) false else super.equals(other)
+@DatabaseTable(tableName = "users")
+class User{
+    @DatabaseField var username: String? = null
+    @DatabaseField(id = true) var chatId: Long = -1
+    @DatabaseField var smlName: String? = null
+    @DatabaseField var birthday: String? = null
+    @DatabaseField val role: String = "User"
+
+    constructor(){
+
+    }
+
+    constructor(username: String, chatId: Long) {
+        this.username = username
+        this.chatId = chatId
     }
 }

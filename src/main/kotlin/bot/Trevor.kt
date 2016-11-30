@@ -7,6 +7,7 @@ import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageReplyMa
 import org.telegram.telegrambots.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
+import org.telegram.telegrambots.api.objects.replykeyboard.ForceReplyKeyboard
 import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import utils.PropertiesLoader
@@ -16,14 +17,15 @@ import utils.PropertiesLoader
  */
 class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 
-    override fun getBotUsername(): String =
-            PropertiesLoader.getProperty("bot.username")
+    //todo добавить реакцию на /start
+    //todo добавить все команды в папу бота, чтобы был хайлайт
+    override fun getBotUsername(): String = PropertiesLoader.getProperty("bot.username")
 
-    override fun getBotToken(): String =
-            PropertiesLoader.getProperty("bot.token")
+
+    override fun getBotToken(): String = PropertiesLoader.getProperty("bot.token")
 
     override fun onUpdateReceived(update: Update?) {
-        update?.message?.let {
+        update?.message?.let { //todo добавить isCommand и тогда processText можно тут вызывать у процессора
             MessageProcessor.processCommand(it)
         }
         update?.callbackQuery?.let {
@@ -32,13 +34,16 @@ class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 
     }
 
+    //todo forceReply тут кажется уже лишним. Может вынести в отдельный метод может ?
     override fun performSendMessage(chatId: Long,
                                     text: String,
-                                    keyboard: InlineKeyboardMarkup?): Message {
+                                    keyboard: InlineKeyboardMarkup?,
+                                    forceReply: Boolean?): Message {
         return with(SendMessage()) {
             this.chatId = chatId.toString()
             this.text = text
             keyboard?.let { this.replyMarkup = keyboard }
+            forceReply?.let { this.replyMarkup = ForceReplyKeyboard() }
             sendMessage(this)
         }
     }

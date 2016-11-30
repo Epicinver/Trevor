@@ -4,7 +4,7 @@ package res
  * Created by sergeyopivalov on 25/11/2016.
  */
 object CallbackData {
-    const val allNames = "#allNames"
+    const val allUsers = "#allUsers"
     const val needHelp = "#needHelp"
     const val deleteUser = "#deleteUser"
     const val salaryStart = "#salaryStart"
@@ -16,4 +16,7 @@ object CallbackData {
     const val notGoingToGetPaid = "#noGoingToGetPaid"
     const val gotPaid = "#gotPaid"
     const val notGotPaid = "#notGotPaid"
+    const val bigRoomReserve = "#bigRoomReserve"
+    const val smallRoomReserve = "#smallRoomReserve"
+    const val reservesList = "#reservesList"
 }

@@ -18,7 +18,6 @@ import kotlin.properties.Delegates
  */
 object AdminActionsController : BaseController() {
 
-    //todo добавить возможность удалять юзера из БД
     private var messageWithActions: Message by Delegates.notNull()
 
     //todo перенести сервис в базовый класс (там гемор с дженериками)
@@ -35,11 +34,11 @@ object AdminActionsController : BaseController() {
     }
 
 
-    @BotCallbackData(CallbackData.allNames)
-    fun showAllNames(message: Message) {
+    @BotCallbackData(CallbackData.allUsers)
+    fun showAllUsers(message: Message) {
         val list = StringBuilder()
         service.getAllUsers()
-                .map { user -> "${user.smlName} \n" }
+                .map { user -> "${user.smlName}     ${user.chatId} \n" }
                 .forEach { list.append(it) }
 
         bot.performSendMessage(message.chatId, list.toString())
@@ -55,13 +54,25 @@ object AdminActionsController : BaseController() {
 
     }
 
+    @BotCallbackData(CallbackData.deleteUser)
+    fun deleteUser(message: Message) {
+        bot.performSendMessage(message.chatId, AdminStrings.typeChatIdToDelete, forceReply = true)
+    }
+
     @BotCallbackData(CallbackData.salaryToday)
     fun sendSalaryNotification(message: Message) {
         service.getAllUsers()
-                .forEach { bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
-                            InlineKeyboardFactory.createUserNotificationKeyboard()) }
+                .forEach {
+                    bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
+                            InlineKeyboardFactory.createUserNotificationKeyboard())
+                }
         bot.performEditKeyboard(message.chatId, messageWithActions.messageId,
                 InlineKeyboardFactory.createEditedAdminKeyboard())
 
+    }
+
+    fun performDeleteUser(message: Message) {
+        bot.performSendMessage(message.chatId, AdminStrings.userHasBeenDeleted)
+        service.deleteUser(message.text.toLong())
     }
 }

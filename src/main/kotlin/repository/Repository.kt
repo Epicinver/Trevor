@@ -6,18 +6,15 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 15.11.16.
  */
-interface Repository <T> {
+interface Repository<T> {
 
-    fun create(entity : T)
+    fun create(entity: T)
 
-    fun delete(id : Long)
+    fun delete(id: Number)
 
-    fun getById(id: Long) : T?
+    fun getById(id: Number): T?
 
-    fun getAll() : ArrayList<T>
+    fun getAll(): ArrayList<T>
 
-    fun update(id : Long,
-               key : String,
-               value: String,
-               closeConnection: Boolean)
+    fun update(id: Number, column: String, value: Any)
 }

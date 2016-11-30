@@ -1,12 +1,9 @@
 package feature.registration
 
 import entity.User
+import feature.base.BaseService
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
-import repository.Repository
-import feature.base.BaseService
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 
 /**
  * Created by sergeyopivalov on 10/11/2016.
@@ -20,11 +17,11 @@ class RegistrationService : BaseService() {
             hasSmlName(message) && hasBirthday(message)
 
     fun createUser(message: Message) {
-        userRepository.create(User(message.from.userName, message.chatId, role = "user"))
+        userRepository.create(User(message.from.userName, message.chatId))
     }
 
-    fun updateUser(chatId: Long, key: String, value: String, closeDb: Boolean = false) {
-        userRepository.update(chatId, key, value, closeDb)
+    fun updateUser(chatId: Long, column: String, value: Any) {
+        userRepository.update(chatId, column, value)
     }
 
     fun hasSmlName(message: Message): Boolean {

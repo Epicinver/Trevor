@@ -1,8 +1,11 @@
 package repository
 
-import database.DatabaseHelper
+import com.j256.ormlite.dao.Dao
+import com.j256.ormlite.dao.DaoManager
+import com.j256.ormlite.jdbc.JdbcConnectionSource
 import entity.User
-import java.sql.ResultSet
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.*
 
 /**
@@ -10,54 +13,23 @@ import java.util.*
  */
 class UserRepository : Repository <User> {
 
-    override fun create(user: User) {
-        DatabaseHelper.
-                executeTransaction("INSERT INTO users (USERNAME, CHAT_ID, ROLE) " +
-                        "VALUES ('${user.username}', '${user.chatId}', '${user.role}')")
-    }
+//    val dao = Injekt.get<Dao<User, Long>>()
+    val dao : Dao<User, Long> = DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), User::class.java)
 
-    override fun delete(chatId: Long) {
-        DatabaseHelper.
-                executeTransaction("DELETE FROM users WHERE CHAT_ID = $chatId")
-    }
+    override fun create(user: User) { dao.create(user) }
 
-    override fun getById(chatId: Long): User? {
-        val resultSet = DatabaseHelper.getConnection().
-                createStatement().executeQuery("SELECT * FROM users WHERE CHAT_ID = $chatId")
-        if (!resultSet.isBeforeFirst) {
-            resultSet.close()
-            return null
+    override fun delete(chatId: Number) { dao.deleteById(chatId.toLong()) }
+
+    override fun getById(chatId: Number): User? = dao.queryForId(chatId.toLong())
+
+    override fun getAll(): ArrayList<User> = dao.queryForAll() as ArrayList<User>
+
+    override fun update(chatId: Number, column : String, value : Any ) {
+        dao.updateBuilder().apply {
+            where().eq("chatId", chatId)
+            updateColumnValue(column, value)
+            update()
         }
-        return with(resultSet) {
-            val username = getString(DatabaseHelper.COLUMN_USERNAME)
-            val smlName = getString(DatabaseHelper.COLUMN_SML_NAME)
-            val birthday = getString(DatabaseHelper.COLUMN_BIRTHDAY)
-            val role = getString(DatabaseHelper.COLUMN_ROLE)
-            resultSet.close()
-            User(username, chatId, smlName, birthday, role)
-        }
-    }
-
-    override fun getAll(): ArrayList<User> {
-        var result  = ArrayList<User>()
-        val resultSet = DatabaseHelper.getConnection().
-                createStatement().executeQuery("SELECT * FROM users")
-        while (resultSet.next()) {
-            val username = resultSet.getString(DatabaseHelper.COLUMN_USERNAME)
-            val chatId = resultSet.getLong(DatabaseHelper.COLUMN_CHAT_ID)
-            val smlName = resultSet.getString(DatabaseHelper.COLUMN_SML_NAME)
-            val birthday = resultSet.getString(DatabaseHelper.COLUMN_BIRTHDAY)
-            val role = resultSet.getString(DatabaseHelper.COLUMN_ROLE)
-            result.add(User(username, chatId, smlName, birthday, role))
-        }
-        resultSet.close()
-        return result
-    }
-
-    override fun update(chatId: Long, key: String, value: String, closeConnection: Boolean) {
-        DatabaseHelper.
-                executeTransaction("UPDATE users SET $key = '$value' WHERE CHAT_ID = $chatId", closeConnection)
-
     }
 
 }

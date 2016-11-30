@@ -1,6 +1,8 @@
 package processor
 
+import feature.adminactions.AdminActionsController
 import feature.registration.RegistrationController
+import feature.reservation.ReservationController
 import org.telegram.telegrambots.api.objects.CallbackQuery
 import org.telegram.telegrambots.api.objects.Message
 import java.util.*
@@ -43,6 +45,18 @@ object MessageProcessor {
     }
 
     private fun processText(message: Message) {
+        with(ReservationController) {
+            if (isReserveCreated(message)) {
+                updateReservation(message)
+                return
+            }
+        }
+        with(AdminActionsController) {
+            if(message.isReply) {
+                performDeleteUser(message)
+                return
+            }
+        }
         with(RegistrationController) {
             if (isRegistered(message)) updateUser(message) else askPass(message)
         }

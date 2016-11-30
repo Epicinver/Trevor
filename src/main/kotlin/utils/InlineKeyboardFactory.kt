@@ -22,30 +22,32 @@ object InlineKeyboardFactory {
     fun createAdminKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(ButtonLabel.allNames, CallbackData.allNames)),
+                    listOf(createButton(ButtonLabel.allUsers, CallbackData.allUsers)),
                     listOf(createButton(ButtonLabel.needHelp, CallbackData.needHelp)),
+                    listOf(createButton(ButtonLabel.deleteUser, CallbackData.deleteUser)),
                     listOf(createButton(ButtonLabel.salaryToday, CallbackData.salaryToday)))
         }
     }
 
-    fun createEditedAdminKeyboard() : InlineKeyboardMarkup {
+    fun createEditedAdminKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
-                    listOf(createButton(ButtonLabel.allNames, CallbackData.allNames)),
+                    listOf(createButton(ButtonLabel.allUsers, CallbackData.allUsers)),
                     listOf(createButton(ButtonLabel.needHelp, CallbackData.needHelp)),
+                    listOf(createButton(ButtonLabel.deleteUser, CallbackData.deleteUser)),
                     listOf(createButton(ButtonLabel.salaryList, CallbackData.salaryList)),
                     listOf(createButton(ButtonLabel.salaryStart, CallbackData.salaryStart)))
         }
     }
 
-    fun createUserNotificationKeyboard() : InlineKeyboardMarkup {
+    fun createUserNotificationKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(listOf(createButton(ButtonLabel.yes, CallbackData.addToSalaryList),
                     createButton(ButtonLabel.no, CallbackData.notAddToSalaryList)))
         }
     }
 
-    fun createUserInvitationKeyboard() : InlineKeyboardMarkup {
+    fun createUserInvitationKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
                     listOf(createButton(ButtonLabel.going, CallbackData.goingToGetPaid),
@@ -54,11 +56,21 @@ object InlineKeyboardFactory {
         }
     }
 
-    fun createUserPaidStatusKeyboard() : InlineKeyboardMarkup {
+    fun createUserPaidStatusKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
                     listOf(createButton(ButtonLabel.gotPaid, CallbackData.gotPaid),
                             createButton(ButtonLabel.notGotPaid, CallbackData.notGotPaid))
+            )
+        }
+    }
+
+    fun createReservationKeyboard(): InlineKeyboardMarkup {
+        return InlineKeyboardMarkup().apply {
+            keyboard = listOf(
+                    listOf(createButton(ButtonLabel.bigRoom, CallbackData.bigRoomReserve),
+                            createButton(ButtonLabel.smallRoom, CallbackData.smallRoomReserve)),
+                    listOf(createButton(ButtonLabel.reservesList, CallbackData.reservesList))
             )
         }
     }
