@@ -13,8 +13,7 @@ import java.util.*
  */
 class AdminActionsService : BaseService() {
 
-    fun isAdmin(message: Message): Boolean = userRepository.getById(message.chatId)?.
-            role == ("Admin")
+    fun isAdmin(message: Message): Boolean = userRepository.getById(message.chatId)?.role == ("Admin")
 
 
     fun deleteUser(chatId: Long) { userRepository.delete(chatId) }
@@ -22,7 +21,8 @@ class AdminActionsService : BaseService() {
     fun getHelper(): User = userRepository.getAll()
             .filter { it.role == "911" }[0]
 
-    fun getAllUsers(): ArrayList<User> { return userRepository.getAll() }
+    fun getAllUsers(): ArrayList<User> = userRepository.getAll()
+
 
 
 }

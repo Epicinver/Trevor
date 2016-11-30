@@ -12,8 +12,8 @@ class Reservation {
     @DatabaseField(generatedId = true) val id: Int = -1
     @DatabaseField(foreign = true, foreignAutoRefresh = true) var user: User? = null
     @DatabaseField(foreign = true, foreignAutoRefresh = true) var room: MeetingRoom? = null
-    @DatabaseField var date: Long? = null
-    @DatabaseField var duration: Int? = null
+    @DatabaseField var start: Long? = null
+    @DatabaseField var end: Long? = null
 
     constructor() {
     }

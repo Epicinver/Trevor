@@ -3,6 +3,7 @@ package repository
 import com.j256.ormlite.dao.Dao
 import com.j256.ormlite.dao.DaoManager
 import com.j256.ormlite.jdbc.JdbcConnectionSource
+import com.j256.ormlite.stmt.UpdateBuilder
 import entity.MeetingRoom
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get

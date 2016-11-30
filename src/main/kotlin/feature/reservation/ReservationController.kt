@@ -30,10 +30,11 @@ object ReservationController : BaseController() {
     fun showReservesList(message: Message) {
         val list = StringBuilder()
         service.getAllReserves()
-                .forEach { list.append("${it.room!!.description} " +
-                        "   ${SimpleDateFormat("dd.MM.yyyy hh:mm").format(it.date!!)}" +
-                        "   ${it.user!!.smlName}" +
-                        "   ${it.duration}min\n") }
+                .forEach {
+                    list.append("${it.room!!.description} " +
+                            "   ${SimpleDateFormat("dd.MM.yyyy hh:mm").format(it.start!!)}" +
+                            "   ${it.user!!.smlName}" +
+                            "   ${(it.end!! - it.start!!) / 1000 / 60}min\n") }
         bot.performSendMessage(message.chatId, list.toString())
 
     }
@@ -52,16 +53,20 @@ object ReservationController : BaseController() {
 
     fun updateReservation(message: Message) {
         if (service.isReserveCompleted(message)) return
-        if (service.hasDate(message)) {
+        if (service.hasStart(message)) {
             if (Validator.validateReserveDuration(message.text)) {
-                service.updateDuration(message)
+                service.updateEnd(message)
                 bot.performSendMessage(message.chatId, ReservationStrings.reserved)
             } else {
                 bot.performSendMessage(message.chatId, ReservationStrings.incorrectDuration)
             }
         } else {
             if (Validator.validateReserveDate(message.text)) {
-                service.updateDate(message)
+                if (service.isTimeAlreadyReserved(message)) {
+                    bot.performSendMessage(message.chatId, ReservationStrings.timeAlreadyReserved)
+                    return
+                }
+                service.updateStart(message)
                 bot.performSendMessage(message.chatId, ReservationStrings.typeDuration)
             } else {
                 bot.performSendMessage(message.chatId, ReservationStrings.incorrectDate)

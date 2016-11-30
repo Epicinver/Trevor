@@ -28,24 +28,34 @@ class ReservationService : BaseService() {
         }
     }
 
-    fun updateDate(message: Message) {
+    fun updateStart(message: Message) {
         with(SimpleDateFormat("dd.MM.yyyy hh:mm")) {
-            map[message.chatId]?.date = this.parse(message.text).time
+            map[message.chatId]?.start = this.parse(message.text).time
         }
     }
 
-    fun updateDuration(message: Message) {
-        map[message.chatId]?.duration = message.text.toInt()
+    fun updateEnd(message: Message) {
+        with(map[message.chatId]!!) {
+            end = start!! + (message.text.toLong() * 60 * 1000)
+        }
         performReserve(message)
     }
 
+    fun isTimeAlreadyReserved(message: Message): Boolean {
+        val date = SimpleDateFormat("dd.MM.yyyy hh:mm").parse(message.text).time
+        return reservationRepository.getAll()
+                .filter { date in it.start!!..it.end!! }
+                .isNotEmpty()
+    }
+
+
     fun isReserveExist(message: Message): Boolean = map.containsKey(message.chatId)
 
-    fun isReserveCompleted(message: Message): Boolean = hasDate(message) && hasDuration(message)
+    fun isReserveCompleted(message: Message): Boolean = hasStart(message) && hasEnd(message)
 
-    fun hasDate(message: Message): Boolean = map[message.chatId]?.date != null
+    fun hasStart(message: Message): Boolean = map[message.chatId]?.start != null
 
-    fun hasDuration(message: Message): Boolean = map[message.chatId]?.duration != null
+    fun hasEnd(message: Message): Boolean = map[message.chatId]?.end != null
 
     fun getAllReserves(): ArrayList<Reservation> = reservationRepository.getAll()
 
