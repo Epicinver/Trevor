@@ -72,8 +72,9 @@ object ReservationStrings {
     val reserved = "Зарезервировано"
     val incorrectDate = "Некорректный формат"
     val incorrectDuration = "Не нужно тебе столько..."
-    val typeDuration = "Введи адекватную продолжительность резерва в минутах"
-    val typeDate = "Когда? Формат dd.MM.yyyy hh:mm"
+    val typeDuration = "Введи продолжительность резерва в минутах"
+    val typeDate = "Когда? Формат dd.MM.yyyy HH:mm"
     val timeNotAvailable = "Время уже занято, либо уже прошло..." //todo текст
+    val noReserves = "Резервов пока нет"
 }
 

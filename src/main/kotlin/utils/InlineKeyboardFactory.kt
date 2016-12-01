@@ -11,14 +11,6 @@ import java.io.BufferedReader
  */
 object InlineKeyboardFactory {
 
-    private fun createButton(text: String, callbackData: String): InlineKeyboardButton {
-        return InlineKeyboardButton().apply {
-            this.text = text
-            this.callbackData = callbackData
-        }
-
-    }
-
     fun createAdminKeyboard(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup().apply {
             keyboard = listOf(
@@ -73,6 +65,14 @@ object InlineKeyboardFactory {
                     listOf(createButton(ButtonLabel.reservesList, CallbackData.reservesList))
             )
         }
+    }
+
+    private fun createButton(text: String, callbackData: String): InlineKeyboardButton {
+        return InlineKeyboardButton().apply {
+            this.text = text
+            this.callbackData = callbackData
+        }
+
     }
 
 }

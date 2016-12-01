@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat
  */
 object ReservationController : BaseController() {
 
+    val dateFormat = "dd.MM.yyyy HH:mm"
     val service = Injekt.get<ReservationService>()
 
     @BotCommand("/reserve")
@@ -29,14 +30,21 @@ object ReservationController : BaseController() {
     @BotCallbackData(CallbackData.reservesList)
     fun showReservesList(message: Message) {
         val list = StringBuilder()
-        service.getAllReserves()
-                .forEach {
-                    list.append("${it.room!!.description} " +
-                            "   ${SimpleDateFormat("dd.MM.yyyy hh:mm").format(it.start!!)}" +
-                            "   ${it.user!!.smlName}" +
-                            "   ${(it.end!! - it.start!!) / 1000 / 60}min\n") }
-        bot.performSendMessage(message.chatId, list.toString())
 
+        with(service.getAllReserves()) {
+            if (this.isEmpty()) {
+                bot.performSendMessage(message.chatId, ReservationStrings.noReserves)
+                return
+            }
+            this.forEach {
+                list.append("${it.room!!.description} " +
+                        "   ${SimpleDateFormat(dateFormat).format(it.start!!)}" +
+                        "   ${it.user!!.smlName}" +
+                        "   ${(it.end!! - it.start!!) / 1000 / 60}min\n")
+            }
+            bot.performSendMessage(message.chatId, list.toString())
+
+        }
     }
 
     @BotCallbackData(CallbackData.bigRoomReserve)
@@ -77,6 +85,8 @@ object ReservationController : BaseController() {
     fun isReserveCreated(message: Message): Boolean =
             service.isReserveExist(message) && !service.isReserveCompleted(message)
 
-    fun cleanReservation(id : Int) { service.deleteReserve(id) }
+    fun cleanReservation(id: Int) {
+        service.deleteReserve(id)
+    }
 
 }

@@ -17,6 +17,6 @@ object RegexValidator {
     }
 
     fun validateReserveDuration(duration: String): Boolean {
-        return if (duration.toInt() >= 10 && duration.toInt() <= 120) true else false
+        return if (duration.toInt() >= 1 && duration.toInt() <= 120) true else false
     }
 }
