@@ -1,7 +1,6 @@
 package bot
 
-import bot.SmlSalaryBot
-import bot.Trevor
+
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton

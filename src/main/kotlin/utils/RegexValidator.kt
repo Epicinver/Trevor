@@ -3,7 +3,7 @@ package utils
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
-object Validator {
+object RegexValidator {
 
     fun validateBirthday(birthday: String): Boolean {
         val regex = Regex("^(0[1-9]|[12][0-9]|3[01])[. /.](0[1-9]|1[012])[. /.](19|20)\\d\\d$")
@@ -17,6 +17,6 @@ object Validator {
     }
 
     fun validateReserveDuration(duration: String): Boolean {
-        return if (duration.toInt() >= 10 && duration.toInt() <= 120) true else false
+        return if (duration.toInt() >= 1 && duration.toInt() <= 120) true else false
     }
 }

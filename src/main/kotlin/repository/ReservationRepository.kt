@@ -17,7 +17,7 @@ class ReservationRepository : Repository<Reservation> {
     val dao : Dao<Reservation, Int> =
         DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), Reservation::class.java)
 
-    override fun create(reservation: Reservation) { dao.create(reservation) }
+    override fun create(reservation: Reservation) : Reservation =  dao.createIfNotExists(reservation)
 
     override fun delete(id: Number) { dao.deleteById(id.toInt()) }
 

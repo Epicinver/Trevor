@@ -7,7 +7,7 @@ import org.telegram.telegrambots.api.objects.Message
 import res.CallbackData
 import res.ReservationStrings
 import utils.InlineKeyboardFactory
-import utils.Validator
+import utils.RegexValidator
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.SimpleDateFormat
@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat
  */
 object ReservationController : BaseController() {
 
+    val dateFormat = "dd.MM.yyyy HH:mm"
     val service = Injekt.get<ReservationService>()
 
     @BotCommand("/reserve")
@@ -29,14 +30,21 @@ object ReservationController : BaseController() {
     @BotCallbackData(CallbackData.reservesList)
     fun showReservesList(message: Message) {
         val list = StringBuilder()
-        service.getAllReserves()
-                .forEach {
-                    list.append("${it.room!!.description} " +
-                            "   ${SimpleDateFormat("dd.MM.yyyy hh:mm").format(it.start!!)}" +
-                            "   ${it.user!!.smlName}" +
-                            "   ${(it.end!! - it.start!!) / 1000 / 60}min\n") }
-        bot.performSendMessage(message.chatId, list.toString())
 
+        with(service.getAllReserves()) {
+            if (this.isEmpty()) {
+                bot.performSendMessage(message.chatId, ReservationStrings.noReserves)
+                return
+            }
+            this.forEach {
+                list.append("${it.room!!.description} " +
+                        "   ${SimpleDateFormat(dateFormat).format(it.start!!)}" +
+                        "   ${it.user!!.smlName}" +
+                        "   ${(it.end!! - it.start!!) / 1000 / 60}min\n")
+            }
+            bot.performSendMessage(message.chatId, list.toString())
+
+        }
     }
 
     @BotCallbackData(CallbackData.bigRoomReserve)
@@ -54,16 +62,16 @@ object ReservationController : BaseController() {
     fun updateReservation(message: Message) {
         if (service.isReserveCompleted(message)) return
         if (service.hasStart(message)) {
-            if (Validator.validateReserveDuration(message.text)) {
+            if (RegexValidator.validateReserveDuration(message.text)) {
                 service.updateEnd(message)
                 bot.performSendMessage(message.chatId, ReservationStrings.reserved)
             } else {
                 bot.performSendMessage(message.chatId, ReservationStrings.incorrectDuration)
             }
         } else {
-            if (Validator.validateReserveDate(message.text)) {
-                if (service.isTimeAlreadyReserved(message)) {
-                    bot.performSendMessage(message.chatId, ReservationStrings.timeAlreadyReserved)
+            if (RegexValidator.validateReserveDate(message.text)) {
+                if (!service.isTimeAvailable(message)) {
+                    bot.performSendMessage(message.chatId, ReservationStrings.timeNotAvailable)
                     return
                 }
                 service.updateStart(message)
@@ -76,5 +84,9 @@ object ReservationController : BaseController() {
 
     fun isReserveCreated(message: Message): Boolean =
             service.isReserveExist(message) && !service.isReserveCompleted(message)
+
+    fun cleanReservation(id: Int) {
+        service.deleteReserve(id)
+    }
 
 }
