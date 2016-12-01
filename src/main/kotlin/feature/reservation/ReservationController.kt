@@ -7,7 +7,7 @@ import org.telegram.telegrambots.api.objects.Message
 import res.CallbackData
 import res.ReservationStrings
 import utils.InlineKeyboardFactory
-import utils.Validator
+import utils.RegexValidator
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.SimpleDateFormat
@@ -54,16 +54,16 @@ object ReservationController : BaseController() {
     fun updateReservation(message: Message) {
         if (service.isReserveCompleted(message)) return
         if (service.hasStart(message)) {
-            if (Validator.validateReserveDuration(message.text)) {
+            if (RegexValidator.validateReserveDuration(message.text)) {
                 service.updateEnd(message)
                 bot.performSendMessage(message.chatId, ReservationStrings.reserved)
             } else {
                 bot.performSendMessage(message.chatId, ReservationStrings.incorrectDuration)
             }
         } else {
-            if (Validator.validateReserveDate(message.text)) {
-                if (service.isTimeAlreadyReserved(message)) {
-                    bot.performSendMessage(message.chatId, ReservationStrings.timeAlreadyReserved)
+            if (RegexValidator.validateReserveDate(message.text)) {
+                if (!service.isTimeAvailable(message)) {
+                    bot.performSendMessage(message.chatId, ReservationStrings.timeNotAvailable)
                     return
                 }
                 service.updateStart(message)
@@ -76,5 +76,7 @@ object ReservationController : BaseController() {
 
     fun isReserveCreated(message: Message): Boolean =
             service.isReserveExist(message) && !service.isReserveCompleted(message)
+
+    fun cleanReservation(id : Int) { service.deleteReserve(id) }
 
 }

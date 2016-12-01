@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.telegram:telegrambots:2.4.0"
+    compile "org.telegram:telegrambots:2.4.4"
     compile "org.xerial:sqlite-jdbc:3.15.1"
     compile "com.j256.ormlite:ormlite-core:5.0"
     compile "com.j256.ormlite:ormlite-jdbc:5.0"

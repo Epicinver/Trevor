@@ -12,8 +12,6 @@ import feature.adminactions.AdminActionsModule
 import feature.base.BaseController
 import feature.birthdays.BirthdayController
 import feature.birthdays.BirthdayModule
-import feature.birthdays.job.BirthdayWeekdayJob
-import feature.birthdays.job.BirthdayWeekendJob
 import feature.registration.RegistrationController
 import feature.registration.RegistrationModule
 import feature.reservation.ReservationController
@@ -45,8 +43,6 @@ class Application {
             TelegramBotsApi().registerBot(Trevor())
 
             SundialJobScheduler.startScheduler("feature.birthdays.job")
-            SundialJobScheduler.startJob(BirthdayWeekdayJob::class.java.simpleName)
-            SundialJobScheduler.startJob(BirthdayWeekendJob::class.java.simpleName)
         }
 
         override fun InjektRegistrar.registerInjectables() {

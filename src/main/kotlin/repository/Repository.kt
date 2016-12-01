@@ -8,7 +8,7 @@ import java.util.*
  */
 interface Repository<T> {
 
-    fun create(entity: T)
+    fun create(entity: T) : T
 
     fun delete(id: Number)
 

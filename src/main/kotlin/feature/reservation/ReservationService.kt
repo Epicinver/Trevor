@@ -3,6 +3,8 @@ package feature.reservation
 import entity.MeetingRoom
 import entity.Reservation
 import feature.base.BaseService
+import feature.reservation.job.ReservationCleanJob
+import org.knowm.sundial.SundialJobScheduler
 import org.telegram.telegrambots.api.objects.Message
 import repository.Repository
 import uy.kohesive.injekt.Injekt
@@ -28,6 +30,12 @@ class ReservationService : BaseService() {
         }
     }
 
+    fun getAllReserves(): ArrayList<Reservation> = reservationRepository.getAll()
+
+    fun deleteReserve(id: Int) {
+        reservationRepository.delete(id)
+    }
+
     fun updateStart(message: Message) {
         with(SimpleDateFormat("dd.MM.yyyy hh:mm")) {
             map[message.chatId]?.start = this.parse(message.text).time
@@ -41,13 +49,13 @@ class ReservationService : BaseService() {
         performReserve(message)
     }
 
-    fun isTimeAlreadyReserved(message: Message): Boolean {
+    fun isTimeAvailable(message: Message): Boolean {
         val date = SimpleDateFormat("dd.MM.yyyy hh:mm").parse(message.text).time
-        return reservationRepository.getAll()
-                .filter { date in it.start!!..it.end!! }
-                .isNotEmpty()
+        return if (date < System.currentTimeMillis()) false else
+            reservationRepository.getAll()
+                    .filter { date in it.start!!..it.end!! }
+                    .isEmpty()
     }
-
 
     fun isReserveExist(message: Message): Boolean = map.containsKey(message.chatId)
 
@@ -57,11 +65,25 @@ class ReservationService : BaseService() {
 
     fun hasEnd(message: Message): Boolean = map[message.chatId]?.end != null
 
-    fun getAllReserves(): ArrayList<Reservation> = reservationRepository.getAll()
-
     private fun performReserve(message: Message) {
-        reservationRepository.create(map[message.chatId]!!)
+        createCleanJob(reservationRepository.create(map[message.chatId]!!))
         map.remove(message.chatId)
+    }
+
+    private fun createCleanJob(reservation: Reservation) {
+        val endReservation = Calendar.getInstance().apply {
+            time = Date(reservation.end!!)
+        }
+        SundialJobScheduler.addJob(ReservationCleanJob::class.java.simpleName,
+                ReservationCleanJob::class.java,
+                mapOf(Pair("id", reservation.id)),
+                false)
+        SundialJobScheduler.addCronTrigger("CleanReservationTrigger", ReservationCleanJob::class.java.simpleName,
+                "0 ${endReservation.get(Calendar.MINUTE)} " +
+                        "${endReservation.get(Calendar.HOUR_OF_DAY)} " +
+                        "${endReservation.get(Calendar.DAY_OF_MONTH)} " +
+                        "${endReservation.get(Calendar.MONTH)} ? " +
+                        "${endReservation.get(Calendar.YEAR)}")
     }
 
     enum class Rooms {
