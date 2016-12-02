@@ -13,7 +13,6 @@ import java.util.*
  */
 class ReservationRepository : Repository<Reservation> {
 
-//    val dao = Injekt.get<Dao<Reservation, Int>>()
     val dao : Dao<Reservation, Int> =
         DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), Reservation::class.java)
 

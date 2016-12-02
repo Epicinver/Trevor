@@ -31,7 +31,7 @@ object BirthdayController : BaseController<BirthdayService>(BirthdayService::cla
             forEach { birthdayUser = it }
             flatMap { service.getUsersForNotify(birthdayUser!!) }
             forEach { bot.performSendMessage(it.chatId,
-                        "${BirthdayStrings.notificationWeekend} ${birthdayUser!!.smlName}") }
+                        "${BirthdayStrings.notification} ${birthdayUser!!.smlName}") }
             clear()
         }
 

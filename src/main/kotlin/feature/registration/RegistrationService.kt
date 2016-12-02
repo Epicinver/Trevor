@@ -10,7 +10,7 @@ import org.telegram.telegrambots.api.objects.Message
  */
 class RegistrationService : BaseService() {
 
-    fun isExist(message: Message): Boolean = userRepository.getById(message.chatId) != null
+    fun isUserExist(message: Message): Boolean = userRepository.getById(message.chatId) != null
 
     fun isRegistrationCompleted(message: Message): Boolean = hasSmlName(message) && hasBirthday(message)
 

@@ -39,7 +39,7 @@ object ReservationController : BaseController<ReservationService>(ReservationSer
                 list.append("${it.room!!.description} " +
                         "   ${SimpleDateFormat(dateFormat).format(it.start!!)}" +
                         "   ${it.user!!.smlName}" +
-                        "   ${(it.end!! - it.start!!) / 1000 / 60}min\n")
+                        "   ${(it.end!! - it.start!!) / 1000 / 60}min\n\n")
             }
             bot.performSendMessage(message.chatId, list.toString())
 
@@ -84,6 +84,9 @@ object ReservationController : BaseController<ReservationService>(ReservationSer
     fun isReserveCreated(message: Message): Boolean =
             service.isReserveExist(message) && !service.isReserveCompleted(message)
 
-    fun cleanReservation(id: Int) = service.deleteReserve(id)
+    fun cleanReservation() {
+        service.getAllReserves().
+                forEach { if (it.end!! < System.currentTimeMillis()) service.deleteReserve(it.id) }
+    }
 
 }

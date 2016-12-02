@@ -7,7 +7,7 @@ import org.telegram.telegrambots.api.objects.Message
 import res.AdminStrings
 import res.CallbackData
 import res.Stickers
-import res.UserStrings
+import res.RegistrationStrings
 import utils.InlineKeyboardFactory
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -60,7 +60,7 @@ object AdminActionsController : BaseController<AdminActionsService>(AdminActions
     fun sendSalaryNotification(message: Message) {
         service.getAllUsers()
                 .forEach {
-                    bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
+                    bot.performSendMessage(it.chatId, RegistrationStrings.salaryNotification,
                             InlineKeyboardFactory.createUserNotificationKeyboard())
                 }
         bot.performEditKeyboard(message.chatId, messageWithActions!!.messageId,

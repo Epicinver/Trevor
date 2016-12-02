@@ -23,7 +23,8 @@ object ButtonLabel {
 
 object MiscStrings {
     val ok = "Ok"
-    val greeting = "Привет, это Тревор. Для регистрации отправь /reg"
+    val greeting = "Привет, это Тревор"
+    val incorrectInput = "Что, прости?"
     val instruction = "1. В день зарплаты получаешь уведомление о выдаче с двумя кнопками\n2. Нажимаешь 'Да' если ты сегодня в офисе и планируешь забрать свои деньги, 'Нет' - если ты на больничном/в отпуске/в командировке и т.д.\n3. Когда настанет твоя очередь - получишь сообщение. На него нужно отреагировать в течении 2 минут, чтобы не задерживать очередь\n4. Идешь и забираешь зарплату\n5. Каеф\n"
 }
 
@@ -36,23 +37,22 @@ object AdminStrings {
     val userHasBeenDeleted = "Удалил изменника"
 }
 
-object UserStrings {
+object RegistrationStrings {
     val alreadyRegistered = "Ну ты ведь зарегестрирован уже..."
-    val thereIsNoUsername = "Привет! Ты хочешь получать зарплату, но у тебя не указан username в настройках Telegram. Не надо так. Добавь username и попробуй /reg снова"
-    val askPass = "Привет! Ну ладно, ты хочешь получать зарплату. Какой пароль?"
+    val thereIsNoUsername = "У тебя не указан username в настройках Telegram. Не надо так. Добавь username и отправь /start снова"
+    val askPass = "Зарплаты не будет без пароля, такие дела. Какой пароль?"
     val registrationComplete = "Регистрация завершена"
     val wrongPass = "Почти правильный пароль"
     val rightPass = "Верный пароль"
     val typeYourName = "Введи свое имя и фамилию. Через пробел. С большой буквы. И без шуточек"
     val typeYourBirthday = "Тревор хочет знать твою дату рождения. Формат : dd.MM.yyyy"
-    val incorrectInput = "Ты прислал какую то шляпу..."
     val incorrectBirthday = "Ты втер мне дичь. Введи дату рождения в правильном формате"
     val salaryNotification = "Привет! Сегодня зарплату обещают\nБудешь получать ?"
 }
 
 object BirthdayStrings {
     val notification = "Cегодня празднует свой день рождения "
-    val notificationWeekend = "На выходных был день рождения у " //todo падеж!!!
+    val notificationWeekend = "На выходных был день рождения у "
 }
 
 object SalaryDayStrings {
@@ -65,7 +65,7 @@ object SalaryDayStrings {
     val isGoing = "идет..."
     val turnSkipped = "Ты пропустил свою очередь. Ожидай следующего вызова"
     val complete = "Зарплата выдана всем"
-    val moneyReceived = "Деньги получены. Досвидули"
+    val moneyReceived = "Ciao!"
 
 }
 
@@ -76,7 +76,7 @@ object ReservationStrings {
     val incorrectDuration = "Не нужно тебе столько..."
     val typeDuration = "Введи продолжительность резерва в минутах"
     val typeDate = "Когда? Формат dd.MM.yyyy HH:mm"
-    val timeNotAvailable = "Время уже занято, либо уже прошло..." //todo текст
+    val timeNotAvailable = "Время уже занято, либо уже прошло..."
     val noReserves = "Резервов пока нет"
 }
 

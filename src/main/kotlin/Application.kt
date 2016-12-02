@@ -17,6 +17,7 @@ import feature.registration.RegistrationController
 import feature.registration.RegistrationModule
 import feature.reservation.ReservationController
 import feature.reservation.ReservationModule
+import feature.reservation.job.ReservationCleanJob
 import feature.salary.SalaryController
 import feature.salary.SalaryModule
 import org.knowm.sundial.SundialJobScheduler
@@ -40,10 +41,18 @@ class Application {
             registerController(ReservationController)
 
             initDb()
+            initScheduler()
 
             TelegramBotsApi().registerBot(Trevor())
 
+
+        }
+
+        private fun initScheduler() {
             SundialJobScheduler.startScheduler("feature.birthdays.job")
+            SundialJobScheduler.addJob("ReservationCleaner", ReservationCleanJob::class.java)
+            SundialJobScheduler.addSimpleTrigger("CleanerTrigger", "ReservationCleaner", -1, 10000)
+            SundialJobScheduler.startJob("ReservationCleaner")
         }
 
         override fun InjektRegistrar.registerInjectables() {
