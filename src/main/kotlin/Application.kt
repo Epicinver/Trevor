@@ -10,6 +10,7 @@ import entity.User
 import feature.adminactions.AdminActionsController
 import feature.adminactions.AdminActionsModule
 import feature.base.BaseController
+import feature.base.BaseService
 import feature.birthdays.BirthdayController
 import feature.birthdays.BirthdayModule
 import feature.registration.RegistrationController
@@ -19,7 +20,6 @@ import feature.reservation.ReservationModule
 import feature.salary.SalaryController
 import feature.salary.SalaryModule
 import org.knowm.sundial.SundialJobScheduler
-//import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.TelegramBotsApi
 import processor.MessageProcessor
 import processor.MethodExecutor
@@ -62,7 +62,7 @@ class Application {
             TableUtils.createTableIfNotExists(connection, Reservation::class.java)
         }
 
-        private fun registerController(controller: BaseController) {
+        private fun registerController(controller: BaseController<BaseService>) {
             controller.javaClass.declaredMethods
                     .forEach {
                         if (it.isAnnotationPresent(BotCommand::class.java)) {

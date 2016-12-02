@@ -16,7 +16,7 @@ class AdminActionsService : BaseService() {
     fun isAdmin(message: Message): Boolean = userRepository.getById(message.chatId)?.role == ("Admin")
 
 
-    fun deleteUser(chatId: Long) { userRepository.delete(chatId) }
+    fun deleteUser(chatId: Long) = userRepository.delete(chatId)
 
     fun getHelper(): User = userRepository.getAll()
             .filter { it.role == "911" }[0]

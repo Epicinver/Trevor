@@ -10,29 +10,22 @@ import org.telegram.telegrambots.api.objects.Message
  */
 class RegistrationService : BaseService() {
 
-    fun isExist(message: Message): Boolean =
-            userRepository.getById(message.chatId) != null
+    fun isExist(message: Message): Boolean = userRepository.getById(message.chatId) != null
 
-    fun isRegistrationCompleted(message: Message): Boolean =
-            hasSmlName(message) && hasBirthday(message)
+    fun isRegistrationCompleted(message: Message): Boolean = hasSmlName(message) && hasBirthday(message)
 
-    fun createUser(message: Message) {
-        userRepository.create(User(message.from.userName, message.chatId))
-    }
+    fun createUser(message: Message) = userRepository.create(User(message.from.userName, message.chatId))
 
-    fun updateUser(chatId: Long, column: String, value: Any) {
-        userRepository.update(chatId, column, value)
-    }
+    fun updateUser(chatId: Long, column: String, value: Any) = userRepository.update(chatId, column, value)
 
-    fun hasSmlName(message: Message): Boolean {
-        return with(userRepository.getById(message.chatId)) {
-            !TextUtils.isEmpty(this?.smlName)
-        }
-    }
+    fun hasSmlName(message: Message): Boolean =
+            with(userRepository.getById(message.chatId)) {
+                !TextUtils.isEmpty(this?.smlName)
+            }
 
-    fun hasBirthday(message: Message): Boolean {
-        return with(userRepository.getById(message.chatId)) {
-            !TextUtils.isEmpty(this?.birthday)
-        }
-    }
+    private fun hasBirthday(message: Message): Boolean =
+            with(userRepository.getById(message.chatId)) {
+                !TextUtils.isEmpty(this?.birthday)
+            }
+
 }

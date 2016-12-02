@@ -17,7 +17,6 @@ import utils.PropertiesLoader
  */
 class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 
-    //todo добавить реакцию на /start
     //todo добавить все команды в папу бота, чтобы был хайлайт
     override fun getBotUsername(): String = PropertiesLoader.getProperty("bot.username")
 
@@ -25,8 +24,8 @@ class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
     override fun getBotToken(): String = PropertiesLoader.getProperty("bot.token")
 
     override fun onUpdateReceived(update: Update?) {
-        update?.message?.let { //todo добавить isCommand и тогда processText можно тут вызывать у процессора
-            MessageProcessor.processCommand(it)
+        update?.message?.let {
+            MessageProcessor.processMessage(it)
         }
         update?.callbackQuery?.let {
             MessageProcessor.processCallbackQuery(it)
@@ -34,7 +33,6 @@ class Trevor : TelegramLongPollingBot(), SmlSalaryBot {
 
     }
 
-    //todo forceReply тут кажется уже лишним. Может вынести в отдельный метод может ?
     override fun performSendMessage(chatId: Long,
                                     text: String,
                                     keyboard: InlineKeyboardMarkup?,

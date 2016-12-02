@@ -14,10 +14,10 @@ import java.util.*
  */
 class MeetingRoomRepository : Repository<MeetingRoom> {
 
-//    val dao = Injekt.get<Dao<MeetingRoom, Int>>()
-    val dao : Dao<MeetingRoom, Int> = DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), MeetingRoom::class.java)
+    //    val dao = Injekt.get<Dao<MeetingRoom, Int>>()
+    val dao: Dao<MeetingRoom, Int> = DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), MeetingRoom::class.java)
 
-    override fun create(room: MeetingRoom) : MeetingRoom = dao.createIfNotExists(room)
+    override fun create(room: MeetingRoom): MeetingRoom = dao.createIfNotExists(room)
 
     override fun delete(id: Number) { dao.deleteById(id.toInt()) }
 
@@ -25,7 +25,7 @@ class MeetingRoomRepository : Repository<MeetingRoom> {
 
     override fun getAll(): ArrayList<MeetingRoom> = dao.queryForAll() as ArrayList<MeetingRoom>
 
-    override fun update(id: Number, column : String, value : Any) {
+    override fun update(id: Number, column: String, value: Any) {
         dao.updateBuilder().apply {
             where().eq("id", id)
             updateColumnValue(column, value)

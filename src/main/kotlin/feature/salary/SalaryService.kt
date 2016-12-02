@@ -11,23 +11,17 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 20.11.16.
  */
-class SalaryService : BaseService(){
+class SalaryService : BaseService() {
 
     private val salaryList = ArrayList<User>()
 
-    fun addUserToSalaryList(message: Message) {
-        userRepository.getById(message.chatId)?.let {
-            salaryList.add(it)
-        }
-    }
+    fun addUserToSalaryList(message: Message) = userRepository.getById(message.chatId)?.let { salaryList.add(it) }
 
-    fun deleteUserFromSalaryList(user : User) {
-        salaryList.remove(user)
-    }
+    fun deleteUserFromSalaryList(user: User) = salaryList.remove(user)
 
     fun getAllUsersForSalary(): ArrayList<User> = salaryList
 
-    fun getNextUser(presentUser: User?) : User {
+    fun getNextUser(presentUser: User?): User {
         var user = getRandomUser()
         while (user == presentUser && !isLastUser()) {
             user = getRandomUser()
@@ -39,9 +33,6 @@ class SalaryService : BaseService(){
 
     private fun isLastUser(): Boolean = salaryList.size == 1
 
-    private fun getRandomUser(): User {
-        return Random().nextInt(salaryList.size).let {
-            salaryList[it]
-        }
-    }
+    private fun getRandomUser(): User = Random().nextInt(salaryList.size).let { salaryList[it] }
+
 }
