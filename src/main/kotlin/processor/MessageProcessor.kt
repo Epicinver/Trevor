@@ -24,7 +24,7 @@ object MessageProcessor {
     }
 
 
-    fun processCommand(message: Message) {
+    fun processMessage(message: Message) {
         message.text?.let {
             if (it in commandsMap) {
                 commandsMap[it]?.execute(message)

@@ -15,10 +15,9 @@ import java.text.SimpleDateFormat
 /**
  * Created by sergeyopivalov on 26.11.16.
  */
-object ReservationController : BaseController() {
+object ReservationController : BaseController<ReservationService>(ReservationService::class) {
 
     val dateFormat = "dd.MM.yyyy HH:mm"
-    val service = Injekt.get<ReservationService>()
 
     @BotCommand("/reserve")
     fun performChooseRoom(message: Message) {
@@ -85,8 +84,6 @@ object ReservationController : BaseController() {
     fun isReserveCreated(message: Message): Boolean =
             service.isReserveExist(message) && !service.isReserveCompleted(message)
 
-    fun cleanReservation(id: Int) {
-        service.deleteReserve(id)
-    }
+    fun cleanReservation(id: Int) = service.deleteReserve(id)
 
 }

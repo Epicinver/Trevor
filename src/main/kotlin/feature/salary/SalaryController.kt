@@ -18,13 +18,12 @@ import kotlin.properties.Delegates
 /**
  * Created by sergeyopivalov on 20.11.16.
  */
-object SalaryController : BaseController() {
+object SalaryController : BaseController<SalaryService>(SalaryService::class) {
 
-    private val service = Injekt.get<SalaryService>()
     private var timer = Injekt.get<Timer>()
 
-    private var adminMessage: Message by Delegates.notNull()
-    private var currentMessage: Message by Delegates.notNull()
+    private var adminMessage: Message? = null
+    private var currentMessage: Message? = null
     private var salaryListMessage: Message? = null
 
     private var currentUser: User? = null
@@ -83,26 +82,26 @@ object SalaryController : BaseController() {
 
     @BotCallbackData(CallbackData.gotPaid)
     fun userGetSalary(message: Message) {
-        bot.performEditMessage(currentMessage.chatId, currentMessage.messageId, SalaryDayStrings.moneyReceived, true)
+        bot.performEditMessage(currentMessage!!.chatId, currentMessage!!.messageId, SalaryDayStrings.moneyReceived, true)
         service.deleteUserFromSalaryList(currentUser!!)
         notifyNextUser()
     }
 
     @BotCallbackData(CallbackData.notGotPaid)
     fun userNotGetSalary(message: Message) {
-        notifyUserSkipTurn(currentMessage)
+        notifyUserSkipTurn(currentMessage!!)
         notifyNextUser()
     }
 
-    fun notifyUserSkipTurn(message: Message) {
-        bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.turnSkipped)
-    }
+    fun notifyUserSkipTurn(message: Message) =
+            bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.turnSkipped)
+
 
     fun notifyNextUser() {
         timerTask?.cancel()
 
         if (service.isListEmpty()) {
-            bot.performEditMessage(adminMessage.chatId, adminMessage.messageId, SalaryDayStrings.complete)
+            bot.performEditMessage(adminMessage!!.chatId, adminMessage!!.messageId, SalaryDayStrings.complete)
             salaryListMessage = null
             return
         }
@@ -111,15 +110,15 @@ object SalaryController : BaseController() {
         notifyAdmin()
         inviteUser()
 
-        timerTask = SalaryTask(currentMessage)
+        timerTask = SalaryTask(currentMessage!!)
         timer.schedule(timerTask, PropertiesLoader.getProperty("delay").toLong())
     }
 
     private fun notifyAdmin() {
         bot.apply {
-            performEditMessage(adminMessage.chatId, adminMessage.messageId,
+            performEditMessage(adminMessage!!.chatId, adminMessage!!.messageId,
                     "${currentUser?.smlName} ${SalaryDayStrings.isGoing}")
-            performEditKeyboard(SalaryController.adminMessage.chatId, adminMessage.messageId,
+            performEditKeyboard(SalaryController.adminMessage!!.chatId, adminMessage!!.messageId,
                     InlineKeyboardFactory.createUserPaidStatusKeyboard())
         }
     }

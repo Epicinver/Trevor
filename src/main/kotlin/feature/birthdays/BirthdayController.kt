@@ -11,33 +11,30 @@ import java.util.*
 /**
  * Created by sergeyopivalov on 24/11/2016.
  */
-object BirthdayController : BaseController(){
-
-    val service = Injekt.get<BirthdayService>()
+object BirthdayController : BaseController<BirthdayService>(BirthdayService::class) {
 
     private var birthdayUsers: ArrayList<User>? = null
     private var birthdayAtWeekendUsers: ArrayList<User>? = null
 
-
-    //TODO переделать на flatmap, без вложенности
     fun notifyUsersAboutBirthdays() {
         birthdayAtWeekendUsers?.apply {
-            forEach { user ->
-                service.getUsersForNotify(user)
-                        .forEach { bot.performSendMessage(it.chatId,
-                                "${BirthdayStrings.notificationWeekend} ${user.smlName}") }
-            }
+            var birthdayUser: User? = null
+            forEach { birthdayUser = it }
+            flatMap { service.getUsersForNotify(birthdayUser!!) }
+            forEach { bot.performSendMessage(it.chatId,
+                        "${BirthdayStrings.notificationWeekend} ${birthdayUser!!.smlName}") }
             clear()
         }
 
         birthdayUsers?.apply {
-            forEach { user ->
-                service.getUsersForNotify(user)
-                        .forEach { bot.performSendMessage(it.chatId,
-                                "${BirthdayStrings.notification} ${user.smlName}") }
-            }
+            var birthdayUser: User? = null
+            forEach { birthdayUser = it }
+            flatMap { service.getUsersForNotify(birthdayUser!!) }
+            forEach { bot.performSendMessage(it.chatId,
+                        "${BirthdayStrings.notificationWeekend} ${birthdayUser!!.smlName}") }
             clear()
         }
+
     }
 
     fun checkBirthdays(weekend: Boolean = false) {
@@ -46,7 +43,5 @@ object BirthdayController : BaseController(){
 
     private fun getBirthdayUsers(): ArrayList<User>? = service.getUsersWasBornToday(getCurrentDate())
 
-    private fun getCurrentDate(): String = SimpleDateFormat("dd.MM.yyyy").let {
-        it.format(Date())
-    }
+    private fun getCurrentDate(): String = SimpleDateFormat("dd.MM.yyyy").let { it.format(Date()) }
 }

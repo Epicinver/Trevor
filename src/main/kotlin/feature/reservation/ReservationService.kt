@@ -19,9 +19,9 @@ import java.util.concurrent.ConcurrentHashMap
  */
 class ReservationService : BaseService() {
 
-    val reservationRepository = Injekt.get<Repository<Reservation>>()
-    val roomRepository = Injekt.get<Repository<MeetingRoom>>()
-    val map = ConcurrentHashMap<Long, Reservation>()
+    private val reservationRepository = Injekt.get<Repository<Reservation>>()
+    private val roomRepository = Injekt.get<Repository<MeetingRoom>>()
+    private val map = ConcurrentHashMap<Long, Reservation>()
 
     fun createReserve(message: Message, room: Rooms) {
         val user = userRepository.getById(message.chatId)
@@ -33,15 +33,13 @@ class ReservationService : BaseService() {
 
     fun getAllReserves(): ArrayList<Reservation> = reservationRepository.getAll()
 
-    fun deleteReserve(id: Int) {
-        reservationRepository.delete(id)
-    }
+    fun deleteReserve(id: Int) = reservationRepository.delete(id)
 
-    fun updateStart(message: Message) {
-        with(SimpleDateFormat(ReservationController.dateFormat)) {
-            map[message.chatId]?.start = this.parse(message.text).time
-        }
-    }
+    fun updateStart(message: Message) =
+            with(SimpleDateFormat(ReservationController.dateFormat)) {
+                map[message.chatId]?.start = this.parse(message.text).time
+            }
+
 
     fun updateEnd(message: Message) {
         with(map[message.chatId]!!) {

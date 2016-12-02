@@ -4,20 +4,17 @@ import annotation.BotCommand
 import feature.base.BaseController
 import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
+import res.MiscStrings
 import res.Stickers
 import res.UserStrings
 import utils.PropertiesLoader
 import utils.RegexValidator
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 
 
 /**
  * Created by sergeyopivalov on 08/11/2016.
  */
-object RegistrationController : BaseController() {
-
-    private val service = Injekt.get<RegistrationService>()
+object RegistrationController : BaseController<RegistrationService>(RegistrationService::class) {
 
     @BotCommand("/reg")
     fun performRegistration(message: Message) {
@@ -31,6 +28,16 @@ object RegistrationController : BaseController() {
         } else {
             bot.performSendMessage(message.chatId, UserStrings.askPass)
         }
+    }
+
+    @BotCommand("/start")
+    fun showGreeting(message: Message) {
+        bot.performSendMessage(message.chatId, MiscStrings.greeting)
+    }
+
+    @BotCommand("/help")
+    fun showHelp(message: Message) {
+        bot.performSendMessage(message.chatId, MiscStrings.instruction)
     }
 
     fun askPass(message: Message) {

@@ -16,12 +16,9 @@ import kotlin.properties.Delegates
 /**
  * Created by sergeyopivalov on 16.11.16.
  */
-object AdminActionsController : BaseController() {
+object AdminActionsController : BaseController<AdminActionsService>(AdminActionsService::class) {
 
-    private var messageWithActions: Message by Delegates.notNull()
-
-    //todo перенести сервис в базовый класс (там гемор с дженериками)
-    private val service = Injekt.get<AdminActionsService>()
+    private var messageWithActions: Message? = null
 
     @BotCommand("/actions")
     fun performActionsShow(message: Message) {
@@ -66,7 +63,7 @@ object AdminActionsController : BaseController() {
                     bot.performSendMessage(it.chatId, UserStrings.salaryNotification,
                             InlineKeyboardFactory.createUserNotificationKeyboard())
                 }
-        bot.performEditKeyboard(message.chatId, messageWithActions.messageId,
+        bot.performEditKeyboard(message.chatId, messageWithActions!!.messageId,
                 InlineKeyboardFactory.createEditedAdminKeyboard())
 
     }
