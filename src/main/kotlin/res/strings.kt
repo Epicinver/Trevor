@@ -45,14 +45,14 @@ object UserStrings {
     val rightPass = "Верный пароль"
     val typeYourName = "Введи свое имя и фамилию. Через пробел. С большой буквы. И без шуточек"
     val typeYourBirthday = "Тревор хочет знать твою дату рождения. Формат : dd.MM.yyyy"
-    val incorrectInput = "Ты прислал какую то шляпу..."
+    val incorrectInput = "Что, прости?"
     val incorrectBirthday = "Ты втер мне дичь. Введи дату рождения в правильном формате"
     val salaryNotification = "Привет! Сегодня зарплату обещают\nБудешь получать ?"
 }
 
 object BirthdayStrings {
     val notification = "Cегодня празднует свой день рождения "
-    val notificationWeekend = "На выходных был день рождения у " //todo падеж!!!
+    val notificationWeekend = "На выходных был день рождения у "
 }
 
 object SalaryDayStrings {
@@ -65,7 +65,7 @@ object SalaryDayStrings {
     val isGoing = "идет..."
     val turnSkipped = "Ты пропустил свою очередь. Ожидай следующего вызова"
     val complete = "Зарплата выдана всем"
-    val moneyReceived = "Деньги получены. Досвидули"
+    val moneyReceived = "Ciao!"
 
 }
 
@@ -76,7 +76,7 @@ object ReservationStrings {
     val incorrectDuration = "Не нужно тебе столько..."
     val typeDuration = "Введи продолжительность резерва в минутах"
     val typeDate = "Когда? Формат dd.MM.yyyy HH:mm"
-    val timeNotAvailable = "Время уже занято, либо уже прошло..." //todo текст
+    val timeNotAvailable = "Время уже занято, либо уже прошло..."
     val noReserves = "Резервов пока нет"
 }
 

@@ -14,8 +14,8 @@ import java.util.*
  */
 class MeetingRoomRepository : Repository<MeetingRoom> {
 
-    //    val dao = Injekt.get<Dao<MeetingRoom, Int>>()
-    val dao: Dao<MeetingRoom, Int> = DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), MeetingRoom::class.java)
+    val dao: Dao<MeetingRoom, Int> =
+            DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), MeetingRoom::class.java)
 
     override fun create(room: MeetingRoom): MeetingRoom = dao.createIfNotExists(room)
 

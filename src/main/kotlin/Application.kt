@@ -20,6 +20,7 @@ import feature.reservation.ReservationModule
 import feature.salary.SalaryController
 import feature.salary.SalaryModule
 import org.knowm.sundial.SundialJobScheduler
+import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.TelegramBotsApi
 import processor.MessageProcessor
 import processor.MethodExecutor
@@ -42,6 +43,7 @@ class Application {
             initDb()
 
             TelegramBotsApi().registerBot(Trevor())
+            ApiContextInitializer.init()
 
             SundialJobScheduler.startScheduler("feature.birthdays.job")
         }

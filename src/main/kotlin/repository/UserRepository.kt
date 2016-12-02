@@ -13,8 +13,8 @@ import java.util.*
  */
 class UserRepository : Repository <User> {
 
-//    val dao = Injekt.get<Dao<User, Long>>()
-    val dao : Dao<User, Long> = DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), User::class.java)
+    val dao : Dao<User, Long> =
+            DaoManager.createDao(JdbcConnectionSource("jdbc:sqlite:test.s3db"), User::class.java)
 
     override fun create(user: User) : User = dao.createIfNotExists(user)
 

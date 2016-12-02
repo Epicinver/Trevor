@@ -40,7 +40,6 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
         bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.inOtherTime, true)
     }
 
-    //todo more kotlin need here
     @BotCallbackData(CallbackData.salaryList)
     fun showSalaryList(message: Message) {
         val list = with(service.getAllUsersForSalary()) {
@@ -50,16 +49,17 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
             }
             val list = StringBuilder()
             this.map { user -> "${user.smlName} \n" }
-                    .forEach { list.append(it) }
+                .forEach { list.append(it) }
 
             list.append("${SalaryDayStrings.quantity} ${this.size}")
             list.toString()
         }
 
-        if (salaryListMessage == null)
-            salaryListMessage = bot.performSendMessage(message.chatId, list)
-        else
-            bot.performEditMessage(message.chatId, salaryListMessage!!.messageId, list)
+        when (salaryListMessage) {
+            null ->  salaryListMessage = bot.performSendMessage(message.chatId, list)
+            else ->  bot.performEditMessage(message.chatId, salaryListMessage!!.messageId, list)
+        }
+
     }
 
     @BotCallbackData(CallbackData.goingToGetPaid)
@@ -124,7 +124,6 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
     }
 
     private fun inviteUser() {
-        //todo Проверить работает ли
         currentMessage = bot.performSendMessage(currentUser!!.chatId, SalaryDayStrings.yourTurn,
                 InlineKeyboardFactory.createUserInvitationKeyboard())
     }
