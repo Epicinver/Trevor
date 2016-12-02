@@ -16,9 +16,11 @@ import utils.RegexValidator
  */
 object RegistrationController : BaseController<RegistrationService>(RegistrationService::class) {
 
-    @BotCommand("/reg")
-    fun performRegistration(message: Message) {
-        if (service.isExist(message)) {
+    @BotCommand("/start")
+    fun showGreeting(message: Message) {
+        bot.performSendMessage(message.chatId, MiscStrings.greeting)
+
+        if (service.isUserExist(message)) {
             bot.performSendMessage(message.chatId, UserStrings.alreadyRegistered)
             service.updateUser(message.chatId, "username", message.from.userName)
             return
@@ -28,11 +30,6 @@ object RegistrationController : BaseController<RegistrationService>(Registration
         } else {
             bot.performSendMessage(message.chatId, UserStrings.askPass)
         }
-    }
-
-    @BotCommand("/start")
-    fun showGreeting(message: Message) {
-        bot.performSendMessage(message.chatId, MiscStrings.greeting)
     }
 
     @BotCommand("/help")
@@ -45,9 +42,8 @@ object RegistrationController : BaseController<RegistrationService>(Registration
             bot.performSendMessage(message.chatId, UserStrings.wrongPass)
             return
         }
-        bot.performSendMessage(message.chatId, UserStrings.rightPass)
-
         service.createUser(message)
+        bot.performSendMessage(message.chatId, UserStrings.rightPass)
         bot.performSendMessage(message.chatId, UserStrings.typeYourName)
     }
 
@@ -70,7 +66,7 @@ object RegistrationController : BaseController<RegistrationService>(Registration
         }
     }
 
-    fun isRegistered(message: Message): Boolean = service.isExist(message)
+    fun isRegistered(message: Message): Boolean = service.isUserExist(message)
 }
 
 
