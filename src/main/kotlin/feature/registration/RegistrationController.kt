@@ -6,7 +6,7 @@ import org.apache.http.util.TextUtils
 import org.telegram.telegrambots.api.objects.Message
 import res.MiscStrings
 import res.Stickers
-import res.UserStrings
+import res.RegistrationStrings
 import utils.PropertiesLoader
 import utils.RegexValidator
 
@@ -21,14 +21,14 @@ object RegistrationController : BaseController<RegistrationService>(Registration
         bot.performSendMessage(message.chatId, MiscStrings.greeting)
 
         if (service.isUserExist(message)) {
-            bot.performSendMessage(message.chatId, UserStrings.alreadyRegistered)
+            bot.performSendMessage(message.chatId, RegistrationStrings.alreadyRegistered)
             service.updateUser(message.chatId, "username", message.from.userName)
             return
         }
         if (TextUtils.isEmpty(message.from.userName)) {
-            bot.performSendMessage(message.chatId, UserStrings.thereIsNoUsername)
+            bot.performSendMessage(message.chatId, RegistrationStrings.thereIsNoUsername)
         } else {
-            bot.performSendMessage(message.chatId, UserStrings.askPass)
+            bot.performSendMessage(message.chatId, RegistrationStrings.askPass)
         }
     }
 
@@ -39,30 +39,30 @@ object RegistrationController : BaseController<RegistrationService>(Registration
 
     fun askPass(message: Message) {
         if (message.text != PropertiesLoader.getProperty("pass")) {
-            bot.performSendMessage(message.chatId, UserStrings.wrongPass)
+            bot.performSendMessage(message.chatId, RegistrationStrings.wrongPass)
             return
         }
         service.createUser(message)
-        bot.performSendMessage(message.chatId, UserStrings.rightPass)
-        bot.performSendMessage(message.chatId, UserStrings.typeYourName)
+        bot.performSendMessage(message.chatId, RegistrationStrings.rightPass)
+        bot.performSendMessage(message.chatId, RegistrationStrings.typeYourName)
     }
 
     fun updateUser(message: Message) {
         if (service.isRegistrationCompleted(message)) {
-            bot.performSendMessage(message.chatId, UserStrings.incorrectInput)
+            bot.performSendMessage(message.chatId, MiscStrings.incorrectInput)
             return
         }
         if (service.hasSmlName(message)) {
             if (RegexValidator.validateBirthday(message.text)) {
                 service.updateUser(message.chatId, "birthday", message.text)
-                bot.performSendMessage(message.chatId, UserStrings.registrationComplete)
+                bot.performSendMessage(message.chatId, RegistrationStrings.registrationComplete)
                 bot.performSendSticker(message.chatId, Stickers.registrationComplete)
             } else {
-                bot.performSendMessage(message.chatId, UserStrings.incorrectBirthday)
+                bot.performSendMessage(message.chatId, RegistrationStrings.incorrectBirthday)
             }
         } else {
             service.updateUser(message.chatId, "smlName", message.text)
-            bot.performSendMessage(message.chatId, UserStrings.typeYourBirthday)
+            bot.performSendMessage(message.chatId, RegistrationStrings.typeYourBirthday)
         }
     }
 
