@@ -61,23 +61,9 @@ object ReservationController : BaseController<ReservationService>(ReservationSer
     fun updateReservation(message: Message) {
         if (service.isReserveCompleted(message)) return
         if (service.hasStart(message)) {
-            if (RegexValidator.validateReserveDuration(message.text)) {
-                service.updateEnd(message)
-                bot.performSendMessage(message.chatId, ReservationStrings.reserved)
-            } else {
-                bot.performSendMessage(message.chatId, ReservationStrings.incorrectDuration)
-            }
+            updateEndTime(message)
         } else {
-            if (RegexValidator.validateReserveDate(message.text)) {
-                if (!service.isTimeAvailable(message)) {
-                    bot.performSendMessage(message.chatId, ReservationStrings.timeNotAvailable)
-                    return
-                }
-                service.updateStart(message)
-                bot.performSendMessage(message.chatId, ReservationStrings.typeDuration)
-            } else {
-                bot.performSendMessage(message.chatId, ReservationStrings.incorrectDate)
-            }
+            updateStartTime(message)
         }
     }
 
@@ -87,6 +73,28 @@ object ReservationController : BaseController<ReservationService>(ReservationSer
     fun cleanReservation() {
         service.getAllReserves().
                 forEach { if (it.end!! < System.currentTimeMillis()) service.deleteReserve(it.id) }
+    }
+
+    private fun updateStartTime(message: Message) {
+        if (RegexValidator.validateReserveDate(message.text)) {
+            if (!service.isTimeAvailable(message)) {
+                bot.performSendMessage(message.chatId, ReservationStrings.timeNotAvailable)
+                return
+            }
+            service.updateStart(message)
+            bot.performSendMessage(message.chatId, ReservationStrings.typeDuration)
+        } else {
+            bot.performSendMessage(message.chatId, ReservationStrings.incorrectDate)
+        }
+    }
+
+    private fun updateEndTime(message: Message) {
+        if (RegexValidator.validateReserveDuration(message.text)) {
+            service.updateEnd(message)
+            bot.performSendMessage(message.chatId, ReservationStrings.reserved)
+        } else {
+            bot.performSendMessage(message.chatId, ReservationStrings.incorrectDuration)
+        }
     }
 
 }

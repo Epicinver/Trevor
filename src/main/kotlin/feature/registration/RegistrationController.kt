@@ -53,20 +53,28 @@ object RegistrationController : BaseController<RegistrationService>(Registration
             return
         }
         if (service.hasSmlName(message)) {
-            if (RegexValidator.validateBirthday(message.text)) {
-                service.updateUser(message.chatId, "birthday", message.text)
-                bot.performSendMessage(message.chatId, RegistrationStrings.registrationComplete)
-                bot.performSendSticker(message.chatId, Stickers.registrationComplete)
-            } else {
-                bot.performSendMessage(message.chatId, RegistrationStrings.incorrectBirthday)
-            }
+            updateBirthday(message)
         } else {
-            service.updateUser(message.chatId, "smlName", message.text)
-            bot.performSendMessage(message.chatId, RegistrationStrings.typeYourBirthday)
+            updateSmlName(message)
         }
     }
 
     fun isRegistered(message: Message): Boolean = service.isUserExist(message)
+
+    private fun updateSmlName(message: Message) {
+        service.updateUser(message.chatId, "smlName", message.text)
+        bot.performSendMessage(message.chatId, RegistrationStrings.typeYourBirthday)
+    }
+
+    private fun updateBirthday(message: Message) {
+        if (RegexValidator.validateBirthday(message.text)) {
+            service.updateUser(message.chatId, "birthday", message.text)
+            bot.performSendMessage(message.chatId, RegistrationStrings.registrationComplete)
+            bot.performSendSticker(message.chatId, Stickers.registrationComplete)
+        } else {
+            bot.performSendMessage(message.chatId, RegistrationStrings.incorrectBirthday)
+        }
+    }
 }
 
 

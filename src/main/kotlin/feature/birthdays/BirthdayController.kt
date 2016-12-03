@@ -18,20 +18,24 @@ object BirthdayController : BaseController<BirthdayService>(BirthdayService::cla
 
     fun notifyUsersAboutBirthdays() {
         birthdayAtWeekendUsers?.apply {
-            var birthdayUser: User? = null
-            forEach { birthdayUser = it }
-            flatMap { service.getUsersForNotify(birthdayUser!!) }
-            forEach { bot.performSendMessage(it.chatId,
-                        "${BirthdayStrings.notificationWeekend} ${birthdayUser!!.smlName}") }
+            forEach { user ->
+                service.getUsersForNotify(user).
+                        forEach {
+                            bot.performSendMessage(it.chatId,
+                                    "${BirthdayStrings.notificationWeekend} ${user.smlName}")
+                        }
+            }
             clear()
         }
 
         birthdayUsers?.apply {
-            var birthdayUser: User? = null
-            forEach { birthdayUser = it }
-            flatMap { service.getUsersForNotify(birthdayUser!!) }
-            forEach { bot.performSendMessage(it.chatId,
-                        "${BirthdayStrings.notification} ${birthdayUser!!.smlName}") }
+            forEach { user ->
+                service.getUsersForNotify(user).
+                        forEach {
+                            bot.performSendMessage(it.chatId,
+                                    "${BirthdayStrings.notification} ${user.smlName}")
+                        }
+            }
             clear()
         }
 
@@ -43,5 +47,5 @@ object BirthdayController : BaseController<BirthdayService>(BirthdayService::cla
 
     private fun getBirthdayUsers(): ArrayList<User>? = service.getUsersWasBornToday(getCurrentDate())
 
-    private fun getCurrentDate(): String = SimpleDateFormat("dd.MM.yyyy").let { it.format(Date()) }
+    private fun getCurrentDate(): String = SimpleDateFormat("dd.MM.yyyy").format(Date())
 }
