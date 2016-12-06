@@ -6,4 +6,5 @@ package res
 object Stickers {
     val helpRequest = "BQADAQADch8AAtpxZgcZflwMawhtDQI"
     val registrationComplete = "BQADAgADOyYAAktqAwABU3EJXSaKHCQC"
+    val slowpoke = "BQADBAAD-QQAAjZHEwABdkhWRY6mpPUC"
 }
