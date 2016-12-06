@@ -14,11 +14,13 @@ import java.util.*
  */
 class SalaryService : BaseService() {
 
-    val redisService = Injekt.get<RedisService>()
+    private val redisService = Injekt.get<RedisService>()
 
     fun storeInRedis(key: String, value : Any) { redisService.storeValue(key, value) }
 
     fun <T> extractFromRedis(key: String, clazz: Class<T>): T? = redisService.extractValue(key, clazz)
+
+    fun salaryComplete() = redisService.flush()
 
     fun addUserToSalaryList(message: Message) =
             userRepository.getById(message.chatId)?.let {

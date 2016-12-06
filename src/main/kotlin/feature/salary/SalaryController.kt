@@ -106,10 +106,10 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
 
     fun notifyNextUser() {
         timerTask?.cancel()
+
         adminMessage = service.extractFromRedis(Key.adminMessage, Message::class.java)
         if (service.isListEmpty()) {
-            bot.performEditMessage(adminMessage!!.chatId, adminMessage!!.messageId, SalaryDayStrings.complete)
-            salaryListMessage = null
+            salaryComplete()
             return
         }
 
@@ -118,8 +118,13 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
 
         notifyAdmin()
         inviteUser()
-
         startTimer()
+    }
+
+    private fun salaryComplete() {
+        bot.performEditMessage(adminMessage!!.chatId, adminMessage!!.messageId, SalaryDayStrings.complete)
+        service.salaryComplete()
+        salaryListMessage = null
     }
 
     private fun startTimer() {

@@ -42,4 +42,6 @@ class RedisService {
     fun <T> extractValue(key: String, clazz: Class<T>): T? =
             jedisPool.resource.use { ObjectMapper().readValue(it.get(key), clazz) }
 
+    fun flush() = jedisPool.resource.use { it.flushAll()}
+
 }

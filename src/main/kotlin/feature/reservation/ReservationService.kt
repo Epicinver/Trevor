@@ -23,8 +23,8 @@ class ReservationService : BaseService() {
     fun createReserve(message: Message, room: Rooms) {
         val user = userRepository.getById(message.chatId)
         when (room) {
-            Rooms.BIG -> map.put(message.chatId, Reservation(user!!, roomRepository.getById(1)!!))
-            Rooms.SMALL -> map.put(message.chatId, Reservation(user!!, roomRepository.getById(2)!!))
+            Rooms.BIG -> map.put(message.chatId, Reservation(user = user!!, room = roomRepository.getById(1)!!))
+            Rooms.SMALL -> map.put(message.chatId, Reservation(user = user!!, room = roomRepository.getById(2)!!))
         }
     }
 
