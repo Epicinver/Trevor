@@ -1,9 +1,10 @@
 package feature.salary
 
 import entity.User
-import org.telegram.telegrambots.api.objects.Message
-import repository.Repository
 import feature.base.BaseService
+import org.telegram.telegrambots.api.objects.Message
+import res.Key
+import utils.RedisService
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
@@ -13,13 +14,20 @@ import java.util.*
  */
 class SalaryService : BaseService() {
 
-    private val salaryList = ArrayList<User>()
+    val redisService = Injekt.get<RedisService>()
 
-    fun addUserToSalaryList(message: Message) = userRepository.getById(message.chatId)?.let { salaryList.add(it) }
+    fun storeInRedis(key: String, value : Any) { redisService.storeValue(key, value) }
 
-    fun deleteUserFromSalaryList(user: User) = salaryList.remove(user)
+    fun <T> extractFromRedis(key: String, clazz: Class<T>): T? = redisService.extractValue(key, clazz)
 
-    fun getAllUsersForSalary(): ArrayList<User> = salaryList
+    fun addUserToSalaryList(message: Message) =
+            userRepository.getById(message.chatId)?.let {
+                redisService.addToSet(Key.salaryList, it)
+            }
+
+    fun deleteUserFromSalaryList(user: User) = redisService.removeFromSet(Key.salaryList, user)
+
+    fun getAllUsersForSalary(): ArrayList<User> = redisService.getMembersFromSet(Key.salaryList, User::class.java)
 
     fun getNextUser(presentUser: User?): User {
         var user = getRandomUser()
@@ -29,10 +37,11 @@ class SalaryService : BaseService() {
         return user
     }
 
-    fun isListEmpty(): Boolean = salaryList.size == 0
+    fun isListEmpty(): Boolean = redisService.getSizeOfSet(Key.salaryList) == 0
 
-    private fun isLastUser(): Boolean = salaryList.size == 1
+    private fun isLastUser(): Boolean = redisService.getSizeOfSet(Key.salaryList) == 1
 
-    private fun getRandomUser(): User = Random().nextInt(salaryList.size).let { salaryList[it] }
+    private fun getRandomUser(): User = redisService.getRandMemberFromSet(Key.salaryList, User ::class.java)
+
 
 }

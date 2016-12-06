@@ -7,19 +7,10 @@ import com.j256.ormlite.table.DatabaseTable
  * Created by sergeyopivalov on 16.11.16.
  */
 @DatabaseTable(tableName = "users")
-class User{
-    @DatabaseField var username: String? = null
-    @DatabaseField(id = true) var chatId: Long = -1
-    @DatabaseField var smlName: String? = null
-    @DatabaseField var birthday: String? = null
-    @DatabaseField val role: String = "User"
+data class User(
+        @DatabaseField var username: String? = null,
+        @DatabaseField(id = true) var chatId: Long = -1,
+        @DatabaseField var smlName: String? = null,
+        @DatabaseField var birthday: String? = null,
+        @DatabaseField val role: String = "User")
 
-    constructor(){
-
-    }
-
-    constructor(username: String, chatId: Long) {
-        this.username = username
-        this.chatId = chatId
-    }
-}
