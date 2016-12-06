@@ -6,6 +6,7 @@ import com.j256.ormlite.support.ConnectionSource
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig
 import redis.clients.jedis.JedisPool
 import redis.clients.jedis.JedisPoolConfig
+import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
@@ -18,7 +19,7 @@ import uy.kohesive.injekt.api.get
 object BotModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(Trevor() as SmlSalaryBot)
-        addSingleton(JdbcConnectionSource("jdbc:sqlite:test.s3db") as ConnectionSource)
+        addSingleton(JdbcConnectionSource(PropertiesLoader.getProperty("db.url")) as ConnectionSource)
         addSingleton(JedisPoolConfig() as GenericObjectPoolConfig)
         addSingleton(JedisPool(Injekt.get(), "localhost"))
     }
