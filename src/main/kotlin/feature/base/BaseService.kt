@@ -1,6 +1,7 @@
 package feature.base
 
 import entity.User
+import redis.clients.jedis.JedisPool
 import repository.Repository
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -10,4 +11,5 @@ import uy.kohesive.injekt.api.get
  */
 abstract class BaseService {
     protected val userRepository = Injekt.get<Repository<User>>()
+
 }

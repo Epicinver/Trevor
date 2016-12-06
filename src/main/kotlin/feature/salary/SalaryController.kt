@@ -6,6 +6,7 @@ import feature.base.BaseController
 import feature.salary.task.SalaryTask
 import org.telegram.telegrambots.api.objects.Message
 import res.CallbackData
+import res.Key
 import res.MiscStrings
 import res.SalaryDayStrings
 import utils.InlineKeyboardFactory
@@ -13,7 +14,6 @@ import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
-import kotlin.properties.Delegates
 
 /**
  * Created by sergeyopivalov on 20.11.16.
@@ -23,9 +23,7 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
     private var timer = Injekt.get<Timer>()
 
     private var adminMessage: Message? = null
-    private var currentMessage: Message? = null
     private var salaryListMessage: Message? = null
-
     private var currentUser: User? = null
     private var timerTask: TimerTask? = null
 
@@ -48,16 +46,16 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
                 return
             }
             val list = StringBuilder()
-            this.map { user -> "${user.smlName} \n" }
-                .forEach { list.append(it) }
+            this.map { "${it.smlName} \n" }
+                    .forEach { list.append(it) }
 
             list.append("${SalaryDayStrings.quantity} ${this.size}")
             list.toString()
         }
 
         when (salaryListMessage) {
-            null ->  salaryListMessage = bot.performSendMessage(message.chatId, list)
-            else ->  bot.performEditMessage(message.chatId, salaryListMessage!!.messageId, list)
+            null -> salaryListMessage = bot.performSendMessage(message.chatId, list)
+            else -> bot.performEditMessage(message.chatId, salaryListMessage!!.messageId, list)
         }
 
     }
@@ -77,20 +75,29 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
     @BotCallbackData(CallbackData.salaryStart)
     fun startSalary(message: Message) {
         adminMessage = bot.performSendMessage(message.chatId, SalaryDayStrings.dummy)
+        service.storeInRedis(Key.adminMessage, adminMessage!!)
         notifyNextUser()
     }
 
     @BotCallbackData(CallbackData.gotPaid)
-    fun userGetSalary(message: Message) {
-        bot.performEditMessage(currentMessage!!.chatId, currentMessage!!.messageId, SalaryDayStrings.moneyReceived, true)
-        service.deleteUserFromSalaryList(currentUser!!)
+    fun userGotSalary(message: Message) {
+        service.extractFromRedis(Key.currentMessage, Message::class.java).apply {
+            bot.performEditMessage(this!!.chatId, this.messageId, SalaryDayStrings.moneyReceived, true)
+        }
+        service.extractFromRedis(Key.currentUser, User::class.java).apply {
+            service.deleteUserFromSalaryList(this!!)
+        }
         notifyNextUser()
+
     }
 
     @BotCallbackData(CallbackData.notGotPaid)
-    fun userNotGetSalary(message: Message) {
-        notifyUserSkipTurn(currentMessage!!)
+    fun userNotGotSalary(message: Message) {
+        service.extractFromRedis(Key.currentMessage, Message::class.java).apply {
+            notifyUserSkipTurn(this!!)
+        }
         notifyNextUser()
+
     }
 
     fun notifyUserSkipTurn(message: Message) =
@@ -100,32 +107,49 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
     fun notifyNextUser() {
         timerTask?.cancel()
 
+        adminMessage = service.extractFromRedis(Key.adminMessage, Message::class.java)
         if (service.isListEmpty()) {
-            bot.performEditMessage(adminMessage!!.chatId, adminMessage!!.messageId, SalaryDayStrings.complete)
-            salaryListMessage = null
+            salaryComplete()
             return
         }
 
         currentUser = service.getNextUser(currentUser)
+        service.storeInRedis(Key.currentUser, currentUser!!)
+
         notifyAdmin()
         inviteUser()
+        startTimer()
+    }
 
-        timerTask = SalaryTask(currentMessage!!)
-        timer.schedule(timerTask, PropertiesLoader.getProperty("delay").toLong())
+    private fun salaryComplete() {
+        bot.performEditMessage(adminMessage!!.chatId, adminMessage!!.messageId, SalaryDayStrings.complete)
+        service.salaryComplete()
+        salaryListMessage = null
+    }
+
+    private fun startTimer() {
+        with(service.extractFromRedis(Key.currentMessage, Message::class.java)) {
+            timerTask = SalaryTask(this!!)
+            timer.schedule(timerTask, PropertiesLoader.getProperty("delay").toLong())
+        }
     }
 
     private fun notifyAdmin() {
+        adminMessage = service.extractFromRedis(Key.adminMessage, Message::class.java)
+        currentUser = service.extractFromRedis(Key.currentUser, User::class.java)
         bot.apply {
             performEditMessage(adminMessage!!.chatId, adminMessage!!.messageId,
                     "${currentUser?.smlName} ${SalaryDayStrings.isGoing}")
-            performEditKeyboard(SalaryController.adminMessage!!.chatId, adminMessage!!.messageId,
+            performEditKeyboard(adminMessage!!.chatId, adminMessage!!.messageId,
                     InlineKeyboardFactory.createUserPaidStatusKeyboard())
         }
     }
 
     private fun inviteUser() {
-        currentMessage = bot.performSendMessage(currentUser!!.chatId, SalaryDayStrings.yourTurn,
-                InlineKeyboardFactory.createUserInvitationKeyboard())
+        currentUser = service.extractFromRedis(Key.currentUser, User::class.java)
+        service.storeInRedis(Key.currentMessage,
+                bot.performSendMessage(currentUser!!.chatId, SalaryDayStrings.yourTurn,
+                        InlineKeyboardFactory.createUserInvitationKeyboard()))
     }
 
 }

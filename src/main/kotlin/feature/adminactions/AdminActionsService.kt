@@ -1,9 +1,10 @@
 package feature.adminactions
 
 import entity.User
-import org.telegram.telegrambots.api.objects.Message
-import repository.Repository
 import feature.base.BaseService
+import org.telegram.telegrambots.api.objects.Message
+import res.Key
+import utils.RedisService
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
@@ -13,8 +14,9 @@ import java.util.*
  */
 class AdminActionsService : BaseService() {
 
-    fun isAdmin(message: Message): Boolean = userRepository.getById(message.chatId)?.role == ("Admin")
+    private val redisService = Injekt.get<RedisService>()
 
+    fun isAdmin(message: Message): Boolean = userRepository.getById(message.chatId)?.role == ("Admin")
 
     fun deleteUser(chatId: Long) = userRepository.delete(chatId)
 
@@ -23,6 +25,7 @@ class AdminActionsService : BaseService() {
 
     fun getAllUsers(): ArrayList<User> = userRepository.getAll()
 
+    fun storeMessage(message: Message) { redisService.storeValue(Key.messageActions, message) }
 
-
+    fun extractMessage(): Message =  redisService.extractValue(Key.messageActions, Message::class.java)!!
 }

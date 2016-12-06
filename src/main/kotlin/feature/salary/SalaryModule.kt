@@ -1,6 +1,6 @@
 package feature.salary
 
-import feature.salary.SalaryService
+import utils.RedisService
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton

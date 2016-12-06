@@ -4,10 +4,8 @@ import annotation.BotCallbackData
 import annotation.BotCommand
 import feature.base.BaseController
 import org.telegram.telegrambots.api.objects.Message
-import res.AdminStrings
-import res.CallbackData
-import res.Stickers
-import res.RegistrationStrings
+import redis.clients.jedis.JedisPool
+import res.*
 import utils.InlineKeyboardFactory
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -18,16 +16,14 @@ import kotlin.properties.Delegates
  */
 object AdminActionsController : BaseController<AdminActionsService>(AdminActionsService::class) {
 
-    private var messageWithActions: Message? = null
-
     @BotCommand("/actions")
     fun performActionsShow(message: Message) {
         if (!service.isAdmin(message)) {
             bot.performSendMessage(message.chatId, AdminStrings.commandNotAllowed)
             return
         }
-        messageWithActions = bot.performSendMessage(message.chatId, AdminStrings.commandsList,
-                InlineKeyboardFactory.createAdminKeyboard())
+        service.storeMessage(bot.performSendMessage(message.chatId, AdminStrings.commandsList,
+                InlineKeyboardFactory.createAdminKeyboard()))
     }
 
 
@@ -63,8 +59,10 @@ object AdminActionsController : BaseController<AdminActionsService>(AdminActions
                     bot.performSendMessage(it.chatId, RegistrationStrings.salaryNotification,
                             InlineKeyboardFactory.createUserNotificationKeyboard())
                 }
-        bot.performEditKeyboard(message.chatId, messageWithActions!!.messageId,
-                InlineKeyboardFactory.createEditedAdminKeyboard())
+        with(service.extractMessage()) {
+            bot.performEditKeyboard(message.chatId, this.messageId,
+                    InlineKeyboardFactory.createEditedAdminKeyboard())
+        }
 
     }
 

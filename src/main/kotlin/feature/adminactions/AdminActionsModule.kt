@@ -1,5 +1,6 @@
 package feature.adminactions
 
+import utils.RedisService
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton
@@ -9,6 +10,7 @@ import uy.kohesive.injekt.api.addSingleton
  */
 object AdminActionsModule : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
+        addSingleton(RedisService())
         addSingleton(AdminActionsService())
     }
 }
