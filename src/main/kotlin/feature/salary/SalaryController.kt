@@ -5,10 +5,7 @@ import entity.User
 import feature.base.BaseController
 import feature.salary.task.SalaryTask
 import org.telegram.telegrambots.api.objects.Message
-import res.CallbackData
-import res.Key
-import res.MiscStrings
-import res.SalaryDayStrings
+import res.*
 import utils.InlineKeyboardFactory
 import utils.PropertiesLoader
 import uy.kohesive.injekt.Injekt
@@ -100,8 +97,10 @@ object SalaryController : BaseController<SalaryService>(SalaryService::class) {
 
     }
 
-    fun notifyUserSkipTurn(message: Message) =
-            bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.turnSkipped)
+    fun notifyUserSkipTurn(message: Message) {
+        bot.performEditMessage(message.chatId, message.messageId, SalaryDayStrings.turnSkipped)
+        bot.performSendSticker(message.chatId, Stickers.slowpoke)
+    }
 
 
     fun notifyNextUser() {
